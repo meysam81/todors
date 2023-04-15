@@ -12,11 +12,7 @@ jobs:
     strategy:
       matrix:
         target:
-          - aarch64-apple-darwin
           - x86_64-unknown-linux-gnu
-          - x86_64-unknown-linux-musl
-          - aarch64-unknown-linux-musl
-          - armv7-unknown-linux-musleabihf
       fail-fast: false
     steps:
       - name: Checkout
@@ -33,4 +29,4 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            target/release/todors
+            target/${{ matrix.target }}/release/todors
