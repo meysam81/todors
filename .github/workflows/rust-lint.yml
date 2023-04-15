@@ -1,0 +1,27 @@
+name: rust-lint
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install Rust stable
+        run: |
+          rustup update stable
+          rustup default stable
+      - name: Install clippy
+        run: |
+          rustup component add clippy
+      - name: Run clippy
+        run: |
+          cargo clippy --all-targets --all-features -- -D warnings
