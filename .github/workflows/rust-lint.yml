@@ -10,7 +10,7 @@ on:
 
 jobs:
   lint:
-    name: Lint
+    name: lint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -22,6 +22,8 @@ jobs:
       - name: Install clippy
         run: |
           rustup component add clippy
+      - name: Install mold
+        uses: rui314/setup-mold@v1
       - name: Run clippy
         run: |
           cargo clippy --all-targets --all-features -- -D warnings
