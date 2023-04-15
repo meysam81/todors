@@ -28,6 +28,7 @@ jobs:
       - name: Add target
         run: |
           rustup target add ${{ matrix.target }}
+          rustup target list
       - name: Install mold
         uses: rui314/setup-mold@v1
       - name: Build
