@@ -1,25 +1,28 @@
-#[derive(Debug)]
-struct Todo {
-    title: String,
-    done: bool,
-}
+use models::Todo;
+use settings::Settings;
 
-impl Todo {
-    fn new(title: String) -> Todo {
-        Todo {
-            title: title,
-            done: false,
-        }
-    }
+mod db;
+mod logging;
+mod models;
+mod settings;
 
-    fn done(&mut self) {
-        self.done = true;
-    }
-}
+#[tokio::main]
+async fn main() -> Result<(), sqlx::Error> {
+    let settings = Settings::new().unwrap();
 
-fn main() {
-    let mut todo = Todo::new("Hello Rust!".to_string());
-    println!("{:?}", todo);
+    let logger = logging::init();
+    slog::info!(logger, "Hello from Todors!");
+    slog::debug!(logger, "{:?}", settings);
+
+    let conn = db::connect(&settings.db_url, None).await?;
+    slog::debug!(logger, "{:?}", conn);
+
+    let mut todo = Todo::new("Hello Rust".to_string());
     todo.done();
-    println!("{:?}", todo);
+    slog::debug!(logger, "{:?}", todo);
+
+    // save to db
+    todo.save(&conn).await?;
+
+    Ok(())
 }
