@@ -40,8 +40,10 @@ jobs:
     steps:
       - name: Download artifact
         uses: actions/download-artifact@v2
+        with:
+          path: target
       - name: Upload asset to release
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            *
+            target/*
