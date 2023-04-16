@@ -1,0 +1,3 @@
+(function() {var implementors = {
+"todors":[["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/1.68.2/core/marker/trait.Unpin.html\" title=\"trait core::marker::Unpin\">Unpin</a> for <a class=\"struct\" href=\"todors/models/struct.Todo.html\" title=\"struct todors::models::Todo\">Todo</a>",1,["todors::models::Todo"]],["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/1.68.2/core/marker/trait.Unpin.html\" title=\"trait core::marker::Unpin\">Unpin</a> for <a class=\"struct\" href=\"todors/settings/struct.Settings.html\" title=\"struct todors::settings::Settings\">Settings</a>",1,["todors::settings::Settings"]]]
+};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
