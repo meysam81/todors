@@ -41,7 +41,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           path: target
-      - uses: shogo82148/actions-upload-release-asset@v1
+      - uses: softprops/action-gh-release@v1
         with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: target/*
+          files: |
+            target/*
