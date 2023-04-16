@@ -1,4 +1,4 @@
-name: rust-build
+name: rust-release
 
 on:
   release:
@@ -9,8 +9,7 @@ permissions:
   contents: write
 
 jobs:
-  build:
-    name: build
+  release:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -39,13 +38,10 @@ jobs:
     needs: build
     steps:
       - name: Download artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           path: target
-      - name: debug
-        run: ls -lhA target
-      - name: Upload asset to release
-        uses: softprops/action-gh-release@v1
+      - uses: shogo82148/actions-upload-release-asset@v1
         with:
-          files: |
-            target/*
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: target/*
