@@ -41,7 +41,8 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           path: target
-      - uses: softprops/action-gh-release@v1
+      - name: Upload assets
+        uses: softprops/action-gh-release@v0.1.13
         with:
           files: |
             target/*
