@@ -27,6 +27,12 @@
 <a href="#27" id="27">27</a>
 <a href="#28" id="28">28</a>
 <a href="#29" id="29">29</a>
+<a href="#30" id="30">30</a>
+<a href="#31" id="31">31</a>
+<a href="#32" id="32">32</a>
+<a href="#33" id="33">33</a>
+<a href="#34" id="34">34</a>
+<a href="#35" id="35">35</a>
 </pre><pre class="rust"><code><span class="kw">use </span>config::{Config, Environment};
 <span class="kw">use </span>serde::Deserialize;
 
@@ -34,6 +40,8 @@
 </span><span class="kw">pub struct </span>Settings {
     <span class="attr">#[serde(default = <span class="string">&quot;default_dburl&quot;</span>)]
     </span><span class="kw">pub </span>db_url: String,
+    <span class="attr">#[serde(default = <span class="string">&quot;default_loglevel&quot;</span>)]
+    </span><span class="kw">pub </span>log_level: String,
 }
 
 <span class="kw">impl </span>Settings {
@@ -55,6 +63,10 @@
 
     <span class="kw">let </span>path = path.join(<span class="string">&quot;db.sqlite&quot;</span>);
     path.to_str().unwrap().to_string()
+}
+
+<span class="kw">fn </span>default_loglevel() -&gt; String {
+    <span class="string">&quot;info&quot;</span>.to_string()
 }
 </code></pre></div>
 </section></main><div id="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="todors" data-themes="" data-resource-suffix="" data-rustdoc-version="1.68.2 (9eb3afe9e 2023-03-27)" data-search-js="search-98d53477a794af0b.js" data-settings-js="settings-c3c521c753752a1a.js" data-settings-css="settings-08ddfdda51b8ee2e.css" ></div></body></html>

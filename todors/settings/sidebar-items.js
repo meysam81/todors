@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["default_dburl",""]],"struct":[["Settings",""]]};
+window.SIDEBAR_ITEMS = {"fn":[["default_dburl",""],["default_loglevel",""]],"struct":[["Settings",""]]};

@@ -40,7 +40,7 @@
 </span><span class="kw">async fn </span>main() -&gt; <span class="prelude-ty">Result</span>&lt;(), sqlx::Error&gt; {
     <span class="kw">let </span>settings = Settings::new().unwrap();
 
-    <span class="kw">let </span>logger = logging::init();
+    <span class="kw">let </span>logger = logging::init(settings.log_level.as_str());
     <span class="macro">slog::info!</span>(logger, <span class="string">&quot;Hello from Todors!&quot;</span>);
     <span class="macro">slog::debug!</span>(logger, <span class="string">&quot;{:?}&quot;</span>, settings);
 

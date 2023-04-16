@@ -8,15 +8,37 @@
 <a href="#8" id="8">8</a>
 <a href="#9" id="9">9</a>
 <a href="#10" id="10">10</a>
+<a href="#11" id="11">11</a>
+<a href="#12" id="12">12</a>
+<a href="#13" id="13">13</a>
+<a href="#14" id="14">14</a>
+<a href="#15" id="15">15</a>
+<a href="#16" id="16">16</a>
+<a href="#17" id="17">17</a>
+<a href="#18" id="18">18</a>
+<a href="#19" id="19">19</a>
+<a href="#20" id="20">20</a>
+<a href="#21" id="21">21</a>
 </pre><pre class="rust"><code><span class="kw">use </span>slog::{Drain, Logger};
 
-<span class="kw">pub fn </span>init() -&gt; Logger {
-    <span class="kw">let </span>drain = slog_term::FullFormat::new(slog_term::TermDecorator::new().build())
-        .build()
-        .fuse();
+<span class="kw">pub fn </span>init(log_level: <span class="kw-2">&amp;</span>str) -&gt; Logger {
+    <span class="kw">let </span>decorator = slog_term::TermDecorator::new().build();
+    <span class="kw">let </span>drain = slog_term::FullFormat::new(decorator).build().fuse();
     <span class="kw">let </span>drain = slog_async::Async::new(drain).build().fuse();
-    <span class="kw">let </span>log = slog::Logger::root(drain, <span class="macro">slog::o!</span>());
-    log
+    <span class="kw">let </span>level = get_log_level(log_level);
+    <span class="kw">let </span>drain = slog::LevelFilter::new(drain, level).fuse();
+    <span class="kw">let </span>logger = Logger::root(drain.fuse(), <span class="macro">slog::o!</span>());
+    logger
+}
+
+<span class="kw">fn </span>get_log_level(log_level: <span class="kw-2">&amp;</span>str) -&gt; slog::Level {
+    <span class="kw">match </span>log_level {
+        <span class="string">&quot;debug&quot; </span>=&gt; slog::Level::Debug,
+        <span class="string">&quot;info&quot; </span>=&gt; slog::Level::Info,
+        <span class="string">&quot;warn&quot; </span>=&gt; slog::Level::Warning,
+        <span class="string">&quot;error&quot; </span>=&gt; slog::Level::Error,
+        <span class="kw">_ </span>=&gt; slog::Level::Debug,
+    }
 }
 </code></pre></div>
 </section></main><div id="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="todors" data-themes="" data-resource-suffix="" data-rustdoc-version="1.68.2 (9eb3afe9e 2023-03-27)" data-search-js="search-98d53477a794af0b.js" data-settings-js="settings-c3c521c753752a1a.js" data-settings-css="settings-08ddfdda51b8ee2e.css" ></div></body></html>
