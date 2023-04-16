@@ -1,0 +1,9 @@
+.git*
+target
+vendor
+.dockerignore
+Dockerfile
+README.md
+Justfile
+LICENSE
+Cargo.lock
