@@ -10,7 +10,7 @@ mod settings;
 async fn main() -> Result<(), sqlx::Error> {
     let settings = Settings::new().unwrap();
 
-    let logger = logging::init();
+    let logger = logging::init(settings.log_level.as_str());
     slog::info!(logger, "Hello from Todors!");
     slog::debug!(logger, "{:?}", settings);
 

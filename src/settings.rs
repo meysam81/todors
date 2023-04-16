@@ -5,6 +5,8 @@ use serde::Deserialize;
 pub struct Settings {
     #[serde(default = "default_dburl")]
     pub db_url: String,
+    #[serde(default = "default_loglevel")]
+    pub log_level: String,
 }
 
 impl Settings {
@@ -26,4 +28,8 @@ fn default_dburl() -> String {
 
     let path = path.join("db.sqlite");
     path.to_str().unwrap().to_string()
+}
+
+fn default_loglevel() -> String {
+    "info".to_string()
 }
