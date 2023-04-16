@@ -20,6 +20,7 @@ jobs:
           rustup toolchain install stable
       - name: Install mold
         uses: rui314/setup-mold@v1
-      - uses: katyo/publish-crates@v2
+      - name: Publish
+        uses: katyo/publish-crates@v2
         with:
           registry-token: ${{ secrets.CARGO_REGISTRY_TOKEN }}
