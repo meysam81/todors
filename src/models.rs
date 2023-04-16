@@ -1,4 +1,5 @@
 use serde::Deserialize;
+use sqlx::sqlite::SqliteQueryResult;
 
 #[derive(Debug, Deserialize)]
 pub struct Todo {
@@ -15,7 +16,7 @@ impl Todo {
         self.done = true;
     }
 
-    pub async fn save(&self, conn: &sqlx::SqlitePool) -> Result<(), sqlx::Error> {
+    pub async fn save(&self, conn: &sqlx::SqlitePool) -> Result<SqliteQueryResult, sqlx::Error> {
         sqlx::query(
             r#"
             INSERT INTO todo (title, done)
@@ -25,7 +26,6 @@ impl Todo {
         .bind(&self.title)
         .bind(self.done)
         .execute(conn)
-        .await?;
-        Ok(())
+        .await
     }
 }

@@ -21,8 +21,10 @@ async fn main() -> Result<(), sqlx::Error> {
     todo.done();
     slog::debug!(logger, "{:?}", todo);
 
-    // save to db
-    todo.save(&conn).await?;
+    match todo.save(&conn).await {
+        Ok(_) => slog::debug!(logger, "Todo saved!"),
+        Err(e) => slog::error!(logger, "Error saving todo: {}", e),
+    }
 
     Ok(())
 }
