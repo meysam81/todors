@@ -1,18 +1,25 @@
 name: rust-clippy
 
+concurrency:
+  group: rust-clippy-${{ github.ref }}
+  cancel-in-progress: true
+
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
+
+permissions:
+  contents: read
+  security-events: write
+  actions: read
 
 jobs:
   clippy:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      security-events: write
-      actions: read
     steps:
       - name: Checkout code
         uses: actions/checkout@v3

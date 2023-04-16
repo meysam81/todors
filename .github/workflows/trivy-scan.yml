@@ -1,8 +1,12 @@
 name: trivy-scan
 
+concurrency:
+  group: trivy-scan-${{ github.ref }}
+  cancel-in-progress: true
+
 on:
   schedule:
-    - cron: "0 */6 * * *"
+    - cron: 0 */6 * * *
   push:
     branches:
       - main
@@ -23,12 +27,12 @@ jobs:
       - name: Trivy scan
         uses: aquasecurity/trivy-action@master
         with:
-          format: "template"
-          scan-type: "fs"
+          format: template
+          scan-type: fs
           template: "@/contrib/sarif.tpl"
-          output: "trivy-results.sarif"
-          severity: "CRITICAL,HIGH,MEDIUM"
+          output: trivy-results.sarif
+          severity: CRITICAL,HIGH,MEDIUM
       - name: Upload to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v2
         with:
-          sarif_file: "trivy-results.sarif"
+          sarif_file: trivy-results.sarif

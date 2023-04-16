@@ -1,4 +1,5 @@
 name: rust-release
+
 concurrency:
   group: rust-release-${{ github.ref }}
   cancel-in-progress: true
