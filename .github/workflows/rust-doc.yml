@@ -26,7 +26,14 @@ jobs:
       - name: Build docs
         run: |
           cargo doc --no-deps
-          ln -s target/doc/todors/index.html target/doc/index.html
+          cat << 'EOF' > target/doc/index.html
+          <?DOCTYPE html>
+          <html>
+            <head>
+              <meta http-equiv="refresh" content="0; url=todors/index.html" />
+            </head>
+          </html>
+          EOF
       - name: Deploy docs
         uses: peaceiris/actions-gh-pages@v3
         with:
