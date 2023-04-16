@@ -41,8 +41,10 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           path: target
+      - name: Debug
+        run: tree
       - name: Upload assets
         uses: softprops/action-gh-release@v0.1.13
         with:
           files: |
-            target/*
+            target/todors-*
