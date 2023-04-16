@@ -26,9 +26,10 @@ jobs:
       - name: Build docs
         run: |
           cargo doc --no-deps
+          ln -s target/doc/todors/index.html target/doc/index.html
       - name: Deploy docs
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./target/doc/todors
+          publish_dir: ./target/doc/
           publish_branch: gh-pages
