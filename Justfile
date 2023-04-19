@@ -5,7 +5,7 @@ build:
   cargo build --frozen
 
 run:
-  cargo run --frozen
+  cargo run --frozen -- $(ARGS)
 
 watch:
   cargo watch -s "just run"

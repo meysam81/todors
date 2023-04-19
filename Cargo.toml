@@ -1,11 +1,12 @@
 [package]
 name = "todors"
-description = "todo app with CLI, web & gRPC interfaces"
+description = "todo app with CLI, REST & gRPC interfaces"
 license = "MIT"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+clap = { version = "4.2.2", features = ["derive"] }
 config = "0.13.3"
 dirs = "5.0.0"
 serde = "1.0.160"
