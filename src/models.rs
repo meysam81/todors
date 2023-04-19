@@ -113,8 +113,7 @@ impl Todo {
         }
     }
 
-    #[allow(dead_code)]
-    async fn get(id: u32, conn: &sqlx::SqlitePool) -> Result<Todo, sqlx::Error> {
+    pub async fn get(id: u32, conn: &sqlx::SqlitePool) -> Result<Todo, sqlx::Error> {
         let todo = sqlx::query_as::<_, Todo>(
             r#"
             SELECT id, title, done

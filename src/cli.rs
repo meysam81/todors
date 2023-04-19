@@ -68,6 +68,8 @@ pub enum Commands {
     List,
     /// Update a TODO by ID
     Update(Update),
+    /// Get a TODO by ID
+    Get(Get),
     /// Generate shell completion
     Completion(Completion),
 }
@@ -118,6 +120,12 @@ pub struct Update {
     #[arg(group = "finished")]
     #[arg(action = clap::ArgAction::SetTrue)]
     pub undone: Option<bool>,
+}
+
+#[derive(Args, Debug)]
+pub struct Get {
+    /// The ID of the TODO to get
+    pub id: u32,
 }
 
 #[derive(Args, Debug)]

@@ -56,6 +56,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 Err(err) => slog::error!(logger, "Failed to update: {:?}", err),
             };
         }
+        Commands::Get(cli::Get { id }) => {
+            match Todo::get(id, &conn).await {
+                Ok(todo) => slog::info!(logger, "{:?}", todo),
+                Err(err) => slog::error!(logger, "Failed to get: {:?}", err),
+            };
+        }
         Commands::Completion(cli::Completion { shell }) => {
             cli::print_completions(shell);
         }
