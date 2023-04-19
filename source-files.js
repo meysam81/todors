@@ -1,4 +1,4 @@
 var sourcesIndex = JSON.parse('{\
-"todors":["",[],["cli.rs","logging.rs","main.rs","settings.rs"]]\
+"todors":["",[],["cli.rs","db.rs","logging.rs","main.rs","models.rs","settings.rs"]]\
 }');
 createSourceSidebar();

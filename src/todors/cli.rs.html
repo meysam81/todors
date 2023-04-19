@@ -176,6 +176,9 @@
 <a href="#176" id="176">176</a>
 <a href="#177" id="177">177</a>
 <a href="#178" id="178">178</a>
+<a href="#179" id="179">179</a>
+<a href="#180" id="180">180</a>
+<a href="#181" id="181">181</a>
 </pre><pre class="rust"><code><span class="doccomment">//! Command line interface for the todo app
 //!
 //! # Usage
@@ -186,6 +189,9 @@
 //! todors serve grpc -p 50051 -H 127.0.0.1
 //!
 //! todors serve http -p 8000 -H 127.0.0.1
+//!
+//! # Both port &amp; host are optional, but ipv6 can also be used
+//! todors serve grpc -H ::1
 //!
 //! todors create &quot;My first todo&quot;
 //!
@@ -203,7 +209,7 @@
 //! Usage: todors &lt;COMMAND&gt;
 //!
 //! Commands:
-//!   serve   Serve either the gRPC or HTTP server
+//!   serve   Serve either the gRPC or REST over HTTP server
 //!   create  Create a new TODO with a title
 //!   delete  Delete a TODO by ID
 //!   list    List all TODOs
@@ -227,7 +233,7 @@
 
 <span class="attr">#[derive(Subcommand, Debug)]
 </span><span class="kw">pub enum </span>Commands {
-    <span class="doccomment">/// Serve either the gRPC or HTTP server
+    <span class="doccomment">/// Serve either the gRPC or REST over HTTP server
     </span><span class="attr">#[command(subcommand)]
     </span>Serve(Serve),
     <span class="doccomment">/// Create a new TODO with a title
@@ -242,9 +248,9 @@
 
 <span class="attr">#[derive(Subcommand, Debug)]
 </span><span class="kw">pub enum </span>Serve {
-    <span class="doccomment">/// Serve the gRPC server
+    <span class="doccomment">/// Serve gRPC over HTTP server
     </span>Grpc(ServerAddr),
-    <span class="doccomment">/// Serve the HTTP server
+    <span class="doccomment">/// Serve REST over HTTP server
     </span>Http(ServerAddr),
 }
 
