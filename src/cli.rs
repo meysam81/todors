@@ -87,13 +87,13 @@ pub struct ServerAddr {
 #[derive(Args, Debug)]
 pub struct Create {
     /// The title of the TODO
-    title: String,
+    pub title: String,
 }
 
 #[derive(Args, Debug)]
 pub struct Delete {
     /// The ID of the TODO to delete
-    id: u32,
+    pub id: u32,
 }
 
 #[derive(Args, Debug)]
@@ -103,6 +103,14 @@ pub struct Update {
     /// The new title of the TODO
     #[arg(short, long)]
     pub title: Option<String>,
+    #[arg(short, long)]
+    #[arg(group = "finished")]
+    #[arg(action = clap::ArgAction::SetTrue)]
+    pub done: Option<bool>,
+    #[arg(short, long)]
+    #[arg(group = "finished")]
+    #[arg(action = clap::ArgAction::SetTrue)]
+    pub undone: Option<bool>,
 }
 
 #[cfg(test)]
@@ -144,7 +152,7 @@ mod test {
         let args = vec!["todors", "update", "1", "--title", "Hello Rust!"];
         let c = Cli::parse_from(args);
         match c.command {
-            Commands::Update(Update { id, title }) => {
+            Commands::Update(Update { id, title, .. }) => {
                 assert_eq!(id, 1);
                 assert_eq!(title.unwrap(), "Hello Rust!");
             }
@@ -157,7 +165,7 @@ mod test {
         let args = vec!["todors", "update", "1"];
         let c = Cli::parse_from(args);
         match c.command {
-            Commands::Update(Update { id, title }) => {
+            Commands::Update(Update { id, title, .. }) => {
                 assert_eq!(id, 1);
                 assert_eq!(title, None);
             }
