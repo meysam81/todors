@@ -63,6 +63,9 @@
 <a href="#63" id="63">63</a>
 <a href="#64" id="64">64</a>
 <a href="#65" id="65">65</a>
+<a href="#66" id="66">66</a>
+<a href="#67" id="67">67</a>
+<a href="#68" id="68">68</a>
 </pre><pre class="rust"><code><span class="kw">use </span>clap::Parser;
 <span class="kw">use </span>cli::{Cli, Commands};
 <span class="kw">use </span>models::Todo;
@@ -120,6 +123,9 @@
                 <span class="prelude-val">Ok</span>(<span class="kw">_</span>) =&gt; <span class="macro">slog::info!</span>(logger, <span class="string">&quot;Updated successfully!&quot;</span>),
                 <span class="prelude-val">Err</span>(err) =&gt; <span class="macro">slog::error!</span>(logger, <span class="string">&quot;Failed to update: {:?}&quot;</span>, err),
             };
+        }
+        Commands::Completion(cli::Completion { shell }) =&gt; {
+            cli::print_completions(shell);
         }
         <span class="kw">_ </span>=&gt; {
             <span class="macro">slog::error!</span>(logger, <span class="string">&quot;Not implemented yet&quot;</span>);

@@ -187,6 +187,26 @@
 <a href="#187" id="187">187</a>
 <a href="#188" id="188">188</a>
 <a href="#189" id="189">189</a>
+<a href="#190" id="190">190</a>
+<a href="#191" id="191">191</a>
+<a href="#192" id="192">192</a>
+<a href="#193" id="193">193</a>
+<a href="#194" id="194">194</a>
+<a href="#195" id="195">195</a>
+<a href="#196" id="196">196</a>
+<a href="#197" id="197">197</a>
+<a href="#198" id="198">198</a>
+<a href="#199" id="199">199</a>
+<a href="#200" id="200">200</a>
+<a href="#201" id="201">201</a>
+<a href="#202" id="202">202</a>
+<a href="#203" id="203">203</a>
+<a href="#204" id="204">204</a>
+<a href="#205" id="205">205</a>
+<a href="#206" id="206">206</a>
+<a href="#207" id="207">207</a>
+<a href="#208" id="208">208</a>
+<a href="#209" id="209">209</a>
 </pre><pre class="rust"><code><span class="doccomment">//! Command line interface for the todo app
 //!
 //! # Usage
@@ -230,7 +250,9 @@
 //!```
 //!
 
-</span><span class="kw">use </span>clap::{Args, Parser, Subcommand};
+</span><span class="kw">use </span>clap::{Args, Command, Parser, Subcommand};
+<span class="kw">use </span>clap_complete::{generate, Generator, Shell};
+<span class="kw">use </span>std::io;
 
 <span class="attr">#[derive(Parser, Debug)]
 #[clap(author, about, version, long_about = <span class="prelude-val">None</span>)]
@@ -252,6 +274,8 @@
     </span>List,
     <span class="doccomment">/// Update a TODO by ID
     </span>Update(Update),
+    <span class="doccomment">/// Generate shell completion
+    </span>Completion(Completion),
 }
 
 <span class="attr">#[derive(Subcommand, Debug)]
@@ -300,6 +324,22 @@
     #[arg(group = <span class="string">&quot;finished&quot;</span>)]
     #[arg(action = clap::ArgAction::SetTrue)]
     </span><span class="kw">pub </span>undone: <span class="prelude-ty">Option</span>&lt;bool&gt;,
+}
+
+<span class="attr">#[derive(Args, Debug)]
+</span><span class="kw">pub struct </span>Completion {
+    <span class="doccomment">/// Generate completion scripts for your shell
+    </span><span class="kw">pub </span>shell: Shell,
+}
+
+<span class="kw">fn </span>generate_completions&lt;G: Generator&gt;(gen: G, cmd: <span class="kw-2">&amp;mut </span>Command) {
+    generate(gen, cmd, cmd.get_name().to_string(), <span class="kw-2">&amp;mut </span>io::stdout());
+}
+
+<span class="kw">pub fn </span>print_completions(shell: Shell) {
+    <span class="kw">use </span>clap::CommandFactory;
+    <span class="kw">let </span><span class="kw-2">mut </span>cmd = Cli::command();
+    generate_completions(shell, <span class="kw-2">&amp;mut </span>cmd);
 }
 
 <span class="attr">#[cfg(test)]
