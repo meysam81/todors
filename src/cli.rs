@@ -9,6 +9,9 @@
 //!
 //! todors serve http -p 8000 -H 127.0.0.1
 //!
+//! # Both port & host are optional, but ipv6 can also be used
+//! todors serve grpc -H ::1
+//!
 //! todors create "My first todo"
 //!
 //! todors delete 1
@@ -25,7 +28,7 @@
 //! Usage: todors <COMMAND>
 //!
 //! Commands:
-//!   serve   Serve either the gRPC or HTTP server
+//!   serve   Serve either the gRPC or REST over HTTP server
 //!   create  Create a new TODO with a title
 //!   delete  Delete a TODO by ID
 //!   list    List all TODOs
@@ -49,7 +52,7 @@ pub struct Cli {
 
 #[derive(Subcommand, Debug)]
 pub enum Commands {
-    /// Serve either the gRPC or HTTP server
+    /// Serve either the gRPC or REST over HTTP server
     #[command(subcommand)]
     Serve(Serve),
     /// Create a new TODO with a title
@@ -64,9 +67,9 @@ pub enum Commands {
 
 #[derive(Subcommand, Debug)]
 pub enum Serve {
-    /// Serve the gRPC server
+    /// Serve gRPC over HTTP server
     Grpc(ServerAddr),
-    /// Serve the HTTP server
+    /// Serve REST over HTTP server
     Http(ServerAddr),
 }
 
