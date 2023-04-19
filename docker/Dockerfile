@@ -20,4 +20,4 @@ FROM scratch
 
 COPY --from=builder /usr/local/cargo/bin/todors /usr/local/bin/todors
 
-CMD ["/usr/local/bin/todors"]
+ENTRYPOINT ["/usr/local/bin/todors"]

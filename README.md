@@ -19,10 +19,36 @@ TODO app, mainly for a practical learning experience of Rust
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 - [Todors](#todors)
+  - [Installation](#installation)
+    - [Cargo](#cargo)
+    - [Download binary](#download-binary)
+    - [Docker](#docker)
   - [Usage](#usage)
   - [Help](#help)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## Installation
+
+### Cargo
+
+```bash
+cargo install todors
+```
+
+### Download binary
+
+You can also head over to the
+[GitHub release page](https://github.com/meysam81/todors) and download the
+binary for your platform.
+
+### Docker
+  
+```bash
+docker pull meysam81/todors
+# or
+docker pull ghcr.io/meysam81/todors
+```
 
 ## Usage
 
@@ -36,7 +62,8 @@ todors serve http -H ::1
 
 todors create "My first todo"
 todors list
-todors update 1 "My first todo updated"
+todors update 1 --title "My first todo updated"
+todors update 1 --done
 todors delete 1
 
 todors completion bash | sudo tee /etc/bash_completion.d/todors

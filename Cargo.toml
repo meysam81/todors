@@ -39,11 +39,12 @@ exclude = [
     "sonar-project.properties",
 ]
 license = "MIT"
-version = "0.3.2"
+version = "0.3.3"
 edition = "2021"
 rust-version = "1.68"
 
 [dependencies]
+actix-web = "4.3.1"
 clap = { version = "4.2.2", features = ["derive"] }
 clap_complete = "4.2.0"
 config = "0.13.3"
