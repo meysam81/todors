@@ -207,6 +207,17 @@
 <a href="#207" id="207">207</a>
 <a href="#208" id="208">208</a>
 <a href="#209" id="209">209</a>
+<a href="#210" id="210">210</a>
+<a href="#211" id="211">211</a>
+<a href="#212" id="212">212</a>
+<a href="#213" id="213">213</a>
+<a href="#214" id="214">214</a>
+<a href="#215" id="215">215</a>
+<a href="#216" id="216">216</a>
+<a href="#217" id="217">217</a>
+<a href="#218" id="218">218</a>
+<a href="#219" id="219">219</a>
+<a href="#220" id="220">220</a>
 </pre><pre class="rust"><code><span class="doccomment">//! Command line interface for the todo app
 //!
 //! # Usage
@@ -228,6 +239,8 @@
 //! todors list
 //!
 //! todors update 1 &quot;My first todo updated&quot;
+//!
+//! todors completion bash | sudo tee /etc/bash_completion.d/todors
 //! ```
 //!
 //! # Help
@@ -237,12 +250,13 @@
 //! Usage: todors &lt;COMMAND&gt;
 //!
 //! Commands:
-//!   serve   Serve either the gRPC or REST over HTTP server
-//!   create  Create a new TODO with a title
-//!   delete  Delete a TODO by ID
-//!   list    List all TODOs
-//!   update  Update a TODO by ID
-//!   help    Print this message or the help of the given subcommand(s)
+//!   serve       Serve either the gRPC or REST over HTTP server
+//!   create      Create a new TODO with a title
+//!   delete      Delete a TODO by ID
+//!   list        List all TODOs
+//!   update      Update a TODO by ID
+//!   completion  Generate shell completion
+//!   help        Print this message or the help of the given subcommand(s)
 //!
 //! Options:
 //!   -h, --help     Print help
@@ -274,6 +288,8 @@
     </span>List,
     <span class="doccomment">/// Update a TODO by ID
     </span>Update(Update),
+    <span class="doccomment">/// Get a TODO by ID
+    </span>Get(Get),
     <span class="doccomment">/// Generate shell completion
     </span>Completion(Completion),
 }
@@ -324,6 +340,12 @@
     #[arg(group = <span class="string">&quot;finished&quot;</span>)]
     #[arg(action = clap::ArgAction::SetTrue)]
     </span><span class="kw">pub </span>undone: <span class="prelude-ty">Option</span>&lt;bool&gt;,
+}
+
+<span class="attr">#[derive(Args, Debug)]
+</span><span class="kw">pub struct </span>Get {
+    <span class="doccomment">/// The ID of the TODO to get
+    </span><span class="kw">pub </span>id: u32,
 }
 
 <span class="attr">#[derive(Args, Debug)]
