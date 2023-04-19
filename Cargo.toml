@@ -1,9 +1,48 @@
 [package]
 name = "todors"
 description = "todo app with CLI, REST & gRPC interfaces"
+readme = "README.md"
+repository = "https://github.com/meysam81/todors"
+documentation = "https://docs.rs/todors"
+authors = [
+    "Meysam <contact@meysam.io>",
+]
+keywords = [
+    "todo",
+    "cli",
+    "productivity",
+    "rust",
+    "http",
+    "grpc",
+]
+categories = [
+    "command-line-utilities",
+    "web-programming",
+    "web-programming::http-server",
+]
+include = [
+    "src",
+    "migrations",
+    ".cargo",
+    "Cargo.toml",
+    "LICENSE",
+    "README.md",
+]
+exclude = [
+    "Cargo.lock",
+    ".github",
+    ".gitignore",
+    "docker",
+    ".dockerignore",
+    "Dockerfile",
+    ".pre-commit-config.yaml",
+    "Justfile",
+    "sonar-project.properties",
+]
 license = "MIT"
 version = "0.3.0"
 edition = "2021"
+rust-version = "1.68"
 
 [dependencies]
 clap = { version = "4.2.2", features = ["derive"] }
