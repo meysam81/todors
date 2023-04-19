@@ -2,7 +2,7 @@
 name = "todors"
 description = "todo app with CLI, REST & gRPC interfaces"
 license = "MIT"
-version = "0.2.1"
+version = "0.3.0"
 edition = "2021"
 
 [dependencies]
