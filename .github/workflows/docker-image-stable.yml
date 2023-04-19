@@ -22,7 +22,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - image-repo: ${{ github.repository_owner }}/todors-cli
+          - image-repo: ${{ github.repository_owner }}/todors
             dockerfile: ./docker/cli/Dockerfile
     steps:
       - name: Checkout repo
