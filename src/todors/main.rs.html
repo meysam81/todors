@@ -90,7 +90,7 @@
     <span class="kw">match </span>cli.command {
         Commands::List =&gt; {
             <span class="kw">let </span>todos = Todo::list(<span class="kw-2">&amp;</span>conn).<span class="kw">await</span><span class="question-mark">?</span>;
-            <span class="macro">slog::debug!</span>(logger, <span class="string">&quot;{:?}&quot;</span>, todos);
+            <span class="macro">slog::info!</span>(logger, <span class="string">&quot;{:?}&quot;</span>, todos);
         }
         Commands::Create(cli::Create { title }) =&gt; {
             <span class="kw">let </span><span class="kw-2">mut </span>todo = Todo::new(title);
