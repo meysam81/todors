@@ -25,7 +25,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     match cli.command {
         Commands::List => {
             let todos = Todo::list(&conn).await?;
-            slog::debug!(logger, "{:?}", todos);
+            slog::info!(logger, "{:?}", todos);
         }
         Commands::Create(cli::Create { title }) => {
             let mut todo = Todo::new(title);
