@@ -3,6 +3,8 @@
 [![Code Size](https://img.shields.io/github/languages/code-size/meysam81/todors)](https://github.com/meysam81/todors)
 [![Repo Size](https://img.shields.io/github/repo-size/meysam81/todors)](https://github.com/meysam81/todors)
 [![Language Count](https://img.shields.io/github/languages/count/meysam81/todors)](https://github.com/meysam81/todors)
+[![Cargo Crate](https://img.shields.io/crates/v/todors)](https://crates.io/crates/todors)
+[![Crate Download](https://img.shields.io/crates/d/todors?label=crate%20download)](https://crates.io/crates/todors)
 [![Docker pulls](https://img.shields.io/docker/pulls/meysam81/todors?label=docker%20pulls)](https://hub.docker.com/r/meysam81/todors)
 [![License](https://img.shields.io/github/license/meysam81/todors)](https://github.com/meysam81/todors)
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=meysam81_todors&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=meysam81_todors)
