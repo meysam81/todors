@@ -56,6 +56,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 Err(err) => slog::error!(logger, "Failed to update: {:?}", err),
             };
         }
+        Commands::Completion(cli::Completion { shell }) => {
+            cli::print_completions(shell);
+        }
         _ => {
             slog::error!(logger, "Not implemented yet");
         }

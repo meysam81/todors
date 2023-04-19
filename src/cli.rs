@@ -41,7 +41,9 @@
 //!```
 //!
 
-use clap::{Args, Parser, Subcommand};
+use clap::{Args, Command, Parser, Subcommand};
+use clap_complete::{generate, Generator, Shell};
+use std::io;
 
 #[derive(Parser, Debug)]
 #[clap(author, about, version, long_about = None)]
@@ -63,6 +65,8 @@ pub enum Commands {
     List,
     /// Update a TODO by ID
     Update(Update),
+    /// Generate shell completion
+    Completion(Completion),
 }
 
 #[derive(Subcommand, Debug)]
@@ -111,6 +115,22 @@ pub struct Update {
     #[arg(group = "finished")]
     #[arg(action = clap::ArgAction::SetTrue)]
     pub undone: Option<bool>,
+}
+
+#[derive(Args, Debug)]
+pub struct Completion {
+    /// Generate completion scripts for your shell
+    pub shell: Shell,
+}
+
+fn generate_completions<G: Generator>(gen: G, cmd: &mut Command) {
+    generate(gen, cmd, cmd.get_name().to_string(), &mut io::stdout());
+}
+
+pub fn print_completions(shell: Shell) {
+    use clap::CommandFactory;
+    let mut cmd = Cli::command();
+    generate_completions(shell, &mut cmd);
 }
 
 #[cfg(test)]
