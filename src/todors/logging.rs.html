@@ -32,7 +32,7 @@
 }
 
 <span class="kw">fn </span>get_log_level(log_level: <span class="kw-2">&amp;</span>str) -&gt; slog::Level {
-    <span class="kw">match </span>log_level {
+    <span class="kw">match </span>log_level.to_lowercase().as_str() {
         <span class="string">&quot;debug&quot; </span>=&gt; slog::Level::Debug,
         <span class="string">&quot;info&quot; </span>=&gt; slog::Level::Info,
         <span class="string">&quot;warn&quot; </span>=&gt; slog::Level::Warning,

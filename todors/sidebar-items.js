@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["main",""]],"mod":[["db",""],["logging",""],["models",""],["settings",""]]};
+window.SIDEBAR_ITEMS = {"fn":[["main",""]],"mod":[["cli","Command line interface for the todo app"],["logging",""],["settings",""]]};

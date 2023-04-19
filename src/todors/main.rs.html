@@ -24,37 +24,29 @@
 <a href="#24" id="24">24</a>
 <a href="#25" id="25">25</a>
 <a href="#26" id="26">26</a>
-<a href="#27" id="27">27</a>
-<a href="#28" id="28">28</a>
-<a href="#29" id="29">29</a>
-<a href="#30" id="30">30</a>
-</pre><pre class="rust"><code><span class="kw">use </span>models::Todo;
-<span class="kw">use </span>settings::Settings;
+</pre><pre class="rust"><code><span class="kw">use </span>clap::Parser;
+<span class="kw">use </span>cli::Cli;
+<span class="comment">// use models::Todo;
+</span><span class="kw">use </span>settings::Settings;
 
-<span class="kw">mod </span>db;
-<span class="kw">mod </span>logging;
-<span class="kw">mod </span>models;
-<span class="kw">mod </span>settings;
+<span class="kw">pub mod </span>cli;
+<span class="comment">// mod db;
+</span><span class="kw">mod </span>logging;
+<span class="comment">// mod models;
+</span><span class="kw">mod </span>settings;
 
 <span class="attr">#[tokio::main]
-</span><span class="kw">async fn </span>main() -&gt; <span class="prelude-ty">Result</span>&lt;(), sqlx::Error&gt; {
+</span><span class="kw">async fn </span>main() -&gt; <span class="prelude-ty">Result</span>&lt;(), Box&lt;<span class="kw">dyn </span>std::error::Error&gt;&gt; {
     <span class="kw">let </span>settings = Settings::new().unwrap();
-
     <span class="kw">let </span>logger = logging::init(settings.log_level.as_str());
-    <span class="macro">slog::info!</span>(logger, <span class="string">&quot;Hello from Todors!&quot;</span>);
+
     <span class="macro">slog::debug!</span>(logger, <span class="string">&quot;{:?}&quot;</span>, settings);
 
-    <span class="kw">let </span>conn = db::connect(<span class="kw-2">&amp;</span>settings.db_url, <span class="prelude-val">None</span>).<span class="kw">await</span><span class="question-mark">?</span>;
-    <span class="macro">slog::debug!</span>(logger, <span class="string">&quot;{:?}&quot;</span>, conn);
+    <span class="comment">// let conn = db::connect(&amp;settings.db_url, None).await?;
+    // slog::debug!(logger, &quot;{:?}&quot;, conn);
 
-    <span class="kw">let </span><span class="kw-2">mut </span>todo = Todo::new(<span class="string">&quot;Hello Rust&quot;</span>.to_string());
-    todo.done();
-    <span class="macro">slog::debug!</span>(logger, <span class="string">&quot;{:?}&quot;</span>, todo);
-
-    <span class="kw">match </span>todo.save(<span class="kw-2">&amp;</span>conn).<span class="kw">await </span>{
-        <span class="prelude-val">Ok</span>(<span class="kw">_</span>) =&gt; <span class="macro">slog::debug!</span>(logger, <span class="string">&quot;Todo saved!&quot;</span>),
-        <span class="prelude-val">Err</span>(e) =&gt; <span class="macro">slog::error!</span>(logger, <span class="string">&quot;Error saving todo: {}&quot;</span>, e),
-    }
+    </span><span class="kw">let </span>cli = Cli::parse();
+    <span class="macro">slog::debug!</span>(logger, <span class="string">&quot;{:?}&quot;</span>, cli);
 
     <span class="prelude-val">Ok</span>(())
 }
