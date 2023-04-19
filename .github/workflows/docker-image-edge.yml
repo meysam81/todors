@@ -1,6 +1,6 @@
 name: docker-images-edge
 concurrency:
-  cancel-in-progress: true
+  cancel-in-progress: false
   group: docker-images-edge-${{ github.ref }}
 
 on:
