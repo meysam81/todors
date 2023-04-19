@@ -23,7 +23,7 @@ jobs:
       matrix:
         include:
           - image-repo: ${{ github.repository_owner }}/todors
-            dockerfile: ./docker/cli/Dockerfile
+            dockerfile: ./docker/Dockerfile
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
