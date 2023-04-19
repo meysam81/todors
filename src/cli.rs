@@ -149,13 +149,13 @@ mod test {
     use super::*;
     use clap::CommandFactory;
 
-    #[test]
-    fn verify_cli_bare_args() {
+    #[tokio::test]
+    async fn verify_cli_bare_args() {
         Cli::command().debug_assert()
     }
 
-    #[test]
-    fn verify_create_subcommand_works() {
+    #[tokio::test]
+    async fn verify_create_subcommand_works() {
         let args = vec!["todors", "create", "Hello Rust!"];
         let c = Cli::parse_from(args);
         match c.command {
@@ -166,8 +166,8 @@ mod test {
         }
     }
 
-    #[test]
-    fn verify_delete_subcommand_works() {
+    #[tokio::test]
+    async fn verify_delete_subcommand_works() {
         let args = vec!["todors", "delete", "1"];
         let c = Cli::parse_from(args);
         match c.command {
@@ -178,8 +178,8 @@ mod test {
         }
     }
 
-    #[test]
-    fn verify_update_subcommand_works() {
+    #[tokio::test]
+    async fn verify_update_subcommand_works() {
         let args = vec!["todors", "update", "1", "--title", "Hello Rust!"];
         let c = Cli::parse_from(args);
         match c.command {
@@ -191,8 +191,8 @@ mod test {
         }
     }
 
-    #[test]
-    fn verify_update_title_arg_is_optional() {
+    #[tokio::test]
+    async fn verify_update_title_arg_is_optional() {
         let args = vec!["todors", "update", "1"];
         let c = Cli::parse_from(args);
         match c.command {
@@ -204,15 +204,15 @@ mod test {
         }
     }
 
-    #[test]
-    fn verify_cli_delete_errors_with_string_id() {
+    #[tokio::test]
+    async fn verify_cli_delete_errors_with_string_id() {
         let args = vec!["todors", "delete", "foo"];
         let c = Cli::try_parse_from(args);
         assert!(c.is_err());
     }
 
-    #[test]
-    fn update_subcommand_errors_with_non_int_id() {
+    #[tokio::test]
+    async fn update_subcommand_errors_with_non_int_id() {
         let args = vec!["todors", "update", "foo", "--title", "Hello Rust!"];
         let c = Cli::try_parse_from(args);
         assert!(c.is_err());
