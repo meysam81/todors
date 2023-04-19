@@ -19,6 +19,8 @@
 //! todors list
 //!
 //! todors update 1 "My first todo updated"
+//!
+//! todors completion bash | sudo tee /etc/bash_completion.d/todors
 //! ```
 //!
 //! # Help
@@ -28,12 +30,13 @@
 //! Usage: todors <COMMAND>
 //!
 //! Commands:
-//!   serve   Serve either the gRPC or REST over HTTP server
-//!   create  Create a new TODO with a title
-//!   delete  Delete a TODO by ID
-//!   list    List all TODOs
-//!   update  Update a TODO by ID
-//!   help    Print this message or the help of the given subcommand(s)
+//!   serve       Serve either the gRPC or REST over HTTP server
+//!   create      Create a new TODO with a title
+//!   delete      Delete a TODO by ID
+//!   list        List all TODOs
+//!   update      Update a TODO by ID
+//!   completion  Generate shell completion
+//!   help        Print this message or the help of the given subcommand(s)
 //!
 //! Options:
 //!   -h, --help     Print help
