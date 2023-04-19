@@ -1,7 +1,7 @@
 //! Command line interface for the todo app
 //!
 //! # Usage
-//! 
+//!
 //! The usage is as follows:
 //!
 //! ```bash
@@ -20,7 +20,7 @@
 //!
 //! todors update 1 "My first todo updated"
 //! ```
-//! 
+//!
 //! # Help
 //! todo app with CLI, REST & gRPC interfaces
 //!
@@ -39,7 +39,7 @@
 //!   -h, --help     Print help
 //!   -V, --version  Print version
 //!```
-//! 
+//!
 
 use clap::{Args, Parser, Subcommand};
 
