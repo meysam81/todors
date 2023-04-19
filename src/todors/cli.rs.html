@@ -179,6 +179,14 @@
 <a href="#179" id="179">179</a>
 <a href="#180" id="180">180</a>
 <a href="#181" id="181">181</a>
+<a href="#182" id="182">182</a>
+<a href="#183" id="183">183</a>
+<a href="#184" id="184">184</a>
+<a href="#185" id="185">185</a>
+<a href="#186" id="186">186</a>
+<a href="#187" id="187">187</a>
+<a href="#188" id="188">188</a>
+<a href="#189" id="189">189</a>
 </pre><pre class="rust"><code><span class="doccomment">//! Command line interface for the todo app
 //!
 //! # Usage
@@ -268,13 +276,13 @@
 <span class="attr">#[derive(Args, Debug)]
 </span><span class="kw">pub struct </span>Create {
     <span class="doccomment">/// The title of the TODO
-    </span>title: String,
+    </span><span class="kw">pub </span>title: String,
 }
 
 <span class="attr">#[derive(Args, Debug)]
 </span><span class="kw">pub struct </span>Delete {
     <span class="doccomment">/// The ID of the TODO to delete
-    </span>id: u32,
+    </span><span class="kw">pub </span>id: u32,
 }
 
 <span class="attr">#[derive(Args, Debug)]
@@ -284,6 +292,14 @@
     <span class="doccomment">/// The new title of the TODO
     </span><span class="attr">#[arg(short, long)]
     </span><span class="kw">pub </span>title: <span class="prelude-ty">Option</span>&lt;String&gt;,
+    <span class="attr">#[arg(short, long)]
+    #[arg(group = <span class="string">&quot;finished&quot;</span>)]
+    #[arg(action = clap::ArgAction::SetTrue)]
+    </span><span class="kw">pub </span>done: <span class="prelude-ty">Option</span>&lt;bool&gt;,
+    <span class="attr">#[arg(short, long)]
+    #[arg(group = <span class="string">&quot;finished&quot;</span>)]
+    #[arg(action = clap::ArgAction::SetTrue)]
+    </span><span class="kw">pub </span>undone: <span class="prelude-ty">Option</span>&lt;bool&gt;,
 }
 
 <span class="attr">#[cfg(test)]
@@ -325,7 +341,7 @@
         <span class="kw">let </span>args = <span class="macro">vec!</span>[<span class="string">&quot;todors&quot;</span>, <span class="string">&quot;update&quot;</span>, <span class="string">&quot;1&quot;</span>, <span class="string">&quot;--title&quot;</span>, <span class="string">&quot;Hello Rust!&quot;</span>];
         <span class="kw">let </span>c = Cli::parse_from(args);
         <span class="kw">match </span>c.command {
-            Commands::Update(Update { id, title }) =&gt; {
+            Commands::Update(Update { id, title, .. }) =&gt; {
                 <span class="macro">assert_eq!</span>(id, <span class="number">1</span>);
                 <span class="macro">assert_eq!</span>(title.unwrap(), <span class="string">&quot;Hello Rust!&quot;</span>);
             }
@@ -338,7 +354,7 @@
         <span class="kw">let </span>args = <span class="macro">vec!</span>[<span class="string">&quot;todors&quot;</span>, <span class="string">&quot;update&quot;</span>, <span class="string">&quot;1&quot;</span>];
         <span class="kw">let </span>c = Cli::parse_from(args);
         <span class="kw">match </span>c.command {
-            Commands::Update(Update { id, title }) =&gt; {
+            Commands::Update(Update { id, title, .. }) =&gt; {
                 <span class="macro">assert_eq!</span>(id, <span class="number">1</span>);
                 <span class="macro">assert_eq!</span>(title, <span class="prelude-val">None</span>);
             }
