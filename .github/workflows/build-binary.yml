@@ -18,7 +18,6 @@ permissions:
 jobs:
   build:
     runs-on: ${{ matrix.image }}
-    container: rust:1
     strategy:
       matrix:
         include:
