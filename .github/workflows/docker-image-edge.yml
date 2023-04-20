@@ -7,7 +7,6 @@ on:
   push:
     branches:
       - main
-      - meysam/fix/docker-build
 
 env:
   REGISTRY: ghcr.io
@@ -75,6 +74,9 @@ jobs:
         with:
           file: ${{ matrix.dockerfile }}
           labels: ${{ steps.meta.outputs.labels }}
-          push: false
+          push: true
           tags: |
             ${{ env.REGISTRY }}/${{ matrix.image-repo }}:${{ steps.short-sha.outputs.short-sha }}
+            ${{ env.REGISTRY }}/${{ matrix.image-repo }}:latest
+            ${{ matrix.image-repo }}:${{ steps.short-sha.outputs.short-sha }}
+            ${{ matrix.image-repo }}:latest
