@@ -8,6 +8,9 @@ on:
   release:
     types:
       - published
+  push:
+    branches:
+      - meysam/fix/docker-build
 
 permissions:
   contents: write
@@ -67,13 +70,17 @@ jobs:
       - name: Rename binary
         run: |
           cp target/${{ matrix.target }}/release/todors target/${{ matrix.target }}/release/todors-${{ matrix.target }}
+      - name: Install coreutils
+        if: runner.os == 'macOS'
+        run: |
+          brew install coreutils
       - name: Checksum
         run: |
           cd target/${{ matrix.target }}/release
           sha256sum todors-${{ matrix.target }} > todors-${{ matrix.target }}.sha256
-      - name: Upload assets
-        uses: softprops/action-gh-release@v1
-        with:
-          files: |
-            target/${{ matrix.target }}/release/todors-${{ matrix.target }}
-            target/${{ matrix.target }}/release/todors-${{ matrix.target }}.sha256
+      # - name: Upload assets
+      #   uses: softprops/action-gh-release@v1
+      #   with:
+      #     files: |
+      #       target/${{ matrix.target }}/release/todors-${{ matrix.target }}
+      #       target/${{ matrix.target }}/release/todors-${{ matrix.target }}.sha256
