@@ -76,7 +76,7 @@ jobs:
         with:
           name: todors-${{ matrix.target }}
           path: target/${{ matrix.target }}/release/todors
-          fail-on-empty-artifacts: true
+          if-no-files-found: error
       # - name: Rename binary
       #   run: |
       #     cp target/${{ matrix.target }}/release/todors target/${{ matrix.target }}/release/todors-${{ matrix.target }}
