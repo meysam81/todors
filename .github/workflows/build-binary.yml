@@ -1,7 +1,7 @@
-name: rust-release
+name: build-binary
 
 concurrency:
-  group: rust-release-${{ github.ref }}
+  group: build-binary-${{ github.ref }}
   cancel-in-progress: true
 
 on:
@@ -17,12 +17,16 @@ permissions:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.image }}
     strategy:
       matrix:
-        target:
-          - x86_64-unknown-linux-gnu
-          - x86_64-unknown-linux-musl
+        include:
+          - image: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+          - image: macos-latest
+            target: x86_64-apple-darwin
+          - image: windows-latest
+            target: x86_64-pc-windows-msvc
       fail-fast: false
     steps:
       - name: Checkout
