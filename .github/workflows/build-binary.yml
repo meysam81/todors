@@ -47,13 +47,14 @@ jobs:
             ~/.cargo/git
             target
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-      - if: runner.os == 'macOS'
-        name: Cache Homebrew
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/Library/Caches/Homebrew/downloads/
-          key: ${{ runner.os }}-homebrew
+      # NOTE: this will save ~3GiB of space and takes time to download/upload
+      # - if: runner.os == 'macOS'
+      #   name: Cache Homebrew
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: |
+      #       ~/Library/Caches/Homebrew/downloads/
+      #     key: ${{ runner.os }}-homebrew
       - name: Install Rust stable
         run: |
           rustup toolchain install stable --target ${{ matrix.target }}
