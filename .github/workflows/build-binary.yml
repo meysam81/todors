@@ -17,20 +17,35 @@ permissions:
 
 jobs:
   build:
-    runs-on: ${{ matrix.image }}
+    runs-on: ubuntu-latest
+    container: rust:1
     strategy:
       matrix:
-        include:
-          - image: ubuntu-latest
-            target: x86_64-unknown-linux-gnu
-          - image: macos-latest
-            target: x86_64-apple-darwin
-          - image: windows-latest
-            target: x86_64-pc-windows-msvc
+        # include:
+        #   - image: ubuntu-latest
+        #     target: x86_64-unknown-linux-gnu
+        #   - image: macos-latest
+        #     target: x86_64-apple-darwin
+        #   - image: windows-latest
+        #     target: x86_64-pc-windows-msvc
+        #   - target: x86_64-unknown-linux-musl
+        targets:
+          - x86_64-unknown-linux-gnu
+          - x86_64-apple-darwin
+          - x86_64-pc-windows-msvc
+          - x86_64-unknown-linux-musl
       fail-fast: false
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - name: Install Rust stable
         run: |
           rustup toolchain install stable --target ${{ matrix.target }}
