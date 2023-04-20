@@ -6,10 +6,6 @@ rustflags = ["-C", "link-arg=-fuse-ld=/usr/local/bin/mold"]
 linker = "musl-gcc"
 rustflags = ["-C", "link-arg=-fuse-ld=/usr/local/bin/mold"]
 
-[target.aarch64-unknown-linux-gnu]
-linker = "aarch64-linux-gnu-gcc"
-rustflags = ["-C", "link-arg=-fuse-ld=/usr/local/bin/mold"]
-
 [target.x86_64-apple-darwin]
 rustflags = [
     "-C",
