@@ -49,8 +49,8 @@ jobs:
       - name: Install Rust stable
         run: |
           rustup toolchain install stable --target ${{ matrix.target }}
-      - name: Install mold
-        uses: rui314/setup-mold@v1
+      # - name: Install mold
+      #   uses: rui314/setup-mold@v1
       - name: Build
         run: |
           cargo build --release --target ${{ matrix.target }}
