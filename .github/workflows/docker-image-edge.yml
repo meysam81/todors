@@ -33,7 +33,6 @@ jobs:
         with:
           path: |
             /tmp/.buildx-cache
-            /var/lib/docker
           key: ${{ runner.os }}-buildx-${{ hashFiles('**/Dockerfile') }}
       - name: Set up QEMU needed for Docker
         uses: docker/setup-qemu-action@v2

@@ -85,8 +85,8 @@ jobs:
         with:
           name: todors-${{ matrix.target }}
           path: |
-            todors-${{ matrix.target }}
-            todors-${{ matrix.target }}.sha256
+            target/${{ matrix.target }}/release/todors-${{ matrix.target }}
+            target/${{ matrix.target }}/release/todors-${{ matrix.target }}.sha256
           if-no-files-found: error
       # - name: Upload assets
       #   uses: softprops/action-gh-release@v1
