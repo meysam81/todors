@@ -2,10 +2,6 @@
 linker = "clang"
 rustflags = ["-C", "link-arg=-fuse-ld=/usr/local/bin/mold"]
 
-[target.x86_64-unknown-linux-musl]
-linker = "musl-gcc"
-rustflags = ["-C", "link-arg=-fuse-ld=/usr/local/bin/mold"]
-
 [target.x86_64-apple-darwin]
 rustflags = [
     "-C",
