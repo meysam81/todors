@@ -61,7 +61,7 @@ jobs:
       - name: Build
         run: |
           cargo build --release --target ${{ matrix.target }}
-      - name: Upload artifact
+      - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
           name: todors-${{ matrix.target }}
