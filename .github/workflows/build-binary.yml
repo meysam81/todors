@@ -10,7 +10,10 @@ on:
       - published
   push:
     branches:
-      - meysam/fix/docker-build
+      - main
+  pull_request:
+    branches:
+      - main
 
 permissions:
   contents: write
@@ -88,9 +91,10 @@ jobs:
             target/${{ matrix.target }}/release/todors-${{ matrix.target }}
             target/${{ matrix.target }}/release/todors-${{ matrix.target }}.sha256
           if-no-files-found: error
-      # - name: Upload assets
-      #   uses: softprops/action-gh-release@v1
-      #   with:
-      #     files: |
-      #       target/${{ matrix.target }}/release/todors-${{ matrix.target }}
-      #       target/${{ matrix.target }}/release/todors-${{ matrix.target }}.sha256
+      - if: github.event_name == 'release' && github.event.action == 'published'
+        name: Upload assets
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            target/${{ matrix.target }}/release/todors-${{ matrix.target }}
+            target/${{ matrix.target }}/release/todors-${{ matrix.target }}.sha256
