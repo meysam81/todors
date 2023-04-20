@@ -37,6 +37,11 @@ jobs:
           - image: ubuntu-latest
             target: aarch64-unknown-linux-gnu
             mold: true
+          - image: ubuntu-latest
+            target: armv7-unknown-linux-gnueabihf
+            mold: true
+          - image: windows-latest
+            target: aarch64-pc-windows-msvc
       fail-fast: false
     steps:
       - name: Checkout
