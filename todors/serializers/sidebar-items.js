@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"derive":["Deserialize","Serialize"],"fn":["from_json","to_json"],"struct":["Error"],"trait":["Deserialize","Serialize"]};

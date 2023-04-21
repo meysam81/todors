@@ -1,0 +1,3 @@
+(function() {var implementors = {
+"todors":[["impl <a class=\"trait\" href=\"todors/serializers/trait.Serialize.html\" title=\"trait todors::serializers::Serialize\">Serialize</a> for <a class=\"struct\" href=\"todors/models/struct.Todo.html\" title=\"struct todors::models::Todo\">Todo</a>"]]
+};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

@@ -1,0 +1,317 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="A record that can be built from a row returned by the database."><title>FromRow in todors::db - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-c4dbdcde0fbd8430.css" id="mainThemeStyle"><link rel="stylesheet" id="themeStyle" href="../../static.files/light-db279b6232be9c13.css"><link rel="stylesheet" disabled href="../../static.files/dark-cf923f49f397b216.css"><link rel="stylesheet" disabled href="../../static.files/ayu-be46fdc453a55015.css"><script src="../../static.files/storage-3891ce972e3a2bf8.js"></script><script defer src="sidebar-items.js"></script><script defer src="../../static.files/main-98a684e84ae5b08b.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc trait"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="logo-container" href="../../todors/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><h2></h2></nav><nav class="sidebar"><a class="logo-container" href="../../todors/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><h2 class="location"><a href="#">FromRow</a></h2><div class="sidebar-elems"><section><h3><a href="#required-methods">Required Methods</a></h3><ul class="block"><li><a href="#tymethod.from_row">from_row</a></li></ul><h3><a href="#foreign-impls">Implementations on Foreign Types</a></h3><ul class="block"><li><a href="#impl-FromRow%3C'r,+R%3E-for-(T1,+T2)">(T1, T2)</a></li><li><a href="#impl-FromRow%3C'r,+R%3E-for-(T1,+T2,+T3)">(T1, T2, T3)</a></li><li><a href="#impl-FromRow%3C'r,+R%3E-for-(T1,+T2,+T3,+T4)">(T1, T2, T3, T4)</a></li><li><a href="#impl-FromRow%3C'r,+R%3E-for-(T1,+T2,+T3,+T4,+T5)">(T1, T2, T3, T4, T5)</a></li><li><a href="#impl-FromRow%3C'r,+R%3E-for-(T1,+T2,+T3,+T4,+T5,+T6)">(T1, T2, T3, T4, T5, T6)</a></li><li><a href="#impl-FromRow%3C'r,+R%3E-for-(T1,+T2,+T3,+T4,+T5,+T6,+T7)">(T1, T2, T3, T4, T5, T6, T7)</a></li><li><a href="#impl-FromRow%3C'r,+R%3E-for-(T1,+T2,+T3,+T4,+T5,+T6,+T7,+T8)">(T1, T2, T3, T4, T5, T6, T7, T8)</a></li><li><a href="#impl-FromRow%3C'r,+R%3E-for-(T1,+T2,+T3,+T4,+T5,+T6,+T7,+T8,+T9)">(T1, T2, T3, T4, T5, T6, T7, T8, T9)</a></li><li><a href="#impl-FromRow%3C'r,+R%3E-for-(T1,+T2,+T3,+T4,+T5,+T6,+T7,+T8,+T9,+T10)">(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10)</a></li><li><a href="#impl-FromRow%3C'r,+R%3E-for-(T1,+T2,+T3,+T4,+T5,+T6,+T7,+T8,+T9,+T10,+T11)">(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11)</a></li><li><a href="#impl-FromRow%3C'r,+R%3E-for-(T1,+T2,+T3,+T4,+T5,+T6,+T7,+T8,+T9,+T10,+T11,+T12)">(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12)</a></li><li><a href="#impl-FromRow%3C'r,+R%3E-for-(T1,+T2,+T3,+T4,+T5,+T6,+T7,+T8,+T9,+T10,+T11,+T12,+T13)">(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13)</a></li><li><a href="#impl-FromRow%3C'r,+R%3E-for-(T1,+T2,+T3,+T4,+T5,+T6,+T7,+T8,+T9,+T10,+T11,+T12,+T13,+T14)">(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14)</a></li><li><a href="#impl-FromRow%3C'r,+R%3E-for-(T1,+T2,+T3,+T4,+T5,+T6,+T7,+T8,+T9,+T10,+T11,+T12,+T13,+T14,+T15)">(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15)</a></li><li><a href="#impl-FromRow%3C'r,+R%3E-for-(T1,+T2,+T3,+T4,+T5,+T6,+T7,+T8,+T9,+T10,+T11,+T12,+T13,+T14,+T15,+T16)">(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16)</a></li><li><a href="#impl-FromRow%3C'r,+R%3E-for-(T1,)">(T1,)</a></li></ul><h3><a href="#implementors">Implementors</a></h3></section><h2><a href="index.html">In todors::db</a></h2></div></nav><main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Trait <a href="../index.html">todors</a>::<wbr><a href="index.html">db</a>::<wbr><a class="trait" href="#">FromRow</a><button id="copy-path" title="Copy item path to clipboard"><img src="../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><pre class="rust item-decl"><code>pub trait FromRow&lt;'r, R&gt;: <a class="trait" href="https://doc.rust-lang.org/1.69.0/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a><span class="where fmt-newline">where
+    R: Row,</span>{
+    // Required method
+    fn <a href="#tymethod.from_row" class="fn">from_row</a>(row: <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.reference.html">&amp;'r R</a>) -&gt; <a class="enum" href="https://doc.rust-lang.org/1.69.0/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;Self, <a class="enum" href="enum.Error.html" title="enum todors::db::Error">Error</a>&gt;;
+}</code></pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>A record that can be built from a row returned by the database.</p>
+<p>In order to use <a href="crate::query_as"><code>query_as</code></a> the output type must implement <code>FromRow</code>.</p>
+<h3 id="derivable"><a href="#derivable">Derivable</a></h3>
+<p>This trait can be derived by SQLx for any struct. The generated implementation
+will consist of a sequence of calls to [<code>Row::try_get</code>] using the name from each
+struct field.</p>
+
+<div class="example-wrap ignore"><a href="#" class="tooltip" title="This example is not tested">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="attr">#[derive(sqlx::FromRow)]
+</span><span class="kw">struct </span>User {
+    id: i32,
+    name: String,
+}</code></pre></div>
+<h4 id="field-attributes"><a href="#field-attributes">Field attributes</a></h4>
+<p>Several attributes can be specified to customize how each column in a row is read:</p>
+<h5 id="rename"><a href="#rename"><code>rename</code></a></h5>
+<p>When the name of a field in Rust does not match the name of its corresponding column,
+you can use the <code>rename</code> attribute to specify the name that the field has in the row.
+For example:</p>
+
+<div class="example-wrap ignore"><a href="#" class="tooltip" title="This example is not tested">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="attr">#[derive(sqlx::FromRow)]
+</span><span class="kw">struct </span>User {
+    id: i32,
+    name: String,
+    <span class="attr">#[sqlx(rename = <span class="string">&quot;description&quot;</span>)]
+    </span>about_me: String
+}</code></pre></div>
+<p>Given a query such as:</p>
+<div class="example-wrap"><pre class="language-sql"><code>SELECT id, name, description FROM users;
+</code></pre></div>
+<p>will read the content of the column <code>description</code> into the field <code>about_me</code>.</p>
+<h5 id="rename_all"><a href="#rename_all"><code>rename_all</code></a></h5>
+<p>By default, field names are expected verbatim (with the exception of the raw identifier prefix <code>r#</code>, if present).
+Placed at the struct level, this attribute changes how the field name is mapped to its SQL column name:</p>
+
+<div class="example-wrap ignore"><a href="#" class="tooltip" title="This example is not tested">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="attr">#[derive(sqlx::FromRow)]
+#[sqlx(rename_all = <span class="string">&quot;camelCase&quot;</span>)]
+</span><span class="kw">struct </span>UserPost {
+    id: i32,
+    <span class="comment">// remapped to &quot;userId&quot;
+    </span>user_id: i32,
+    contents: String
+}</code></pre></div>
+<p>The supported values are <code>snake_case</code> (available if you have non-snake-case field names for some
+reason), <code>lowercase</code>, <code>UPPERCASE</code>, <code>camelCase</code>, <code>PascalCase</code>, <code>SCREAMING_SNAKE_CASE</code> and <code>kebab-case</code>.
+The styling of each option is intended to be an example of its behavior.</p>
+<h5 id="default"><a href="#default"><code>default</code></a></h5>
+<p>When your struct contains a field that is not present in your query,
+if the field type has an implementation for <a href="https://doc.rust-lang.org/1.69.0/core/default/trait.Default.html" title="trait core::default::Default"><code>Default</code></a>,
+you can use the <code>default</code> attribute to assign the default value to said field.
+For example:</p>
+
+<div class="example-wrap ignore"><a href="#" class="tooltip" title="This example is not tested">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="attr">#[derive(sqlx::FromRow)]
+</span><span class="kw">struct </span>User {
+    id: i32,
+    name: String,
+    <span class="attr">#[sqlx(default)]
+    </span>location: <span class="prelude-ty">Option</span>&lt;String&gt;
+}</code></pre></div>
+<p>Given a query such as:</p>
+<div class="example-wrap"><pre class="language-sql"><code>SELECT id, name FROM users;
+</code></pre></div>
+<p>will set the value of the field <code>location</code> to the default value of <code>Option&lt;String&gt;</code>,
+which is <code>None</code>.</p>
+<h4 id="flatten"><a href="#flatten"><code>flatten</code></a></h4>
+<p>If you want to handle a field that implements <a href="trait.FromRow.html" title="trait todors::db::FromRow"><code>FromRow</code></a>,
+you can use the <code>flatten</code> attribute to specify that you want
+it to use <a href="trait.FromRow.html" title="trait todors::db::FromRow"><code>FromRow</code></a> for parsing rather than the usual method.
+For example:</p>
+
+<div class="example-wrap ignore"><a href="#" class="tooltip" title="This example is not tested">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="attr">#[derive(sqlx::FromRow)]
+</span><span class="kw">struct </span>Address {
+    country: String,
+    city: String,
+    road: String,
+}
+
+<span class="attr">#[derive(sqlx::FromRow)]
+</span><span class="kw">struct </span>User {
+    id: i32,
+    name: String,
+    <span class="attr">#[sqlx(flatten)]
+    </span>address: Address,
+}</code></pre></div>
+<p>Given a query such as:</p>
+<div class="example-wrap"><pre class="language-sql"><code>SELECT id, name, country, city, road FROM users;
+</code></pre></div>
+<p>This field is compatible with the <code>default</code> attribute.</p>
+<h3 id="manual-implementation"><a href="#manual-implementation">Manual implementation</a></h3>
+<p>You can also implement the <a href="trait.FromRow.html" title="trait todors::db::FromRow"><code>FromRow</code></a> trait by hand. This can be useful if you
+have a struct with a field that needs manual decoding:</p>
+
+<div class="example-wrap ignore"><a href="#" class="tooltip" title="This example is not tested">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="kw">use </span>sqlx::{FromRow, sqlite::SqliteRow, sqlx::Row};
+<span class="kw">struct </span>MyCustomType {
+    custom: String,
+}
+
+<span class="kw">struct </span>Foo {
+    bar: MyCustomType,
+}
+
+<span class="kw">impl </span>FromRow&lt;<span class="lifetime">&#39;_</span>, SqliteRow&gt; <span class="kw">for </span>Foo {
+    <span class="kw">fn </span>from_row(row: <span class="kw-2">&amp;</span>SqliteRow) -&gt; sqlx::Result&lt;<span class="self">Self</span>&gt; {
+        <span class="prelude-val">Ok</span>(<span class="self">Self </span>{
+            bar: MyCustomType {
+                custom: row.try_get(<span class="string">&quot;custom&quot;</span>)<span class="question-mark">?
+            </span>}
+        })
+    }
+}</code></pre></div>
+<h5 id="try_from"><a href="#try_from"><code>try_from</code></a></h5>
+<p>When your struct contains a field whose type is not matched with the database type,
+if the field type has an implementation <a href="https://doc.rust-lang.org/1.69.0/core/convert/trait.TryFrom.html" title="trait core::convert::TryFrom"><code>TryFrom</code></a> for the database type,
+you can use the <code>try_from</code> attribute to convert the database type to the field type.
+For example:</p>
+
+<div class="example-wrap ignore"><a href="#" class="tooltip" title="This example is not tested">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="attr">#[derive(sqlx::FromRow)]
+</span><span class="kw">struct </span>User {
+    id: i32,
+    name: String,
+    <span class="attr">#[sqlx(try_from = <span class="string">&quot;i64&quot;</span>)]
+    </span>bigIntInMySql: u64
+}</code></pre></div>
+<p>Given a query such as:</p>
+<div class="example-wrap"><pre class="language-sql"><code>SELECT id, name, bigIntInMySql FROM users;
+</code></pre></div>
+<p>In MySql, <code>BigInt</code> type matches <code>i64</code>, but you can convert it to <code>u64</code> by <code>try_from</code>.</p>
+</div></details><h2 id="required-methods" class="small-section-header">Required Methods<a href="#required-methods" class="anchor">§</a></h2><div class="methods"><section id="tymethod.from_row" class="method"><h4 class="code-header">fn <a href="#tymethod.from_row" class="fn">from_row</a>(row: <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.reference.html">&amp;'r R</a>) -&gt; <a class="enum" href="https://doc.rust-lang.org/1.69.0/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;Self, <a class="enum" href="enum.Error.html" title="enum todors::db::Error">Error</a>&gt;</h4></section></div><h2 id="foreign-impls" class="small-section-header">Implementations on Foreign Types<a href="#foreign-impls" class="anchor">§</a></h2><details class="toggle implementors-toggle"><summary><section id="impl-FromRow%3C'r,+R%3E-for-(T1,+T2,+T3,+T4,+T5,+T6,+T7,+T8,+T9,+T10)" class="impl"><a href="#impl-FromRow%3C'r,+R%3E-for-(T1,+T2,+T3,+T4,+T5,+T6,+T7,+T8,+T9,+T10)" class="anchor">§</a><h3 class="code-header">impl&lt;'r, R, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10&gt; <a class="trait" href="trait.FromRow.html" title="trait todors::db::FromRow">FromRow</a>&lt;'r, R&gt; for <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.tuple.html">(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10)</a><span class="where fmt-newline">where
+    R: Row,
+    <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.usize.html">usize</a>: ColumnIndex&lt;R&gt;,
+    T1: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T2: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T3: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T4: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T5: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T6: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T7: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T8: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T9: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T10: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,</span></h3></section></summary><div class="impl-items"><section id="method.from_row" class="method trait-impl"><a href="#method.from_row" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.from_row" class="fn">from_row</a>(
+    row: <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.reference.html">&amp;'r R</a>
+) -&gt; <a class="enum" href="https://doc.rust-lang.org/1.69.0/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.tuple.html">(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10)</a>, <a class="enum" href="enum.Error.html" title="enum todors::db::Error">Error</a>&gt;</h4></section></div></details><details class="toggle implementors-toggle"><summary><section id="impl-FromRow%3C'r,+R%3E-for-(T1,+T2,+T3,+T4,+T5,+T6,+T7)" class="impl"><a href="#impl-FromRow%3C'r,+R%3E-for-(T1,+T2,+T3,+T4,+T5,+T6,+T7)" class="anchor">§</a><h3 class="code-header">impl&lt;'r, R, T1, T2, T3, T4, T5, T6, T7&gt; <a class="trait" href="trait.FromRow.html" title="trait todors::db::FromRow">FromRow</a>&lt;'r, R&gt; for <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.tuple.html">(T1, T2, T3, T4, T5, T6, T7)</a><span class="where fmt-newline">where
+    R: Row,
+    <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.usize.html">usize</a>: ColumnIndex&lt;R&gt;,
+    T1: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T2: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T3: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T4: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T5: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T6: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T7: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,</span></h3></section></summary><div class="impl-items"><section id="method.from_row-1" class="method trait-impl"><a href="#method.from_row-1" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.from_row" class="fn">from_row</a>(row: <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.reference.html">&amp;'r R</a>) -&gt; <a class="enum" href="https://doc.rust-lang.org/1.69.0/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.tuple.html">(T1, T2, T3, T4, T5, T6, T7)</a>, <a class="enum" href="enum.Error.html" title="enum todors::db::Error">Error</a>&gt;</h4></section></div></details><details class="toggle implementors-toggle"><summary><section id="impl-FromRow%3C'r,+R%3E-for-(T1,+T2,+T3,+T4,+T5,+T6,+T7,+T8,+T9,+T10,+T11,+T12)" class="impl"><a href="#impl-FromRow%3C'r,+R%3E-for-(T1,+T2,+T3,+T4,+T5,+T6,+T7,+T8,+T9,+T10,+T11,+T12)" class="anchor">§</a><h3 class="code-header">impl&lt;'r, R, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12&gt; <a class="trait" href="trait.FromRow.html" title="trait todors::db::FromRow">FromRow</a>&lt;'r, R&gt; for <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.tuple.html">(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12)</a><span class="where fmt-newline">where
+    R: Row,
+    <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.usize.html">usize</a>: ColumnIndex&lt;R&gt;,
+    T1: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T2: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T3: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T4: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T5: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T6: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T7: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T8: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T9: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T10: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T11: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T12: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,</span></h3></section></summary><div class="impl-items"><section id="method.from_row-2" class="method trait-impl"><a href="#method.from_row-2" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.from_row" class="fn">from_row</a>(
+    row: <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.reference.html">&amp;'r R</a>
+) -&gt; <a class="enum" href="https://doc.rust-lang.org/1.69.0/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.tuple.html">(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12)</a>, <a class="enum" href="enum.Error.html" title="enum todors::db::Error">Error</a>&gt;</h4></section></div></details><details class="toggle implementors-toggle"><summary><section id="impl-FromRow%3C'r,+R%3E-for-(T1,+T2,+T3,+T4,+T5)" class="impl"><a href="#impl-FromRow%3C'r,+R%3E-for-(T1,+T2,+T3,+T4,+T5)" class="anchor">§</a><h3 class="code-header">impl&lt;'r, R, T1, T2, T3, T4, T5&gt; <a class="trait" href="trait.FromRow.html" title="trait todors::db::FromRow">FromRow</a>&lt;'r, R&gt; for <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.tuple.html">(T1, T2, T3, T4, T5)</a><span class="where fmt-newline">where
+    R: Row,
+    <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.usize.html">usize</a>: ColumnIndex&lt;R&gt;,
+    T1: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T2: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T3: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T4: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T5: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,</span></h3></section></summary><div class="impl-items"><section id="method.from_row-3" class="method trait-impl"><a href="#method.from_row-3" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.from_row" class="fn">from_row</a>(row: <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.reference.html">&amp;'r R</a>) -&gt; <a class="enum" href="https://doc.rust-lang.org/1.69.0/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.tuple.html">(T1, T2, T3, T4, T5)</a>, <a class="enum" href="enum.Error.html" title="enum todors::db::Error">Error</a>&gt;</h4></section></div></details><details class="toggle implementors-toggle"><summary><section id="impl-FromRow%3C'r,+R%3E-for-(T1,+T2,+T3,+T4,+T5,+T6,+T7,+T8,+T9,+T10,+T11,+T12,+T13,+T14,+T15,+T16)" class="impl"><a href="#impl-FromRow%3C'r,+R%3E-for-(T1,+T2,+T3,+T4,+T5,+T6,+T7,+T8,+T9,+T10,+T11,+T12,+T13,+T14,+T15,+T16)" class="anchor">§</a><h3 class="code-header">impl&lt;'r, R, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16&gt; <a class="trait" href="trait.FromRow.html" title="trait todors::db::FromRow">FromRow</a>&lt;'r, R&gt; for <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.tuple.html">(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16)</a><span class="where fmt-newline">where
+    R: Row,
+    <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.usize.html">usize</a>: ColumnIndex&lt;R&gt;,
+    T1: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T2: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T3: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T4: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T5: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T6: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T7: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T8: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T9: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T10: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T11: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T12: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T13: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T14: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T15: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T16: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,</span></h3></section></summary><div class="impl-items"><section id="method.from_row-4" class="method trait-impl"><a href="#method.from_row-4" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.from_row" class="fn">from_row</a>(
+    row: <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.reference.html">&amp;'r R</a>
+) -&gt; <a class="enum" href="https://doc.rust-lang.org/1.69.0/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.tuple.html">(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16)</a>, <a class="enum" href="enum.Error.html" title="enum todors::db::Error">Error</a>&gt;</h4></section></div></details><details class="toggle implementors-toggle"><summary><section id="impl-FromRow%3C'r,+R%3E-for-(T1,+T2,+T3,+T4,+T5,+T6)" class="impl"><a href="#impl-FromRow%3C'r,+R%3E-for-(T1,+T2,+T3,+T4,+T5,+T6)" class="anchor">§</a><h3 class="code-header">impl&lt;'r, R, T1, T2, T3, T4, T5, T6&gt; <a class="trait" href="trait.FromRow.html" title="trait todors::db::FromRow">FromRow</a>&lt;'r, R&gt; for <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.tuple.html">(T1, T2, T3, T4, T5, T6)</a><span class="where fmt-newline">where
+    R: Row,
+    <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.usize.html">usize</a>: ColumnIndex&lt;R&gt;,
+    T1: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T2: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T3: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T4: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T5: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T6: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,</span></h3></section></summary><div class="impl-items"><section id="method.from_row-5" class="method trait-impl"><a href="#method.from_row-5" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.from_row" class="fn">from_row</a>(row: <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.reference.html">&amp;'r R</a>) -&gt; <a class="enum" href="https://doc.rust-lang.org/1.69.0/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.tuple.html">(T1, T2, T3, T4, T5, T6)</a>, <a class="enum" href="enum.Error.html" title="enum todors::db::Error">Error</a>&gt;</h4></section></div></details><details class="toggle implementors-toggle"><summary><section id="impl-FromRow%3C'r,+R%3E-for-(T1,+T2)" class="impl"><a href="#impl-FromRow%3C'r,+R%3E-for-(T1,+T2)" class="anchor">§</a><h3 class="code-header">impl&lt;'r, R, T1, T2&gt; <a class="trait" href="trait.FromRow.html" title="trait todors::db::FromRow">FromRow</a>&lt;'r, R&gt; for <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.tuple.html">(T1, T2)</a><span class="where fmt-newline">where
+    R: Row,
+    <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.usize.html">usize</a>: ColumnIndex&lt;R&gt;,
+    T1: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T2: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,</span></h3></section></summary><div class="impl-items"><section id="method.from_row-6" class="method trait-impl"><a href="#method.from_row-6" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.from_row" class="fn">from_row</a>(row: <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.reference.html">&amp;'r R</a>) -&gt; <a class="enum" href="https://doc.rust-lang.org/1.69.0/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.tuple.html">(T1, T2)</a>, <a class="enum" href="enum.Error.html" title="enum todors::db::Error">Error</a>&gt;</h4></section></div></details><details class="toggle implementors-toggle"><summary><section id="impl-FromRow%3C'r,+R%3E-for-(T1,+T2,+T3)" class="impl"><a href="#impl-FromRow%3C'r,+R%3E-for-(T1,+T2,+T3)" class="anchor">§</a><h3 class="code-header">impl&lt;'r, R, T1, T2, T3&gt; <a class="trait" href="trait.FromRow.html" title="trait todors::db::FromRow">FromRow</a>&lt;'r, R&gt; for <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.tuple.html">(T1, T2, T3)</a><span class="where fmt-newline">where
+    R: Row,
+    <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.usize.html">usize</a>: ColumnIndex&lt;R&gt;,
+    T1: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T2: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T3: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,</span></h3></section></summary><div class="impl-items"><section id="method.from_row-7" class="method trait-impl"><a href="#method.from_row-7" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.from_row" class="fn">from_row</a>(row: <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.reference.html">&amp;'r R</a>) -&gt; <a class="enum" href="https://doc.rust-lang.org/1.69.0/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.tuple.html">(T1, T2, T3)</a>, <a class="enum" href="enum.Error.html" title="enum todors::db::Error">Error</a>&gt;</h4></section></div></details><details class="toggle implementors-toggle"><summary><section id="impl-FromRow%3C'r,+R%3E-for-(T1,+T2,+T3,+T4,+T5,+T6,+T7,+T8,+T9,+T10,+T11,+T12,+T13)" class="impl"><a href="#impl-FromRow%3C'r,+R%3E-for-(T1,+T2,+T3,+T4,+T5,+T6,+T7,+T8,+T9,+T10,+T11,+T12,+T13)" class="anchor">§</a><h3 class="code-header">impl&lt;'r, R, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13&gt; <a class="trait" href="trait.FromRow.html" title="trait todors::db::FromRow">FromRow</a>&lt;'r, R&gt; for <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.tuple.html">(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13)</a><span class="where fmt-newline">where
+    R: Row,
+    <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.usize.html">usize</a>: ColumnIndex&lt;R&gt;,
+    T1: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T2: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T3: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T4: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T5: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T6: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T7: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T8: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T9: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T10: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T11: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T12: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T13: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,</span></h3></section></summary><div class="impl-items"><section id="method.from_row-8" class="method trait-impl"><a href="#method.from_row-8" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.from_row" class="fn">from_row</a>(
+    row: <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.reference.html">&amp;'r R</a>
+) -&gt; <a class="enum" href="https://doc.rust-lang.org/1.69.0/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.tuple.html">(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13)</a>, <a class="enum" href="enum.Error.html" title="enum todors::db::Error">Error</a>&gt;</h4></section></div></details><details class="toggle implementors-toggle"><summary><section id="impl-FromRow%3C'r,+R%3E-for-(T1,+T2,+T3,+T4)" class="impl"><a href="#impl-FromRow%3C'r,+R%3E-for-(T1,+T2,+T3,+T4)" class="anchor">§</a><h3 class="code-header">impl&lt;'r, R, T1, T2, T3, T4&gt; <a class="trait" href="trait.FromRow.html" title="trait todors::db::FromRow">FromRow</a>&lt;'r, R&gt; for <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.tuple.html">(T1, T2, T3, T4)</a><span class="where fmt-newline">where
+    R: Row,
+    <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.usize.html">usize</a>: ColumnIndex&lt;R&gt;,
+    T1: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T2: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T3: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T4: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,</span></h3></section></summary><div class="impl-items"><section id="method.from_row-9" class="method trait-impl"><a href="#method.from_row-9" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.from_row" class="fn">from_row</a>(row: <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.reference.html">&amp;'r R</a>) -&gt; <a class="enum" href="https://doc.rust-lang.org/1.69.0/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.tuple.html">(T1, T2, T3, T4)</a>, <a class="enum" href="enum.Error.html" title="enum todors::db::Error">Error</a>&gt;</h4></section></div></details><details class="toggle implementors-toggle"><summary><section id="impl-FromRow%3C'r,+R%3E-for-(T1,+T2,+T3,+T4,+T5,+T6,+T7,+T8,+T9)" class="impl"><a href="#impl-FromRow%3C'r,+R%3E-for-(T1,+T2,+T3,+T4,+T5,+T6,+T7,+T8,+T9)" class="anchor">§</a><h3 class="code-header">impl&lt;'r, R, T1, T2, T3, T4, T5, T6, T7, T8, T9&gt; <a class="trait" href="trait.FromRow.html" title="trait todors::db::FromRow">FromRow</a>&lt;'r, R&gt; for <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.tuple.html">(T1, T2, T3, T4, T5, T6, T7, T8, T9)</a><span class="where fmt-newline">where
+    R: Row,
+    <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.usize.html">usize</a>: ColumnIndex&lt;R&gt;,
+    T1: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T2: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T3: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T4: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T5: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T6: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T7: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T8: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T9: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,</span></h3></section></summary><div class="impl-items"><section id="method.from_row-10" class="method trait-impl"><a href="#method.from_row-10" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.from_row" class="fn">from_row</a>(row: <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.reference.html">&amp;'r R</a>) -&gt; <a class="enum" href="https://doc.rust-lang.org/1.69.0/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.tuple.html">(T1, T2, T3, T4, T5, T6, T7, T8, T9)</a>, <a class="enum" href="enum.Error.html" title="enum todors::db::Error">Error</a>&gt;</h4></section></div></details><details class="toggle implementors-toggle"><summary><section id="impl-FromRow%3C'r,+R%3E-for-(T1,+T2,+T3,+T4,+T5,+T6,+T7,+T8)" class="impl"><a href="#impl-FromRow%3C'r,+R%3E-for-(T1,+T2,+T3,+T4,+T5,+T6,+T7,+T8)" class="anchor">§</a><h3 class="code-header">impl&lt;'r, R, T1, T2, T3, T4, T5, T6, T7, T8&gt; <a class="trait" href="trait.FromRow.html" title="trait todors::db::FromRow">FromRow</a>&lt;'r, R&gt; for <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.tuple.html">(T1, T2, T3, T4, T5, T6, T7, T8)</a><span class="where fmt-newline">where
+    R: Row,
+    <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.usize.html">usize</a>: ColumnIndex&lt;R&gt;,
+    T1: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T2: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T3: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T4: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T5: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T6: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T7: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T8: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,</span></h3></section></summary><div class="impl-items"><section id="method.from_row-11" class="method trait-impl"><a href="#method.from_row-11" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.from_row" class="fn">from_row</a>(row: <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.reference.html">&amp;'r R</a>) -&gt; <a class="enum" href="https://doc.rust-lang.org/1.69.0/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.tuple.html">(T1, T2, T3, T4, T5, T6, T7, T8)</a>, <a class="enum" href="enum.Error.html" title="enum todors::db::Error">Error</a>&gt;</h4></section></div></details><details class="toggle implementors-toggle"><summary><section id="impl-FromRow%3C'r,+R%3E-for-(T1,)" class="impl"><a href="#impl-FromRow%3C'r,+R%3E-for-(T1,)" class="anchor">§</a><h3 class="code-header">impl&lt;'r, R, T1&gt; <a class="trait" href="trait.FromRow.html" title="trait todors::db::FromRow">FromRow</a>&lt;'r, R&gt; for <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.tuple.html">(T1,)</a><span class="where fmt-newline">where
+    R: Row,
+    <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.usize.html">usize</a>: ColumnIndex&lt;R&gt;,
+    T1: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,</span></h3></section></summary><div class="impl-items"><section id="method.from_row-12" class="method trait-impl"><a href="#method.from_row-12" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.from_row" class="fn">from_row</a>(row: <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.reference.html">&amp;'r R</a>) -&gt; <a class="enum" href="https://doc.rust-lang.org/1.69.0/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.tuple.html">(T1,)</a>, <a class="enum" href="enum.Error.html" title="enum todors::db::Error">Error</a>&gt;</h4></section></div></details><details class="toggle implementors-toggle"><summary><section id="impl-FromRow%3C'r,+R%3E-for-(T1,+T2,+T3,+T4,+T5,+T6,+T7,+T8,+T9,+T10,+T11)" class="impl"><a href="#impl-FromRow%3C'r,+R%3E-for-(T1,+T2,+T3,+T4,+T5,+T6,+T7,+T8,+T9,+T10,+T11)" class="anchor">§</a><h3 class="code-header">impl&lt;'r, R, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11&gt; <a class="trait" href="trait.FromRow.html" title="trait todors::db::FromRow">FromRow</a>&lt;'r, R&gt; for <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.tuple.html">(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11)</a><span class="where fmt-newline">where
+    R: Row,
+    <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.usize.html">usize</a>: ColumnIndex&lt;R&gt;,
+    T1: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T2: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T3: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T4: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T5: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T6: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T7: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T8: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T9: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T10: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T11: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,</span></h3></section></summary><div class="impl-items"><section id="method.from_row-13" class="method trait-impl"><a href="#method.from_row-13" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.from_row" class="fn">from_row</a>(
+    row: <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.reference.html">&amp;'r R</a>
+) -&gt; <a class="enum" href="https://doc.rust-lang.org/1.69.0/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.tuple.html">(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11)</a>, <a class="enum" href="enum.Error.html" title="enum todors::db::Error">Error</a>&gt;</h4></section></div></details><details class="toggle implementors-toggle"><summary><section id="impl-FromRow%3C'r,+R%3E-for-(T1,+T2,+T3,+T4,+T5,+T6,+T7,+T8,+T9,+T10,+T11,+T12,+T13,+T14,+T15)" class="impl"><a href="#impl-FromRow%3C'r,+R%3E-for-(T1,+T2,+T3,+T4,+T5,+T6,+T7,+T8,+T9,+T10,+T11,+T12,+T13,+T14,+T15)" class="anchor">§</a><h3 class="code-header">impl&lt;'r, R, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15&gt; <a class="trait" href="trait.FromRow.html" title="trait todors::db::FromRow">FromRow</a>&lt;'r, R&gt; for <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.tuple.html">(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15)</a><span class="where fmt-newline">where
+    R: Row,
+    <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.usize.html">usize</a>: ColumnIndex&lt;R&gt;,
+    T1: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T2: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T3: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T4: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T5: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T6: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T7: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T8: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T9: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T10: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T11: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T12: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T13: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T14: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T15: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,</span></h3></section></summary><div class="impl-items"><section id="method.from_row-14" class="method trait-impl"><a href="#method.from_row-14" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.from_row" class="fn">from_row</a>(
+    row: <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.reference.html">&amp;'r R</a>
+) -&gt; <a class="enum" href="https://doc.rust-lang.org/1.69.0/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.tuple.html">(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15)</a>, <a class="enum" href="enum.Error.html" title="enum todors::db::Error">Error</a>&gt;</h4></section></div></details><details class="toggle implementors-toggle"><summary><section id="impl-FromRow%3C'r,+R%3E-for-(T1,+T2,+T3,+T4,+T5,+T6,+T7,+T8,+T9,+T10,+T11,+T12,+T13,+T14)" class="impl"><a href="#impl-FromRow%3C'r,+R%3E-for-(T1,+T2,+T3,+T4,+T5,+T6,+T7,+T8,+T9,+T10,+T11,+T12,+T13,+T14)" class="anchor">§</a><h3 class="code-header">impl&lt;'r, R, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14&gt; <a class="trait" href="trait.FromRow.html" title="trait todors::db::FromRow">FromRow</a>&lt;'r, R&gt; for <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.tuple.html">(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14)</a><span class="where fmt-newline">where
+    R: Row,
+    <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.usize.html">usize</a>: ColumnIndex&lt;R&gt;,
+    T1: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T2: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T3: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T4: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T5: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T6: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T7: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T8: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T9: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T10: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T11: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T12: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T13: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,
+    T14: Decode&lt;'r, &lt;R as Row&gt;::Database&gt; + Type&lt;&lt;R as Row&gt;::Database&gt;,</span></h3></section></summary><div class="impl-items"><section id="method.from_row-15" class="method trait-impl"><a href="#method.from_row-15" class="anchor">§</a><h4 class="code-header">fn <a href="#tymethod.from_row" class="fn">from_row</a>(
+    row: <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.reference.html">&amp;'r R</a>
+) -&gt; <a class="enum" href="https://doc.rust-lang.org/1.69.0/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.tuple.html">(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14)</a>, <a class="enum" href="enum.Error.html" title="enum todors::db::Error">Error</a>&gt;</h4></section></div></details><h2 id="implementors" class="small-section-header">Implementors<a href="#implementors" class="anchor">§</a></h2><div id="implementors-list"><section id="impl-FromRow%3C'a,+R%3E-for-Todo" class="impl"><a class="srclink rightside" href="../../src/todors/models.rs.html#5">source</a><a href="#impl-FromRow%3C'a,+R%3E-for-Todo" class="anchor">§</a><h3 class="code-header">impl&lt;'a, R: Row&gt; <a class="trait" href="trait.FromRow.html" title="trait todors::db::FromRow">FromRow</a>&lt;'a, R&gt; for <a class="struct" href="../models/struct.Todo.html" title="struct todors::models::Todo">Todo</a><span class="where fmt-newline">where
+    &amp;'a <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.str.html">str</a>: ColumnIndex&lt;R&gt;,
+    <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.u32.html">u32</a>: Decode&lt;'a, R::Database&gt; + Type&lt;R::Database&gt;,
+    <a class="struct" href="https://doc.rust-lang.org/1.69.0/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>: Decode&lt;'a, R::Database&gt; + Type&lt;R::Database&gt;,
+    <a class="primitive" href="https://doc.rust-lang.org/1.69.0/std/primitive.bool.html">bool</a>: Decode&lt;'a, R::Database&gt; + Type&lt;R::Database&gt;,</span></h3></section></div><script src="../../implementors/sqlx_core/from_row/trait.FromRow.js" data-ignore-extern-crates="std" async></script></section></div></main><div id="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="todors" data-themes="" data-resource-suffix="" data-rustdoc-version="1.69.0 (84c898d65 2023-04-16)" data-search-js="search-8a59a8356673ec1f.js" data-settings-js="settings-f0c5c39777a9a2f6.js" data-settings-css="settings-0bcba95ff279c1db.css" ></div></body></html>

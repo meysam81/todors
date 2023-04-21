@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":[["connect",""],["migrate",""]]};
+window.SIDEBAR_ITEMS = {"derive":["FromRow"],"enum":["Error"],"fn":["connect","migrate","query"],"macro":["query"],"mod":["query"],"struct":["QueryResult"],"trait":["FromRow"],"type":["Pool"]};
