@@ -1,7 +1,7 @@
-use serde::Deserialize;
-use sqlx::{sqlite::SqliteQueryResult, Error};
+use crate::db::{Error as DbError, FromRow, Pool, QueryResult};
+use crate::serializers::{Deserialize, Serialize};
 
-#[derive(Debug, Deserialize, sqlx::FromRow)]
+#[derive(Debug, Deserialize, Serialize, FromRow)]
 pub struct Todo {
     id: u32,
     pub title: String,
@@ -17,7 +17,7 @@ impl Todo {
         }
     }
 
-    pub async fn save(&mut self, conn: &sqlx::SqlitePool) -> Result<(), sqlx::Error> {
+    pub async fn save(&mut self, conn: &Pool) -> Result<(), DbError> {
         let res = sqlx::query(
             r#"
             INSERT INTO todo (title, done)
@@ -39,10 +39,10 @@ impl Todo {
         id: u32,
         title: Option<String>,
         done: Option<bool>,
-        conn: &sqlx::SqlitePool,
+        conn: &Pool,
     ) -> Result<(), Box<dyn std::error::Error>> {
         if title.is_none() && done.is_none() {
-            return Err(Box::new(Error::RowNotFound));
+            return Err(Box::new(DbError::RowNotFound));
         }
 
         let mut tx = conn.begin().await?;
@@ -80,7 +80,7 @@ impl Todo {
         Ok(())
     }
 
-    pub async fn list(conn: &sqlx::SqlitePool) -> Result<Vec<Todo>, sqlx::Error> {
+    pub async fn list(conn: &Pool) -> Result<Vec<Todo>, DbError> {
         let todos = sqlx::query_as::<_, Todo>(
             r#"
             SELECT id, title, done
@@ -93,10 +93,7 @@ impl Todo {
         Ok(todos)
     }
 
-    pub async fn delete(
-        id: u32,
-        conn: &sqlx::SqlitePool,
-    ) -> Result<SqliteQueryResult, sqlx::Error> {
+    pub async fn delete(id: u32, conn: &Pool) -> Result<QueryResult, DbError> {
         let r = sqlx::query(
             r#"
             DELETE FROM todo
@@ -108,12 +105,12 @@ impl Todo {
         .await?;
 
         match r.rows_affected() {
-            0 => Err(Error::RowNotFound),
+            0 => Err(DbError::RowNotFound),
             _ => Ok(r),
         }
     }
 
-    pub async fn get(id: u32, conn: &sqlx::SqlitePool) -> Result<Todo, sqlx::Error> {
+    pub async fn get(id: u32, conn: &Pool) -> Result<Todo, DbError> {
         let todo = sqlx::query_as::<_, Todo>(
             r#"
             SELECT id, title, done

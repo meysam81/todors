@@ -1,5 +1,5 @@
+use crate::serializers::Deserialize;
 use config::{Config, Environment};
-use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
 pub struct Settings {

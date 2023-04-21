@@ -4,11 +4,9 @@ release:
 build:
   cargo build --frozen
 
-run:
-  cargo run --frozen -- $(ARGS)
-
-watch:
-  cargo watch -s "just run"
+check:
+  clear
+  cargo c --frozen
 
 format:
   cargo fmt
