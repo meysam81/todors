@@ -1,18 +1,20 @@
 use clap::Parser;
 use cli::{Cli, Commands};
+use errors::TodoErrors;
 use logging::{debug, error, info, trace, warn};
 use models::Todo;
 use settings::Settings;
 
 mod cli;
 mod db;
+mod errors;
 mod logging;
 mod models;
 mod serializers;
 mod settings;
 
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
+async fn main() -> Result<(), TodoErrors> {
     let settings = Settings::new().unwrap();
     let logger = logging::init(settings.log_level.as_str());
 

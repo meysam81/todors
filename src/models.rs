@@ -1,4 +1,5 @@
 use crate::db::{Error as DbError, FromRow, Pool, QueryResult};
+use crate::errors::TodoErrors;
 use crate::serializers::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize, Serialize, FromRow)]
@@ -40,9 +41,9 @@ impl Todo {
         title: Option<String>,
         done: Option<bool>,
         conn: &Pool,
-    ) -> Result<(), Box<dyn std::error::Error>> {
+    ) -> Result<(), TodoErrors> {
         if title.is_none() && done.is_none() {
-            return Err(Box::new(DbError::RowNotFound));
+            return Err(TodoErrors::NoUpdate);
         }
 
         let mut tx = conn.begin().await?;
