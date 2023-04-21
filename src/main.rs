@@ -3,6 +3,7 @@ use cli::{Cli, Commands};
 use errors::TodoErrors;
 use logging::{debug, error, info, trace, warn};
 use models::Todo;
+use serializers::to_json;
 use settings::Settings;
 
 mod cli;
@@ -29,12 +30,16 @@ async fn main() -> Result<(), TodoErrors> {
     match cli.command {
         Commands::List => {
             let todos = Todo::list(&conn).await?;
-            info!(logger, "{:?}", todos);
+            let todos = to_json(&todos)?;
+            println!("{}", todos);
         }
         Commands::Create(cli::Create { title }) => {
             let mut todo = Todo::new(title);
             match todo.save(&conn).await {
-                Ok(_) => debug!(logger, "{:?}", todo),
+                Ok(_) => {
+                    let todo = to_json(&todo)?;
+                    println!("{}", todo)
+                }
                 Err(err) => error!(logger, "Failed to save: {:?}", err),
             };
         }
@@ -62,7 +67,10 @@ async fn main() -> Result<(), TodoErrors> {
         }
         Commands::Get(cli::Get { id }) => {
             match Todo::get(id, &conn).await {
-                Ok(todo) => info!(logger, "{:?}", todo),
+                Ok(todo) => {
+                    let todo = to_json(&todo)?;
+                    println!("{}", todo)
+                }
                 Err(err) => error!(logger, "Failed to get: {:?}", err),
             };
         }

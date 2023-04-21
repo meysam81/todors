@@ -2803,6 +2803,7 @@ dependencies = [
  "fake",
  "just",
  "serde",
+ "serde_json",
  "slog",
  "slog-async",
  "slog-term",
