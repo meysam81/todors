@@ -77,6 +77,9 @@ async fn main() -> Result<(), TodoErrors> {
         Commands::Completion(cli::Completion { shell }) => {
             cli::print_completions(shell);
         }
+        Commands::Serve(cli::Serve::Http(cli::ServerAddr { host, port })) => {
+            info!(logger, "Starting server at {}:{}", host, port);
+        }
         _ => {
             warn!(logger, "Not implemented yet");
         }
