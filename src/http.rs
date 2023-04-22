@@ -21,27 +21,11 @@ where
 }
 
 #[get("/")]
-pub async fn index() -> HttpResponse {
+async fn index() -> HttpResponse {
     HttpResponse::Ok().body("Hello world!")
 }
 
-pub async fn list_todos<T>(state: web::Data<AppState<T>>) -> HttpResponse
-where
-    T: Controller,
-{
-    match state.controller.list().await {
-        Ok(todos) => HttpResponse::Ok().json(todos),
-        Err(err) => {
-            error!(state.logger, "Failed to list todos: {:?}", err);
-            HttpResponse::InternalServerError().finish()
-        }
-    }
-}
-
-pub async fn create_todo<T>(
-    state: web::Data<AppState<T>>,
-    todo: web::Json<T::Input>,
-) -> HttpResponse
+async fn create_todo<T>(state: web::Data<AppState<T>>, todo: web::Json<T::Input>) -> HttpResponse
 where
     T: Controller,
 {
@@ -54,7 +38,20 @@ where
     }
 }
 
-pub async fn get_todo<T>(state: web::Data<AppState<T>>, id: web::Path<T::Id>) -> HttpResponse
+async fn delete_todo<T>(state: web::Data<AppState<T>>, id: web::Path<T::Id>) -> HttpResponse
+where
+    T: Controller,
+{
+    match state.controller.delete(id.into_inner()).await {
+        Ok(_) => HttpResponse::NoContent().finish(),
+        Err(err) => {
+            error!(state.logger, "Failed to delete todo: {:?}", err);
+            HttpResponse::InternalServerError().finish()
+        }
+    }
+}
+
+async fn get_todo<T>(state: web::Data<AppState<T>>, id: web::Path<T::Id>) -> HttpResponse
 where
     T: Controller,
 {
@@ -67,12 +64,26 @@ where
     }
 }
 
+async fn list_todos<T>(state: web::Data<AppState<T>>) -> HttpResponse
+where
+    T: Controller,
+{
+    match state.controller.list().await {
+        Ok(todos) => HttpResponse::Ok().json(todos),
+        Err(err) => {
+            error!(state.logger, "Failed to list todos: {:?}", err);
+            HttpResponse::InternalServerError().finish()
+        }
+    }
+}
+
 pub fn configure<T>(cfg: &mut web::ServiceConfig)
 where
     T: Controller + 'static,
 {
     cfg.service(index)
-        .route("/api/v1/todos", web::get().to(list_todos::<T>))
         .route("/api/v1/todos", web::post().to(create_todo::<T>))
-        .route("/api/v1/todos/{id}", web::get().to(get_todo::<T>));
+        .route("/api/v1/todos/{id}", web::get().to(get_todo::<T>))
+        .route("/api/v1/todos/{id}", web::delete().to(delete_todo::<T>))
+        .route("/api/v1/todos", web::get().to(list_todos::<T>));
 }

@@ -33,19 +33,6 @@ impl Controller for TodoController {
     type Input = TodoWrite;
     type Output = TodoRead;
 
-    async fn list(&self) -> Result<Vec<Self::Output>, TodoErrors> {
-        let todos = query_as::<_, TodoRead>(
-            r#"
-            SELECT id, title, done
-            FROM todo
-            "#,
-        )
-        .fetch_all(&self.pool)
-        .await?;
-
-        Ok(todos)
-    }
-
     async fn create(&self, todo: &Self::Input) -> Result<Self::Output, TodoErrors> {
         let res = query(
             r#"
@@ -68,6 +55,15 @@ impl Controller for TodoController {
         })
     }
 
+    async fn delete(&self, id: u32) -> Result<(), TodoErrors> {
+        query("DELETE FROM todo WHERE id = ?")
+            .bind(id)
+            .execute(&self.pool)
+            .await?;
+
+        Ok(())
+    }
+
     async fn get(&self, id: u32) -> Result<Self::Output, TodoErrors> {
         let todo = query_as::<_, TodoRead>(
             r#"
@@ -81,6 +77,19 @@ impl Controller for TodoController {
         .await?;
 
         Ok(todo)
+    }
+
+    async fn list(&self) -> Result<Vec<Self::Output>, TodoErrors> {
+        let todos = query_as::<_, TodoRead>(
+            r#"
+            SELECT id, title, done
+            FROM todo
+            "#,
+        )
+        .fetch_all(&self.pool)
+        .await?;
+
+        Ok(todos)
     }
 }
 
