@@ -45,8 +45,8 @@ impl Controller for TodoController {
         Ok(todos)
     }
 
-    async fn create(self: &TodoController, todo: &mut Self::Input) -> Result<(), TodoErrors> {
-        query(
+    async fn create(self: &TodoController, todo: &Self::Input) -> Result<Self::Output, TodoErrors> {
+        let res = query(
             r#"
             INSERT INTO todo (title, done)
             VALUES (?, ?)
@@ -58,9 +58,13 @@ impl Controller for TodoController {
         .execute(&self.pool)
         .await?;
 
-        // todo.id = res.last_insert_rowid() as u32;
+        let id = res.last_insert_rowid() as u32;
 
-        Ok(())
+        Ok(TodoRead {
+            id,
+            title: todo.title.clone(),
+            done: todo.done,
+        })
     }
 }
 

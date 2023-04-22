@@ -45,9 +45,8 @@ pub async fn create_todo<T>(
 where
     T: Controller,
 {
-    let mut todo = todo.into_inner();
-    match state.controller.create(&mut todo).await {
-        Ok(todo) => HttpResponse::Ok().json(todo),
+    match state.controller.create(&todo.into_inner()).await {
+        Ok(todo) => HttpResponse::Created().json(todo),
         Err(err) => {
             error!(state.logger, "Failed to create todo: {:?}", err);
             HttpResponse::InternalServerError().finish()

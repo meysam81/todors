@@ -8,5 +8,5 @@ pub trait Controller {
     type Output: Serialize;
 
     async fn list(&self) -> Result<Vec<Self::Output>, TodoErrors>;
-    async fn create(&self, todo: &mut Self::Input) -> Result<(), TodoErrors>;
+    async fn create(&self, todo: &Self::Input) -> Result<Self::Output, TodoErrors>;
 }
