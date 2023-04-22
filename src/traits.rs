@@ -1,10 +1,12 @@
 use crate::errors::TodoErrors;
-use crate::serializers::Serialize;
+use crate::serializers::{Deserialize, Serialize};
 pub use async_trait::async_trait;
 
 #[async_trait(?Send)]
 pub trait Controller {
-    type Model: Serialize;
+    type Input: for<'a> Deserialize<'a>;
+    type Output: Serialize;
 
-    async fn list(self: &Self) -> Result<Vec<Self::Model>, TodoErrors>;
+    async fn list(&self) -> Result<Vec<Self::Output>, TodoErrors>;
+    async fn create(&self, todo: &mut Self::Input) -> Result<(), TodoErrors>;
 }

@@ -1,27 +1,20 @@
-use crate::db::{query, query_as, Error as DbError, FromRow, Pool, QueryResult};
+use crate::db::{query, query_as, FromRow, Pool};
 use crate::errors::TodoErrors;
 use crate::serializers::{Deserialize, Serialize};
 use crate::traits::{async_trait, Controller};
-use std::cell::RefCell;
-use std::ops::Deref;
-use std::sync::Arc;
-use tokio::sync::Mutex;
 
-#[derive(Debug, Deserialize, Serialize, FromRow)]
-pub struct Todo {
+#[derive(Debug, Serialize, FromRow)]
+pub struct TodoRead {
     id: u32,
     pub title: String,
     done: bool,
 }
 
-impl Todo {
-    pub fn new(title: String) -> Todo {
-        Todo {
-            id: 0,
-            title,
-            done: false,
-        }
-    }
+#[derive(Debug, Deserialize)]
+pub struct TodoWrite {
+    title: String,
+    #[serde(default)]
+    done: bool,
 }
 
 pub struct TodoController {
@@ -36,10 +29,11 @@ impl TodoController {
 
 #[async_trait(?Send)]
 impl Controller for TodoController {
-    type Model = Todo;
+    type Input = TodoWrite;
+    type Output = TodoRead;
 
-    async fn list(self: &Self) -> Result<Vec<Self::Model>, TodoErrors> {
-        let todos = query_as::<_, Todo>(
+    async fn list(self: &TodoController) -> Result<Vec<Self::Output>, TodoErrors> {
+        let todos = query_as::<_, TodoRead>(
             r#"
             SELECT id, title, done
             FROM todo
@@ -49,6 +43,24 @@ impl Controller for TodoController {
         .await?;
 
         Ok(todos)
+    }
+
+    async fn create(self: &TodoController, todo: &mut Self::Input) -> Result<(), TodoErrors> {
+        query(
+            r#"
+            INSERT INTO todo (title, done)
+            VALUES (?, ?)
+            RETURNING id
+            "#,
+        )
+        .bind(&todo.title)
+        .bind(todo.done)
+        .execute(&self.pool)
+        .await?;
+
+        // todo.id = res.last_insert_rowid() as u32;
+
+        Ok(())
     }
 }
 
@@ -187,10 +199,10 @@ mod test {
         sqlx::query(TODO_TABLE_DLL).execute(&conn).await.unwrap();
 
         let title = Faker.fake::<String>();
-        let mut todo = Todo::new(title.clone());
+        let mut todo = TodoRead::new(title.clone());
         todo.save(&conn).await.unwrap();
 
-        let todos = Todo::list(&conn).await.unwrap();
+        let todos = TodoRead::list(&conn).await.unwrap();
         assert_eq!(todos.len(), 1);
         assert_eq!(todos[0].title, title);
     }
@@ -206,15 +218,15 @@ mod test {
         sqlx::query(TODO_TABLE_DLL).execute(&conn).await.unwrap();
 
         let title = Faker.fake::<String>();
-        let mut todo = Todo::new(title.clone());
+        let mut todo = TodoRead::new(title.clone());
         todo.save(&conn).await.unwrap();
 
         let new_title = Faker.fake::<String>();
-        Todo::update(todo.id, Some(new_title.clone()), None, &conn)
+        TodoRead::update(todo.id, Some(new_title.clone()), None, &conn)
             .await
             .unwrap();
 
-        let todo = Todo::get(todo.id, &conn).await.unwrap();
+        let todo = TodoRead::get(todo.id, &conn).await.unwrap();
         assert_ne!(todo.title, title);
         assert_eq!(todo.title, new_title);
     }
@@ -230,10 +242,10 @@ mod test {
         sqlx::query(TODO_TABLE_DLL).execute(&conn).await.unwrap();
 
         let title = Faker.fake::<String>();
-        let mut todo = Todo::new(title.clone());
+        let mut todo = TodoRead::new(title.clone());
         todo.save(&conn).await.unwrap();
 
-        let r = Todo::delete(todo.id, &conn).await.unwrap();
+        let r = TodoRead::delete(todo.id, &conn).await.unwrap();
         assert_eq!(r.rows_affected(), 1);
     }
 
@@ -248,10 +260,10 @@ mod test {
         sqlx::query(TODO_TABLE_DLL).execute(&conn).await.unwrap();
 
         let title = Faker.fake::<String>();
-        let mut todo = Todo::new(title.clone());
+        let mut todo = TodoRead::new(title.clone());
         todo.save(&conn).await.unwrap();
 
-        let todo = Todo::get(todo.id, &conn).await.unwrap();
+        let todo = TodoRead::get(todo.id, &conn).await.unwrap();
         assert_eq!(todo.title, title);
     }
 }

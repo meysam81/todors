@@ -2,11 +2,8 @@ use clap::Parser;
 use cli::{Cli, Commands};
 use errors::TodoErrors;
 use logging::{debug, error, info, trace, warn};
-use models::{Todo, TodoController};
-use serializers::to_json;
+use models::TodoController;
 use settings::Settings;
-use std::sync::Arc;
-use tokio::sync::Mutex;
 
 mod cli;
 mod db;
@@ -88,14 +85,19 @@ async fn main() -> Result<(), TodoErrors> {
         Commands::Serve(cli::Serve::Http(cli::ServerAddr { host, port })) => {
             info!(logger, "Starting server at {}:{}", host, port);
             let addr = format!("{}:{}", host, port);
-            http::HttpServer::new(move || {
+            let r = http::HttpServer::new(move || {
                 http::App::new()
                     .app_data(web_state.clone())
                     .configure(http::configure::<TodoController>)
             })
-            .bind(format!("{}:{}", host, port))?
+            .bind(addr)?
             .run()
-            .await?;
+            .await;
+
+            match r {
+                Ok(_) => info!(logger, "Server stopped"),
+                Err(err) => error!(logger, "Server failed: {:?}", err),
+            };
         }
         _ => {
             warn!(logger, "Not implemented yet");

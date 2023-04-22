@@ -1,5 +1,4 @@
 use crate::logging::{error, Logger};
-use crate::serializers::Serialize;
 use crate::traits::Controller;
 
 pub use actix_web::{get, web, App, HttpResponse, HttpServer, Responder};
@@ -39,10 +38,28 @@ where
     }
 }
 
+pub async fn create_todo<T>(
+    state: web::Data<AppState<T>>,
+    todo: web::Json<T::Input>,
+) -> HttpResponse
+where
+    T: Controller,
+{
+    let mut todo = todo.into_inner();
+    match state.controller.create(&mut todo).await {
+        Ok(todo) => HttpResponse::Ok().json(todo),
+        Err(err) => {
+            error!(state.logger, "Failed to create todo: {:?}", err);
+            HttpResponse::InternalServerError().finish()
+        }
+    }
+}
+
 pub fn configure<T>(cfg: &mut web::ServiceConfig)
 where
     T: Controller + 'static,
 {
     cfg.service(index)
-        .route("/api/v1/todos", web::get().to(list_todos::<T>));
+        .route("/api/v1/todos", web::get().to(list_todos::<T>))
+        .route("/api/v1/todos", web::post().to(create_todo::<T>));
 }
