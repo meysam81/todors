@@ -54,11 +54,25 @@ where
     }
 }
 
+pub async fn get_todo<T>(state: web::Data<AppState<T>>, id: web::Path<T::Id>) -> HttpResponse
+where
+    T: Controller,
+{
+    match state.controller.get(id.into_inner()).await {
+        Ok(todo) => HttpResponse::Ok().json(todo),
+        Err(err) => {
+            error!(state.logger, "Failed to get todo: {:?}", err);
+            HttpResponse::InternalServerError().finish()
+        }
+    }
+}
+
 pub fn configure<T>(cfg: &mut web::ServiceConfig)
 where
     T: Controller + 'static,
 {
     cfg.service(index)
         .route("/api/v1/todos", web::get().to(list_todos::<T>))
-        .route("/api/v1/todos", web::post().to(create_todo::<T>));
+        .route("/api/v1/todos", web::post().to(create_todo::<T>))
+        .route("/api/v1/todos/{id}", web::get().to(get_todo::<T>));
 }

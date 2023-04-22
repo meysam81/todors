@@ -29,10 +29,11 @@ impl TodoController {
 
 #[async_trait(?Send)]
 impl Controller for TodoController {
+    type Id = u32;
     type Input = TodoWrite;
     type Output = TodoRead;
 
-    async fn list(self: &TodoController) -> Result<Vec<Self::Output>, TodoErrors> {
+    async fn list(&self) -> Result<Vec<Self::Output>, TodoErrors> {
         let todos = query_as::<_, TodoRead>(
             r#"
             SELECT id, title, done
@@ -45,7 +46,7 @@ impl Controller for TodoController {
         Ok(todos)
     }
 
-    async fn create(self: &TodoController, todo: &Self::Input) -> Result<Self::Output, TodoErrors> {
+    async fn create(&self, todo: &Self::Input) -> Result<Self::Output, TodoErrors> {
         let res = query(
             r#"
             INSERT INTO todo (title, done)
@@ -65,6 +66,21 @@ impl Controller for TodoController {
             title: todo.title.clone(),
             done: todo.done,
         })
+    }
+
+    async fn get(&self, id: u32) -> Result<Self::Output, TodoErrors> {
+        let todo = query_as::<_, TodoRead>(
+            r#"
+            SELECT id, title, done
+            FROM todo
+            WHERE id = ?
+            "#,
+        )
+        .bind(id)
+        .fetch_one(&self.pool)
+        .await?;
+
+        Ok(todo)
     }
 }
 
