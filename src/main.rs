@@ -23,7 +23,6 @@ async fn main() -> Result<(), TodoErrors> {
     debug!(logger, "{:?}", settings);
 
     let conn = db::connect(&settings.db_url, None).await?;
-    // let conn = Arc::new(Mutex::new(conn));
     trace!(logger, "{:?}", conn);
 
     let todo_controller = TodoController::new(conn);
