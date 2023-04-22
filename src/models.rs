@@ -37,7 +37,6 @@ impl TodoUpdate {
     }
 }
 
-#[derive(Clone)]
 pub struct TodoController {
     pool: Pool,
 }

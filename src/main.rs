@@ -26,7 +26,6 @@ async fn main() -> Result<(), TodoErrors> {
     trace!(logger, "{:?}", conn);
 
     let todo_controller = TodoController::new(conn);
-    let web_state = http::AppState::new(todo_controller.clone(), logger.clone());
 
     let cli = Cli::parse();
     debug!(logger, "{:?}", cli);
@@ -41,6 +40,7 @@ async fn main() -> Result<(), TodoErrors> {
         }
         Commands::Serve(cli::Serve::Http(cli::ServerAddr { host, port })) => {
             info!(logger, "Starting server at {}:{}", host, port);
+            let web_state = http::AppState::new(todo_controller, logger.clone());
             let addr = format!("{}:{}", host, port);
             let r = http::HttpServer::new(move || {
                 http::App::new()
