@@ -12,7 +12,7 @@ on:
       - main
 
 jobs:
-  automated-tests:
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
