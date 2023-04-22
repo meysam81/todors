@@ -1,3 +1,4 @@
+use crate::logging::{error, Logger};
 use crate::serializers::Serialize;
 use crate::traits::Controller;
 
@@ -8,14 +9,15 @@ where
     T: Controller,
 {
     controller: T,
+    logger: Logger,
 }
 
 impl<T> AppState<T>
 where
     T: Controller,
 {
-    pub fn new(controller: T) -> web::Data<AppState<T>> {
-        web::Data::new(AppState { controller })
+    pub fn new(controller: T, logger: Logger) -> web::Data<AppState<T>> {
+        web::Data::new(AppState { controller, logger })
     }
 }
 
@@ -31,7 +33,7 @@ where
     match state.controller.list().await {
         Ok(todos) => HttpResponse::Ok().json(todos),
         Err(err) => {
-            // TODO: print error log
+            error!(state.logger, "Failed to list todos: {:?}", err);
             HttpResponse::InternalServerError().finish()
         }
     }

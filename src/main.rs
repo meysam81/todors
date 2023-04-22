@@ -30,7 +30,7 @@ async fn main() -> Result<(), TodoErrors> {
     trace!(logger, "{:?}", conn);
 
     let todo_controller = TodoController::new(conn);
-    let web_state = http::AppState::new(todo_controller);
+    let web_state = http::AppState::new(todo_controller, logger.clone());
 
     let cli = Cli::parse();
     debug!(logger, "{:?}", cli);
