@@ -9,8 +9,12 @@ check:
   cargo c --frozen
 
 format:
+  clear
   cargo fmt
   cargo clippy
 
 vendor:
   cargo vendor
+
+serve-http:
+  cargo r -- serve http

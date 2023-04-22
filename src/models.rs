@@ -1,6 +1,11 @@
 use crate::db::{Error as DbError, FromRow, Pool, QueryResult};
 use crate::errors::TodoErrors;
 use crate::serializers::{Deserialize, Serialize};
+use crate::traits::{async_trait, Controller};
+use std::cell::RefCell;
+use std::ops::Deref;
+use std::sync::Arc;
+use tokio::sync::Mutex;
 
 #[derive(Debug, Deserialize, Serialize, FromRow)]
 pub struct Todo {
@@ -17,115 +22,145 @@ impl Todo {
             done: false,
         }
     }
+}
 
-    pub async fn save(&mut self, conn: &Pool) -> Result<(), DbError> {
-        let res = sqlx::query(
-            r#"
-            INSERT INTO todo (title, done)
-            VALUES (?, ?)
-            RETURNING id
-            "#,
-        )
-        .bind(&self.title)
-        .bind(self.done)
-        .execute(conn)
-        .await?;
+pub struct TodoController {
+    pool: Pool,
+}
 
-        self.id = res.last_insert_rowid() as u32;
-
-        Ok(())
+impl TodoController {
+    pub fn new(pool: Pool) -> TodoController {
+        TodoController { pool }
     }
+}
 
-    pub async fn update(
-        id: u32,
-        title: Option<String>,
-        done: Option<bool>,
-        conn: &Pool,
-    ) -> Result<(), TodoErrors> {
-        if title.is_none() && done.is_none() {
-            return Err(TodoErrors::NoUpdate);
-        }
+#[async_trait(?Send)]
+impl Controller for TodoController {
+    type Output = Todo;
 
-        let mut tx = conn.begin().await?;
-
-        if let Some(title) = title {
-            sqlx::query(
-                r#"
-                UPDATE todo
-                SET title = ?
-                WHERE id = ?
-                "#,
-            )
-            .bind(title)
-            .bind(id)
-            .execute(&mut tx)
-            .await?;
-        }
-
-        if let Some(done) = done {
-            sqlx::query(
-                r#"
-                UPDATE todo
-                SET done = ?
-                WHERE id = ?
-                "#,
-            )
-            .bind(done)
-            .bind(id)
-            .execute(&mut tx)
-            .await?;
-        }
-
-        tx.commit().await?;
-
-        Ok(())
-    }
-
-    pub async fn list(conn: &Pool) -> Result<Vec<Todo>, DbError> {
+    async fn list(self: &Self) -> Result<Vec<Self::Output>, TodoErrors> {
         let todos = sqlx::query_as::<_, Todo>(
             r#"
             SELECT id, title, done
             FROM todo
             "#,
         )
-        .fetch_all(conn)
+        .fetch_all(&self.pool)
         .await?;
 
         Ok(todos)
     }
-
-    pub async fn delete(id: u32, conn: &Pool) -> Result<QueryResult, DbError> {
-        let r = sqlx::query(
-            r#"
-            DELETE FROM todo
-            WHERE id = ?
-            "#,
-        )
-        .bind(id)
-        .execute(conn)
-        .await?;
-
-        match r.rows_affected() {
-            0 => Err(DbError::RowNotFound),
-            _ => Ok(r),
-        }
-    }
-
-    pub async fn get(id: u32, conn: &Pool) -> Result<Todo, DbError> {
-        let todo = sqlx::query_as::<_, Todo>(
-            r#"
-            SELECT id, title, done
-            FROM todo
-            WHERE id = ?
-            "#,
-        )
-        .bind(id)
-        .fetch_one(conn)
-        .await?;
-
-        Ok(todo)
-    }
 }
+
+// impl Todo {
+//     pub async fn save(&mut self, conn: &Pool) -> Result<(), DbError> {
+//         let res = sqlx::query(
+//             r#"
+//             INSERT INTO todo (title, done)
+//             VALUES (?, ?)
+//             RETURNING id
+//             "#,
+//         )
+//         .bind(&self.title)
+//         .bind(self.done)
+//         .execute(conn)
+//         .await?;
+
+//         self.id = res.last_insert_rowid() as u32;
+
+//         Ok(())
+//     }
+
+//     pub async fn update(
+//         id: u32,
+//         title: Option<String>,
+//         done: Option<bool>,
+//         conn: &Pool,
+//     ) -> Result<(), TodoErrors> {
+//         if title.is_none() && done.is_none() {
+//             return Err(TodoErrors::NoUpdate);
+//         }
+
+//         let mut tx = conn.begin().await?;
+
+//         if let Some(title) = title {
+//             sqlx::query(
+//                 r#"
+//                 UPDATE todo
+//                 SET title = ?
+//                 WHERE id = ?
+//                 "#,
+//             )
+//             .bind(title)
+//             .bind(id)
+//             .execute(&mut tx)
+//             .await?;
+//         }
+
+//         if let Some(done) = done {
+//             sqlx::query(
+//                 r#"
+//                 UPDATE todo
+//                 SET done = ?
+//                 WHERE id = ?
+//                 "#,
+//             )
+//             .bind(done)
+//             .bind(id)
+//             .execute(&mut tx)
+//             .await?;
+//         }
+
+//         tx.commit().await?;
+
+//         Ok(())
+//     }
+
+//     pub async fn list(conn: &Pool) -> Result<Vec<Todo>, DbError> {
+//         let todos = sqlx::query_as::<_, Todo>(
+//             r#"
+//             SELECT id, title, done
+//             FROM todo
+//             "#,
+//         )
+//         .fetch_all(conn)
+//         .await?;
+
+//         Ok(todos)
+//     }
+
+//     pub async fn delete(id: u32, conn: &Pool) -> Result<QueryResult, DbError> {
+//         let r = sqlx::query(
+//             r#"
+//             DELETE FROM todo
+//             WHERE id = ?
+//             "#,
+//         )
+//         .bind(id)
+//         .execute(conn)
+//         .await?;
+
+//         match r.rows_affected() {
+//             0 => Err(DbError::RowNotFound),
+//             _ => Ok(r),
+//         }
+//     }
+
+//     pub async fn get(id: u32, conn: &Pool) -> Result<Todo, DbError> {
+//         let todo = sqlx::query_as::<_, Todo>(
+//             r#"
+//             SELECT id, title, done
+//             FROM todo
+//             WHERE id = ?
+//             "#,
+//         )
+//         .bind(id)
+//         .fetch_one(conn)
+//         .await?;
+
+//         Ok(todo)
+//     }
+// }
 
 #[cfg(test)]
 mod test {
