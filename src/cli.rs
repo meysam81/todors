@@ -1,6 +1,90 @@
+use crate::logging::{error, info, Logger};
+use crate::models::{TodoRead, TodoUpdate, TodoWrite};
+use crate::serializers::to_json;
+use crate::traits::Controller;
 use clap::{Args, Command, Parser, Subcommand};
 use clap_complete::{generate, Generator, Shell};
 use std::io;
+
+pub struct CliState<T>
+where
+    T: Controller,
+{
+    controller: T,
+    logger: Logger,
+}
+
+impl<T> CliState<T>
+where
+    T: Controller,
+{
+    pub fn new(controller: T, logger: Logger) -> Self {
+        Self { controller, logger }
+    }
+}
+
+pub async fn handle_local<T>(local: Local, state: CliState<T>)
+where
+    T: Controller<Input = TodoWrite, Output = TodoRead, Id = u32, OptionalInput = TodoUpdate>,
+{
+    match local {
+        Local::Create(Create { title }) => {
+            let todo = TodoWrite::new(title, None);
+            match state.controller.create(&todo).await {
+                Ok(todo) => {
+                    let todo = to_json(&todo).unwrap();
+                    println!("{}", todo)
+                }
+                Err(err) => {
+                    error!(state.logger, "Failed to create todo: {:?}", err);
+                }
+            }
+        }
+        Local::Delete(Delete { id }) => match state.controller.delete(id).await {
+            Ok(_) => info!(state.logger, "Successfully deleted: {}", id),
+            Err(err) => {
+                error!(state.logger, "Failed to delete todo: {:?}", err);
+            }
+        },
+        Local::Get(Get { id }) => match state.controller.get(id).await {
+            Ok(todo) => {
+                let todo = to_json(&todo).unwrap();
+                println!("{}", todo)
+            }
+            Err(err) => {
+                error!(state.logger, "Failed to get todo: {:?}", err);
+            }
+        },
+        Local::List => match state.controller.list().await {
+            Ok(todos) => {
+                let todos = to_json(&todos).unwrap();
+                println!("{}", todos) /*  */
+            }
+            Err(err) => {
+                error!(state.logger, "Failed to list todos: {:?}", err);
+            }
+        },
+        Local::Update(Update {
+            id,
+            title,
+            done,
+            undone,
+        }) => {
+            let done = if let Some(undone) = undone {
+                Some(!undone)
+            } else {
+                done
+            };
+            let todo = TodoUpdate::new(title, done);
+            match state.controller.update(id, &todo).await {
+                Ok(_) => info!(state.logger, "Successfully updated: {}", id),
+                Err(err) => {
+                    error!(state.logger, "Failed to update todo: {:?}", err);
+                }
+            }
+        }
+    }
+}
 
 #[derive(Parser, Debug)]
 #[clap(author, about, version, long_about = None)]
@@ -14,6 +98,14 @@ pub enum Commands {
     /// Serve either the gRPC or REST over HTTP server
     #[command(subcommand)]
     Serve(Serve),
+    #[command(flatten)]
+    Local(Local),
+    /// Generate shell completion
+    Completion(Completion),
+}
+
+#[derive(Subcommand, Debug)]
+pub enum Local {
     /// Create a new TODO with a title
     Create(Create),
     /// Delete a TODO by ID
@@ -24,8 +116,6 @@ pub enum Commands {
     Update(Update),
     /// Get a TODO by ID
     Get(Get),
-    /// Generate shell completion
-    Completion(Completion),
 }
 
 #[derive(Subcommand, Debug)]
@@ -113,7 +203,7 @@ mod test {
         let args = vec!["todors", "create", "Hello Rust!"];
         let c = Cli::parse_from(args);
         match c.command {
-            Commands::Create(Create { title }) => {
+            Commands::Local(Local::Create(Create { title })) => {
                 assert_eq!(title, "Hello Rust!");
             }
             _ => panic!("Expected a Create command"),
@@ -125,7 +215,7 @@ mod test {
         let args = vec!["todors", "delete", "1"];
         let c = Cli::parse_from(args);
         match c.command {
-            Commands::Delete(Delete { id }) => {
+            Commands::Local(Local::Delete(Delete { id })) => {
                 assert_eq!(id, 1);
             }
             _ => panic!("Expected a Delete command"),
@@ -137,7 +227,7 @@ mod test {
         let args = vec!["todors", "update", "1", "--title", "Hello Rust!"];
         let c = Cli::parse_from(args);
         match c.command {
-            Commands::Update(Update { id, title, .. }) => {
+            Commands::Local(Local::Update(Update { id, title, .. })) => {
                 assert_eq!(id, 1);
                 assert_eq!(title.unwrap(), "Hello Rust!");
             }
@@ -150,7 +240,7 @@ mod test {
         let args = vec!["todors", "update", "1"];
         let c = Cli::parse_from(args);
         match c.command {
-            Commands::Update(Update { id, title, .. }) => {
+            Commands::Local(Local::Update(Update { id, title, .. })) => {
                 assert_eq!(id, 1);
                 assert_eq!(title, None);
             }

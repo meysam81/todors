@@ -13,8 +13,16 @@ pub struct TodoRead {
 #[derive(Debug, Deserialize)]
 pub struct TodoWrite {
     title: String,
-    #[serde(default)]
     done: bool,
+}
+
+impl TodoWrite {
+    pub fn new(title: String, done: Option<bool>) -> Self {
+        Self {
+            title,
+            done: done.unwrap_or_default(),
+        }
+    }
 }
 
 #[derive(Debug, Deserialize)]
@@ -23,6 +31,13 @@ pub struct TodoUpdate {
     done: Option<bool>,
 }
 
+impl TodoUpdate {
+    pub fn new(title: Option<String>, done: Option<bool>) -> Self {
+        Self { title, done }
+    }
+}
+
+#[derive(Clone)]
 pub struct TodoController {
     pool: Pool,
 }
@@ -62,16 +77,19 @@ impl Controller for TodoController {
         })
     }
 
-    async fn delete(&self, id: u32) -> Result<(), TodoErrors> {
-        query("DELETE FROM todo WHERE id = ?")
+    async fn delete(&self, id: Self::Id) -> Result<(), TodoErrors> {
+        let r = query("DELETE FROM todo WHERE id = ?")
             .bind(id)
             .execute(&self.pool)
             .await?;
 
-        Ok(())
+        match r.rows_affected() {
+            0 => Err(TodoErrors::TodoNotFound),
+            _ => Ok(()),
+        }
     }
 
-    async fn get(&self, id: u32) -> Result<Self::Output, TodoErrors> {
+    async fn get(&self, id: Self::Id) -> Result<Self::Output, TodoErrors> {
         let todo = query_as::<_, TodoRead>(
             r#"
             SELECT id, title, done
@@ -99,7 +117,7 @@ impl Controller for TodoController {
         Ok(todos)
     }
 
-    async fn update(&self, id: u32, todo: &Self::OptionalInput) -> Result<(), TodoErrors> {
+    async fn update(&self, id: Self::Id, todo: &Self::OptionalInput) -> Result<(), TodoErrors> {
         let mut tx = self.pool.begin().await?;
 
         if let Some(title) = &todo.title {

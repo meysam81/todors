@@ -8,8 +8,8 @@ pub enum TodoErrors {
     #[error("database error")]
     DatabaseError(#[from] DbError),
 
-    #[error("no update")]
-    NoUpdate,
+    #[error("no todo found")]
+    TodoNotFound,
 
     #[error("serializer error")]
     SerializerError(#[from] SerializerError),
