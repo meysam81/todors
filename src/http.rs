@@ -20,11 +20,11 @@ where
 }
 
 #[get("/")]
-pub async fn index() -> impl Responder {
+pub async fn index() -> HttpResponse {
     HttpResponse::Ok().body("Hello world!")
 }
 
-pub async fn list_todos<T>(state: web::Data<AppState<T>>) -> impl Responder
+pub async fn list_todos<T>(state: web::Data<AppState<T>>) -> HttpResponse
 where
     T: Controller,
 {
