@@ -91,7 +91,6 @@
     <span class="macro">trace!</span>(logger, <span class="string">&quot;{:?}&quot;</span>, conn);
 
     <span class="kw">let </span>todo_controller = TodoController::new(conn);
-    <span class="kw">let </span>web_state = http::AppState::new(todo_controller.clone(), logger.clone());
 
     <span class="kw">let </span>cli = Cli::parse();
     <span class="macro">debug!</span>(logger, <span class="string">&quot;{:?}&quot;</span>, cli);
@@ -106,6 +105,7 @@
         }
         Commands::Serve(cli::Serve::Http(cli::ServerAddr { host, port })) =&gt; {
             <span class="macro">info!</span>(logger, <span class="string">&quot;Starting server at {}:{}&quot;</span>, host, port);
+            <span class="kw">let </span>web_state = http::AppState::new(todo_controller, logger.clone());
             <span class="kw">let </span>addr = <span class="macro">format!</span>(<span class="string">&quot;{}:{}&quot;</span>, host, port);
             <span class="kw">let </span>r = http::HttpServer::new(<span class="kw">move </span>|| {
                 http::App::new()
