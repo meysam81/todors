@@ -36,9 +36,9 @@ impl TodoController {
 
 #[async_trait(?Send)]
 impl Controller for TodoController {
-    type Output = Todo;
+    type Model = Todo;
 
-    async fn list(self: &Self) -> Result<Vec<Self::Output>, TodoErrors> {
+    async fn list(self: &Self) -> Result<Vec<Self::Model>, TodoErrors> {
         let todos = sqlx::query_as::<_, Todo>(
             r#"
             SELECT id, title, done

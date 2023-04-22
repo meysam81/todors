@@ -4,7 +4,7 @@ pub use async_trait::async_trait;
 
 #[async_trait(?Send)]
 pub trait Controller {
-    type Output: Serialize;
+    type Model: Serialize;
 
-    async fn list(self: &Self) -> Result<Vec<Self::Output>, TodoErrors>;
+    async fn list(self: &Self) -> Result<Vec<Self::Model>, TodoErrors>;
 }
