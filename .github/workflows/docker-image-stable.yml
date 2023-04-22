@@ -1,7 +1,7 @@
 name: docker-images-stable
 concurrency:
   cancel-in-progress: true
-  group: docker-images-stable-${{ github.ref }}
+  group: docker-images-stable-${{ github.head_ref || github.ref_name }}
 
 on:
   release:

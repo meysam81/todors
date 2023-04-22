@@ -1,7 +1,7 @@
 name: docker-images-edge
 concurrency:
-  cancel-in-progress: false
-  group: docker-images-edge-${{ github.ref }}
+  cancel-in-progress: true
+  group: docker-images-edge-${{ github.sha }}
 
 on:
   push:

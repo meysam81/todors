@@ -44,6 +44,7 @@ edition = "2021"
 rust-version = "1.68"
 
 [dependencies]
+actix-web = "4"
 async-trait = "0.1.68"
 clap = { version = "4.2.2", features = ["derive"] }
 clap_complete = "4.2.0"
@@ -56,7 +57,7 @@ slog-async = "2.7.0"
 slog-term = "2.9.0"
 sqlx = { version = "0.6.3", features = ["sqlite", "runtime-tokio-rustls", "migrate"] }
 thiserror = "1.0.40"
-tokio = { version = "1", features = ["full"] }
+tokio = { version = "1", features = ["macros", "sync"] }
 
 [dev-dependencies]
 cargo-watch = "8.4.0"

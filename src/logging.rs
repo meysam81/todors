@@ -1,5 +1,6 @@
+use slog::Drain;
+pub use slog::Logger;
 pub use slog::{debug, error, info, trace, warn};
-use slog::{Drain, Logger};
 
 pub fn init(log_level: &str) -> Logger {
     let decorator = slog_term::TermDecorator::new().build();
