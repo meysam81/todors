@@ -17,6 +17,12 @@ pub struct TodoWrite {
     done: bool,
 }
 
+#[derive(Debug, Deserialize)]
+pub struct TodoUpdate {
+    title: Option<String>,
+    done: Option<bool>,
+}
+
 pub struct TodoController {
     pool: Pool,
 }
@@ -31,6 +37,7 @@ impl TodoController {
 impl Controller for TodoController {
     type Id = u32;
     type Input = TodoWrite;
+    type OptionalInput = TodoUpdate;
     type Output = TodoRead;
 
     async fn create(&self, todo: &Self::Input) -> Result<Self::Output, TodoErrors> {
@@ -90,6 +97,42 @@ impl Controller for TodoController {
         .await?;
 
         Ok(todos)
+    }
+
+    async fn update(&self, id: u32, todo: &Self::OptionalInput) -> Result<(), TodoErrors> {
+        let mut tx = self.pool.begin().await?;
+
+        if let Some(title) = &todo.title {
+            query(
+                r#"
+                UPDATE todo
+                SET title = ?
+                WHERE id = ?
+                "#,
+            )
+            .bind(title)
+            .bind(id)
+            .execute(&mut tx)
+            .await?;
+        }
+
+        if let Some(done) = &todo.done {
+            query(
+                r#"
+                UPDATE todo
+                SET done = ?
+                WHERE id = ?
+                "#,
+            )
+            .bind(done)
+            .bind(id)
+            .execute(&mut tx)
+            .await?;
+        }
+
+        tx.commit().await?;
+
+        Ok(())
     }
 }
 

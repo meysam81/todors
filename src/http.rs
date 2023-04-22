@@ -77,6 +77,27 @@ where
     }
 }
 
+async fn update_todo<T>(
+    state: web::Data<AppState<T>>,
+    id: web::Path<T::Id>,
+    todo: web::Json<T::OptionalInput>,
+) -> HttpResponse
+where
+    T: Controller,
+{
+    match state
+        .controller
+        .update(id.into_inner(), &todo.into_inner())
+        .await
+    {
+        Ok(_) => HttpResponse::Accepted().finish(),
+        Err(err) => {
+            error!(state.logger, "Failed to update todo: {:?}", err);
+            HttpResponse::InternalServerError().finish()
+        }
+    }
+}
+
 pub fn configure<T>(cfg: &mut web::ServiceConfig)
 where
     T: Controller + 'static,
@@ -85,5 +106,6 @@ where
         .route("/api/v1/todos", web::post().to(create_todo::<T>))
         .route("/api/v1/todos/{id}", web::get().to(get_todo::<T>))
         .route("/api/v1/todos/{id}", web::delete().to(delete_todo::<T>))
-        .route("/api/v1/todos", web::get().to(list_todos::<T>));
+        .route("/api/v1/todos", web::get().to(list_todos::<T>))
+        .route("/api/v1/todos/{id}", web::patch().to(update_todo::<T>));
 }
