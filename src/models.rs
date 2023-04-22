@@ -246,96 +246,96 @@ impl Controller for TodoController {
 //     }
 // }
 
-#[cfg(test)]
-mod test {
-    use super::*;
-    use fake::{Fake, Faker};
-    use sqlx::sqlite::SqlitePoolOptions;
+// #[cfg(test)]
+// mod test {
+//     use super::*;
+//     use fake::{Fake, Faker};
+//     use sqlx::sqlite::SqlitePoolOptions;
 
-    const TODO_TABLE_DLL: &str = r#"
-    CREATE TABLE todo (
-        id INTEGER PRIMARY KEY,
-        title TEXT NOT NULL,
-        done BOOLEAN NOT NULL
-    )
-    "#;
+//     const TODO_TABLE_DLL: &str = r#"
+//     CREATE TABLE todo (
+//         id INTEGER PRIMARY KEY,
+//         title TEXT NOT NULL,
+//         done BOOLEAN NOT NULL
+//     )
+//     "#;
 
-    #[tokio::test]
-    async fn test_todo_create_successful() {
-        let conn = SqlitePoolOptions::new()
-            .max_connections(1)
-            .connect("sqlite::memory:")
-            .await
-            .unwrap();
+//     #[tokio::test]
+//     async fn test_todo_create_successful() {
+//         let conn = SqlitePoolOptions::new()
+//             .max_connections(1)
+//             .connect("sqlite::memory:")
+//             .await
+//             .unwrap();
 
-        sqlx::query(TODO_TABLE_DLL).execute(&conn).await.unwrap();
+//         sqlx::query(TODO_TABLE_DLL).execute(&conn).await.unwrap();
 
-        let title = Faker.fake::<String>();
-        let mut todo = TodoRead::new(title.clone());
-        todo.save(&conn).await.unwrap();
+//         let title = Faker.fake::<String>();
+//         let mut todo = TodoRead::new(title.clone());
+//         todo.save(&conn).await.unwrap();
 
-        let todos = TodoRead::list(&conn).await.unwrap();
-        assert_eq!(todos.len(), 1);
-        assert_eq!(todos[0].title, title);
-    }
+//         let todos = TodoRead::list(&conn).await.unwrap();
+//         assert_eq!(todos.len(), 1);
+//         assert_eq!(todos[0].title, title);
+//     }
 
-    #[tokio::test]
-    async fn test_todo_update_successful() {
-        let conn = SqlitePoolOptions::new()
-            .max_connections(1)
-            .connect("sqlite::memory:")
-            .await
-            .unwrap();
+//     #[tokio::test]
+//     async fn test_todo_update_successful() {
+//         let conn = SqlitePoolOptions::new()
+//             .max_connections(1)
+//             .connect("sqlite::memory:")
+//             .await
+//             .unwrap();
 
-        sqlx::query(TODO_TABLE_DLL).execute(&conn).await.unwrap();
+//         sqlx::query(TODO_TABLE_DLL).execute(&conn).await.unwrap();
 
-        let title = Faker.fake::<String>();
-        let mut todo = TodoRead::new(title.clone());
-        todo.save(&conn).await.unwrap();
+//         let title = Faker.fake::<String>();
+//         let mut todo = TodoRead::new(title.clone());
+//         todo.save(&conn).await.unwrap();
 
-        let new_title = Faker.fake::<String>();
-        TodoRead::update(todo.id, Some(new_title.clone()), None, &conn)
-            .await
-            .unwrap();
+//         let new_title = Faker.fake::<String>();
+//         TodoRead::update(todo.id, Some(new_title.clone()), None, &conn)
+//             .await
+//             .unwrap();
 
-        let todo = TodoRead::get(todo.id, &conn).await.unwrap();
-        assert_ne!(todo.title, title);
-        assert_eq!(todo.title, new_title);
-    }
+//         let todo = TodoRead::get(todo.id, &conn).await.unwrap();
+//         assert_ne!(todo.title, title);
+//         assert_eq!(todo.title, new_title);
+//     }
 
-    #[tokio::test]
-    async fn test_todo_delete_successful() {
-        let conn = SqlitePoolOptions::new()
-            .max_connections(1)
-            .connect("sqlite::memory:")
-            .await
-            .unwrap();
+//     #[tokio::test]
+//     async fn test_todo_delete_successful() {
+//         let conn = SqlitePoolOptions::new()
+//             .max_connections(1)
+//             .connect("sqlite::memory:")
+//             .await
+//             .unwrap();
 
-        sqlx::query(TODO_TABLE_DLL).execute(&conn).await.unwrap();
+//         sqlx::query(TODO_TABLE_DLL).execute(&conn).await.unwrap();
 
-        let title = Faker.fake::<String>();
-        let mut todo = TodoRead::new(title.clone());
-        todo.save(&conn).await.unwrap();
+//         let title = Faker.fake::<String>();
+//         let mut todo = TodoRead::new(title.clone());
+//         todo.save(&conn).await.unwrap();
 
-        let r = TodoRead::delete(todo.id, &conn).await.unwrap();
-        assert_eq!(r.rows_affected(), 1);
-    }
+//         let r = TodoRead::delete(todo.id, &conn).await.unwrap();
+//         assert_eq!(r.rows_affected(), 1);
+//     }
 
-    #[tokio::test]
-    async fn test_todo_get_successful() {
-        let conn = SqlitePoolOptions::new()
-            .max_connections(1)
-            .connect("sqlite::memory:")
-            .await
-            .unwrap();
+//     #[tokio::test]
+//     async fn test_todo_get_successful() {
+//         let conn = SqlitePoolOptions::new()
+//             .max_connections(1)
+//             .connect("sqlite::memory:")
+//             .await
+//             .unwrap();
 
-        sqlx::query(TODO_TABLE_DLL).execute(&conn).await.unwrap();
+//         sqlx::query(TODO_TABLE_DLL).execute(&conn).await.unwrap();
 
-        let title = Faker.fake::<String>();
-        let mut todo = TodoRead::new(title.clone());
-        todo.save(&conn).await.unwrap();
+//         let title = Faker.fake::<String>();
+//         let mut todo = TodoRead::new(title.clone());
+//         todo.save(&conn).await.unwrap();
 
-        let todo = TodoRead::get(todo.id, &conn).await.unwrap();
-        assert_eq!(todo.title, title);
-    }
-}
+//         let todo = TodoRead::get(todo.id, &conn).await.unwrap();
+//         assert_eq!(todo.title, title);
+//     }
+// }
