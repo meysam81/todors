@@ -21,8 +21,10 @@
 <a href="#21" id="21">21</a>
 <a href="#22" id="22">22</a>
 <a href="#23" id="23">23</a>
-</pre><pre class="rust"><code><span class="kw">pub use </span>slog::{debug, error, info, trace, warn};
-<span class="kw">use </span>slog::{Drain, Logger};
+<a href="#24" id="24">24</a>
+</pre><pre class="rust"><code><span class="kw">use </span>slog::Drain;
+<span class="kw">pub use </span>slog::Logger;
+<span class="kw">pub use </span>slog::{debug, error, info, trace, warn};
 
 <span class="kw">pub fn </span>init(log_level: <span class="kw-2">&amp;</span>str) -&gt; Logger {
     <span class="kw">let </span>decorator = slog_term::TermDecorator::new().build();

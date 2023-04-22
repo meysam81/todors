@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"attr":["get"],"fn":["configure","create_todo","delete_todo","get_todo","index","list_todos","update_todo"],"mod":["web"],"static":["LOC","RS"],"struct":["App","AppState","HttpResponse","HttpServer","index"],"trait":["Responder"]};
