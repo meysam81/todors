@@ -1,4 +1,4 @@
-use crate::db::{Error as DbError, FromRow, Pool, QueryResult};
+use crate::db::{query, query_as, Error as DbError, FromRow, Pool, QueryResult};
 use crate::errors::TodoErrors;
 use crate::serializers::{Deserialize, Serialize};
 use crate::traits::{async_trait, Controller};
@@ -39,7 +39,7 @@ impl Controller for TodoController {
     type Model = Todo;
 
     async fn list(self: &Self) -> Result<Vec<Self::Model>, TodoErrors> {
-        let todos = sqlx::query_as::<_, Todo>(
+        let todos = query_as::<_, Todo>(
             r#"
             SELECT id, title, done
             FROM todo
