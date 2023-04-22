@@ -339,6 +339,24 @@
 <a href="#339" id="339">339</a>
 <a href="#340" id="340">340</a>
 <a href="#341" id="341">341</a>
+<a href="#342" id="342">342</a>
+<a href="#343" id="343">343</a>
+<a href="#344" id="344">344</a>
+<a href="#345" id="345">345</a>
+<a href="#346" id="346">346</a>
+<a href="#347" id="347">347</a>
+<a href="#348" id="348">348</a>
+<a href="#349" id="349">349</a>
+<a href="#350" id="350">350</a>
+<a href="#351" id="351">351</a>
+<a href="#352" id="352">352</a>
+<a href="#353" id="353">353</a>
+<a href="#354" id="354">354</a>
+<a href="#355" id="355">355</a>
+<a href="#356" id="356">356</a>
+<a href="#357" id="357">357</a>
+<a href="#358" id="358">358</a>
+<a href="#359" id="359">359</a>
 </pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::db::{query, query_as, FromRow, Pool};
 <span class="kw">use </span><span class="kw">crate</span>::errors::TodoErrors;
 <span class="kw">use </span><span class="kw">crate</span>::serializers::{Deserialize, Serialize};
@@ -354,8 +372,16 @@
 <span class="attr">#[derive(Debug, Deserialize)]
 </span><span class="kw">pub struct </span>TodoWrite {
     title: String,
-    <span class="attr">#[serde(default)]
-    </span>done: bool,
+    done: bool,
+}
+
+<span class="kw">impl </span>TodoWrite {
+    <span class="kw">pub fn </span>new(title: String, done: <span class="prelude-ty">Option</span>&lt;bool&gt;) -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{
+            title,
+            done: done.unwrap_or_default(),
+        }
+    }
 }
 
 <span class="attr">#[derive(Debug, Deserialize)]
@@ -364,7 +390,14 @@
     done: <span class="prelude-ty">Option</span>&lt;bool&gt;,
 }
 
-<span class="kw">pub struct </span>TodoController {
+<span class="kw">impl </span>TodoUpdate {
+    <span class="kw">pub fn </span>new(title: <span class="prelude-ty">Option</span>&lt;String&gt;, done: <span class="prelude-ty">Option</span>&lt;bool&gt;) -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{ title, done }
+    }
+}
+
+<span class="attr">#[derive(Clone)]
+</span><span class="kw">pub struct </span>TodoController {
     pool: Pool,
 }
 
@@ -403,16 +436,19 @@
         })
     }
 
-    <span class="kw">async fn </span>delete(<span class="kw-2">&amp;</span><span class="self">self</span>, id: u32) -&gt; <span class="prelude-ty">Result</span>&lt;(), TodoErrors&gt; {
-        query(<span class="string">&quot;DELETE FROM todo WHERE id = ?&quot;</span>)
+    <span class="kw">async fn </span>delete(<span class="kw-2">&amp;</span><span class="self">self</span>, id: <span class="self">Self</span>::Id) -&gt; <span class="prelude-ty">Result</span>&lt;(), TodoErrors&gt; {
+        <span class="kw">let </span>r = query(<span class="string">&quot;DELETE FROM todo WHERE id = ?&quot;</span>)
             .bind(id)
             .execute(<span class="kw-2">&amp;</span><span class="self">self</span>.pool)
             .<span class="kw">await</span><span class="question-mark">?</span>;
 
-        <span class="prelude-val">Ok</span>(())
+        <span class="kw">match </span>r.rows_affected() {
+            <span class="number">0 </span>=&gt; <span class="prelude-val">Err</span>(TodoErrors::TodoNotFound),
+            <span class="kw">_ </span>=&gt; <span class="prelude-val">Ok</span>(()),
+        }
     }
 
-    <span class="kw">async fn </span>get(<span class="kw-2">&amp;</span><span class="self">self</span>, id: u32) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>::Output, TodoErrors&gt; {
+    <span class="kw">async fn </span>get(<span class="kw-2">&amp;</span><span class="self">self</span>, id: <span class="self">Self</span>::Id) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>::Output, TodoErrors&gt; {
         <span class="kw">let </span>todo = query_as::&lt;<span class="kw">_</span>, TodoRead&gt;(
             <span class="string">r#&quot;
             SELECT id, title, done
@@ -440,7 +476,7 @@
         <span class="prelude-val">Ok</span>(todos)
     }
 
-    <span class="kw">async fn </span>update(<span class="kw-2">&amp;</span><span class="self">self</span>, id: u32, todo: <span class="kw-2">&amp;</span><span class="self">Self</span>::OptionalInput) -&gt; <span class="prelude-ty">Result</span>&lt;(), TodoErrors&gt; {
+    <span class="kw">async fn </span>update(<span class="kw-2">&amp;</span><span class="self">self</span>, id: <span class="self">Self</span>::Id, todo: <span class="kw-2">&amp;</span><span class="self">Self</span>::OptionalInput) -&gt; <span class="prelude-ty">Result</span>&lt;(), TodoErrors&gt; {
         <span class="kw">let </span><span class="kw-2">mut </span>tx = <span class="self">self</span>.pool.begin().<span class="kw">await</span><span class="question-mark">?</span>;
 
         <span class="kw">if let </span><span class="prelude-val">Some</span>(title) = <span class="kw-2">&amp;</span>todo.title {
