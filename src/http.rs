@@ -1,3 +1,4 @@
+use crate::errors::TodoErrors;
 use crate::logging::{error, Logger};
 use crate::traits::Controller;
 
@@ -57,6 +58,7 @@ where
 {
     match state.controller.get(id.into_inner()).await {
         Ok(todo) => HttpResponse::Ok().json(todo),
+        Err(TodoErrors::TodoNotFound) => HttpResponse::NotFound().finish(),
         Err(err) => {
             error!(state.logger, "Failed to get todo: {:?}", err);
             HttpResponse::InternalServerError().finish()

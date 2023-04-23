@@ -98,9 +98,12 @@ impl Controller for TodoController {
         )
         .bind(id)
         .fetch_one(&self.pool)
-        .await?;
+        .await;
 
-        Ok(todo)
+        match todo {
+            Ok(todo) => Ok(todo),
+            Err(_) => Err(TodoErrors::TodoNotFound),
+        }
     }
 
     async fn list(&self) -> Result<Vec<Self::Output>, TodoErrors> {
