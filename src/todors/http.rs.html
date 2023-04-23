@@ -109,7 +109,10 @@
 <a href="#109" id="109">109</a>
 <a href="#110" id="110">110</a>
 <a href="#111" id="111">111</a>
-</pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::logging::{error, Logger};
+<a href="#112" id="112">112</a>
+<a href="#113" id="113">113</a>
+</pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::errors::TodoErrors;
+<span class="kw">use </span><span class="kw">crate</span>::logging::{error, Logger};
 <span class="kw">use </span><span class="kw">crate</span>::traits::Controller;
 
 <span class="kw">pub use </span>actix_web::{get, web, App, HttpResponse, HttpServer, Responder};
@@ -168,6 +171,7 @@
 {
     <span class="kw">match </span>state.controller.get(id.into_inner()).<span class="kw">await </span>{
         <span class="prelude-val">Ok</span>(todo) =&gt; HttpResponse::Ok().json(todo),
+        <span class="prelude-val">Err</span>(TodoErrors::TodoNotFound) =&gt; HttpResponse::NotFound().finish(),
         <span class="prelude-val">Err</span>(err) =&gt; {
             <span class="macro">error!</span>(state.logger, <span class="string">&quot;Failed to get todo: {:?}&quot;</span>, err);
             HttpResponse::InternalServerError().finish()
