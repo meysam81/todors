@@ -5,6 +5,7 @@ kill_timeout = 120
 
 [build]
   image = "meysam81/todors"
+  build-target = "all"
 
 [http_service]
   internal_port = 8080
