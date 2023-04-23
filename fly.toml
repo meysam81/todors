@@ -17,17 +17,14 @@ kill_timeout = 120
     hard_limit = 10000
 
 [checks]
-  [[services.http_checks]]
-    interval = 10000
-    grace_period = "5s"
+  [checks.http_check]
+    grace_period = "1s"
+    interval = "30s"
     method = "get"
     path = "/"
-    protocol = "http"
-    restart_limit = 0
-    timeout = 2000
-    tls_skip_verify = false
-    [services.http_checks.headers]
-
+    port = 8080
+    timeout = "3s"
+    type = "http"
 
 [mounts]
 source="todors"
