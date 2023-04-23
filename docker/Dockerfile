@@ -13,7 +13,7 @@ WORKDIR /usr/src/todors
 COPY --from=mold /usr/local/bin/mold /usr/local/bin/mold
 COPY . .
 
-RUN apk add --update clang build-base && \
+RUN apk add --update clang build-base protoc protobuf-dev && \
     cargo install --path .
 
 FROM scratch AS runner

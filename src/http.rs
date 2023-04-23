@@ -23,7 +23,7 @@ where
 
 #[get("/")]
 async fn index() -> HttpResponse {
-    HttpResponse::Ok().body("Hello world!")
+    HttpResponse::Ok().body("Hello from Rust!")
 }
 
 async fn create_todo<T>(state: web::Data<AppState<T>>, todo: web::Json<T::Input>) -> HttpResponse
