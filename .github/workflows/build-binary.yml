@@ -77,10 +77,10 @@ jobs:
       - name: Rename binary
         run: |
           cp target/${{ matrix.target }}/release/todors target/${{ matrix.target }}/release/todors-${{ matrix.target }}
-      - name: Install coreutils
+      - name: Install macOS dependencies
         if: runner.os == 'macOS'
         run: |
-          brew install coreutils
+          brew install coreutils protobuf
       - name: Checksum
         run: |
           cd target/${{ matrix.target }}/release
