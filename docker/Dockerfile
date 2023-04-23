@@ -32,9 +32,9 @@ WORKDIR /usr/src/supervisor
 RUN apk add --update supervisor
 
 
-FROM runner AS all
+FROM supervisor AS all
 
-COPY --from=supervisor --chown=1000:1000 /usr/bin/supervisord /usr/local/bin/supervisord
+COPY --from=builder --chown=1000:1000 /usr/local/cargo/bin/todors /usr/local/bin/todors
 COPY --chown=1000:1000 ./supervisord.conf /etc/supervisord.conf
 
 USER 1000:1000
