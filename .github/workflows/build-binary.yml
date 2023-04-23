@@ -74,17 +74,16 @@ jobs:
         uses: arduino/setup-protoc@v1
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install macOS dependencies
+        if: runner.os == 'macOS'
+        run: |
+          brew install coreutils protobuf
       - name: Build
         run: |
           cargo build --release --target ${{ matrix.target }}
       - name: Rename binary
         run: |
           cp target/${{ matrix.target }}/release/todors target/${{ matrix.target }}/release/todors-${{ matrix.target }}
-      - name: Install macOS dependencies
-        if: runner.os == 'macOS'
-        run: |
-          brew tap homebrew/versions
-          brew install coreutils protobuf241
       - name: Checksum
         run: |
           cd target/${{ matrix.target }}/release
