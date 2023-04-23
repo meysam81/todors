@@ -83,6 +83,9 @@ where
                 }
             }
         }
+        Local::Completion(Completion { shell }) => {
+            print_completions(shell);
+        }
     }
 }
 
@@ -100,8 +103,6 @@ pub enum Commands {
     Serve(Serve),
     #[command(flatten)]
     Local(Local),
-    /// Generate shell completion
-    Completion(Completion),
 }
 
 #[derive(Subcommand, Debug)]
@@ -116,6 +117,8 @@ pub enum Local {
     Update(Update),
     /// Get a TODO by ID
     Get(Get),
+    /// Generate shell completion
+    Completion(Completion),
 }
 
 #[derive(Subcommand, Debug)]
@@ -182,7 +185,7 @@ fn generate_completions<G: Generator>(gen: G, cmd: &mut Command) {
     generate(gen, cmd, cmd.get_name().to_string(), &mut io::stdout());
 }
 
-pub fn print_completions(shell: Shell) {
+fn print_completions(shell: Shell) {
     use clap::CommandFactory;
     let mut cmd = Cli::command();
     generate_completions(shell, &mut cmd);

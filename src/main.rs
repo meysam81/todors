@@ -35,9 +35,6 @@ async fn main() -> Result<(), TodoErrors> {
             let cli_state = cli::CliState::new(todo_controller, logger);
             handle_local(local, cli_state).await;
         }
-        Commands::Completion(cli::Completion { shell }) => {
-            cli::print_completions(shell);
-        }
         Commands::Serve(cli::Serve::Http(cli::ServerAddr { host, port })) => {
             info!(logger, "Starting server at {}:{}", host, port);
             let web_state = http::AppState::new(todo_controller, logger.clone());
