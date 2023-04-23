@@ -71,9 +71,9 @@ jobs:
           sudo apt install -y musl-tools
       - if: runner.os == 'Linux'
         name: Install protoc
-        uses: arduino/setup-protoc@v1
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          sudo apt update
+          sudo apt install -y protobuf-compiler libprotobuf-dev
       - name: Install macOS dependencies
         if: runner.os == 'macOS'
         run: |
