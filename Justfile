@@ -18,3 +18,6 @@ vendor:
 
 serve-http:
   cargo r -- serve http
+
+test:
+  cargo t
