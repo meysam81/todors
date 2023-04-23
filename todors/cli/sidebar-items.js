@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["Commands","Local","Serve"],"fn":["generate_completions","handle_local","print_completions"],"static":["DEFAULT_VALUE","LOC","RS"],"struct":["Cli","CliState","Completion","Create","Delete","Get","ServerAddr","Update"]};
+window.SIDEBAR_ITEMS = {"enum":["Commands","Local","Serve"],"fn":["generate_completions","handle_local","print_completions"],"static":["DEFAULT_VALUE","LOC","RS"],"struct":["Cli","CliState","Completion","Create","Delete","Get","GrpcServerAddr","HttpServerAddr","Update"]};

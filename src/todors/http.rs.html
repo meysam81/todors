@@ -136,7 +136,7 @@
 
 <span class="attr">#[get(<span class="string">&quot;/&quot;</span>)]
 </span><span class="kw">async fn </span>index() -&gt; HttpResponse {
-    HttpResponse::Ok().body(<span class="string">&quot;Hello world!&quot;</span>)
+    HttpResponse::Ok().body(<span class="string">&quot;Hello from Rust!&quot;</span>)
 }
 
 <span class="kw">async fn </span>create_todo&lt;T&gt;(state: web::Data&lt;AppState&lt;T&gt;&gt;, todo: web::Json&lt;T::Input&gt;) -&gt; HttpResponse

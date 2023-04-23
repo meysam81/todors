@@ -265,6 +265,17 @@
 <a href="#265" id="265">265</a>
 <a href="#266" id="266">266</a>
 <a href="#267" id="267">267</a>
+<a href="#268" id="268">268</a>
+<a href="#269" id="269">269</a>
+<a href="#270" id="270">270</a>
+<a href="#271" id="271">271</a>
+<a href="#272" id="272">272</a>
+<a href="#273" id="273">273</a>
+<a href="#274" id="274">274</a>
+<a href="#275" id="275">275</a>
+<a href="#276" id="276">276</a>
+<a href="#277" id="277">277</a>
+<a href="#278" id="278">278</a>
 </pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::logging::{error, info, Logger};
 <span class="kw">use </span><span class="kw">crate</span>::models::{TodoRead, TodoUpdate, TodoWrite};
 <span class="kw">use </span><span class="kw">crate</span>::serializers::to_json;
@@ -391,14 +402,25 @@
 <span class="attr">#[derive(Subcommand, Debug)]
 </span><span class="kw">pub enum </span>Serve {
     <span class="doccomment">/// Serve gRPC over HTTP server
-    </span>Grpc(ServerAddr),
+    </span>Grpc(GrpcServerAddr),
     <span class="doccomment">/// Serve REST over HTTP server
-    </span>Http(ServerAddr),
+    </span>Http(HttpServerAddr),
 }
 
 <span class="attr">#[derive(Args, Debug)]
-</span><span class="kw">pub struct </span>ServerAddr {
+</span><span class="kw">pub struct </span>HttpServerAddr {
     <span class="attr">#[arg(short, long, default_value_t = <span class="number">8080</span>)]
+    #[arg(value_parser = <span class="macro">clap::value_parser!</span>(u16).range(<span class="number">1</span>..))]
+    </span><span class="kw">pub </span>port: u16,
+    <span class="attr">#[arg(short = <span class="string">&#39;H&#39;</span>)]
+    #[arg(long, default_value = <span class="string">&quot;127.0.0.1&quot;</span>)]
+    #[arg(value_parser = <span class="macro">clap::value_parser!</span>(std::net::IpAddr))]
+    </span><span class="kw">pub </span>host: std::net::IpAddr,
+}
+
+<span class="attr">#[derive(Args, Debug)]
+</span><span class="kw">pub struct </span>GrpcServerAddr {
+    <span class="attr">#[arg(short, long, default_value_t = <span class="number">50051</span>)]
     #[arg(value_parser = <span class="macro">clap::value_parser!</span>(u16).range(<span class="number">1</span>..))]
     </span><span class="kw">pub </span>port: u16,
     <span class="attr">#[arg(short = <span class="string">&#39;H&#39;</span>)]
