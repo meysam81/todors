@@ -11,11 +11,18 @@ primary_region = "ams"
   auto_start_machines = true
 
 [checks]
-  [checks.alive]
-    type = "tcp"
-    interval = "15s"
-    timeout = "2s"
+
+  [[services.http_checks]]
+    interval = 10000
     grace_period = "5s"
+    method = "get"
+    path = "/"
+    protocol = "http"
+    restart_limit = 0
+    timeout = 2000
+    tls_skip_verify = false
+    [services.http_checks.headers]
+
 
 [mounts]
 source="todors"
