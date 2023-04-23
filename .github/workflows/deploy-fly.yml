@@ -2,7 +2,8 @@ name: deploy-fly
 
 on:
   workflow_run:
-    workflows: [docker-images-edge]
+    workflows:
+      - docker-images-edge
     types:
       - completed
 
