@@ -33,6 +33,8 @@
 <a href="#33" id="33">33</a>
 <a href="#34" id="34">34</a>
 <a href="#35" id="35">35</a>
+<a href="#36" id="36">36</a>
+<a href="#37" id="37">37</a>
 </pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::serializers::Deserialize;
 <span class="kw">use </span>config::{Config, Environment};
 
@@ -42,6 +44,8 @@
     </span><span class="kw">pub </span>db_url: String,
     <span class="attr">#[serde(default = <span class="string">&quot;default_loglevel&quot;</span>)]
     </span><span class="kw">pub </span>log_level: String,
+    <span class="attr">#[serde(default = <span class="string">&quot;num_cpus::get&quot;</span>)]
+    </span><span class="kw">pub </span>num_workers: usize,
 }
 
 <span class="kw">impl </span>Settings {
