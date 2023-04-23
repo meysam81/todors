@@ -36,7 +36,10 @@ async fn main() -> Result<(), TodoErrors> {
             handle_local(local, cli_state).await;
         }
         Commands::Serve(cli::Serve::Http(cli::ServerAddr { host, port })) => {
-            info!(logger, "Starting server at {}:{}", host, port);
+            info!(
+                logger,
+                "Starting server at {}:{} with {} threads...", &host, &port, &settings.num_workers
+            );
             let web_state = http::AppState::new(todo_controller, logger.clone());
             let addr = format!("{}:{}", host, port);
             let r = http::HttpServer::new(move || {
@@ -44,6 +47,7 @@ async fn main() -> Result<(), TodoErrors> {
                     .app_data(web_state.clone())
                     .configure(http::configure::<TodoController>)
             })
+            .workers(settings.num_workers)
             .bind(addr)?
             .run()
             .await;

@@ -7,6 +7,8 @@ pub struct Settings {
     pub db_url: String,
     #[serde(default = "default_loglevel")]
     pub log_level: String,
+    #[serde(default = "num_cpus::get")]
+    pub num_workers: usize,
 }
 
 impl Settings {

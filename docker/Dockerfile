@@ -18,7 +18,9 @@ RUN apk add --update clang build-base && \
 
 FROM scratch AS runner
 
-COPY --from=builder /usr/local/cargo/bin/todors /usr/local/bin/todors
+USER 1000:1000
+
+COPY --from=builder --chown=1000:1000 /usr/local/cargo/bin/todors /usr/local/bin/todors
 
 ONBUILD ENTRYPOINT ["/usr/local/bin/todors"]
 
