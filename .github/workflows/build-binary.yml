@@ -69,6 +69,8 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y musl-tools
+      - name: Install protoc
+        uses: arduino/setup-protoc@v1
       - name: Build
         run: |
           cargo build --release --target ${{ matrix.target }}

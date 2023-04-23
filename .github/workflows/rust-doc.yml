@@ -31,6 +31,8 @@ jobs:
           rustup toolchain install stable
       - name: Install mold
         uses: rui314/setup-mold@v1
+      - name: Install protoc
+        uses: arduino/setup-protoc@v1
       - name: Build docs
         run: |
           cargo doc --no-deps
