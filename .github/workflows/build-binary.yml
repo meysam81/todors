@@ -83,7 +83,8 @@ jobs:
       - name: Install macOS dependencies
         if: runner.os == 'macOS'
         run: |
-          brew install coreutils protobuf
+          brew tap homebrew/versions
+          brew install coreutils protobuf241
       - name: Checksum
         run: |
           cd target/${{ matrix.target }}/release
