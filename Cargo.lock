@@ -2264,6 +2264,7 @@ dependencies = [
  "dirs",
  "fake",
  "just",
+ "num_cpus",
  "serde",
  "serde_json",
  "slog",

@@ -17,7 +17,7 @@ vendor:
   cargo vendor
 
 serve-http:
-  cargo r -- serve http
+  cargo r --frozen -- serve http
 
 test:
   cargo t --frozen
