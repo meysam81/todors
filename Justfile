@@ -20,4 +20,4 @@ serve-http:
   cargo r -- serve http
 
 test:
-  cargo t
+  cargo t --frozen

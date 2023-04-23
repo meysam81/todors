@@ -1,0 +1,18 @@
+version: "3"
+
+services:
+  todors:
+    build:
+      dockerfile: docker/Dockerfile
+    entrypoint: todors
+    command: serve http -H 0.0.0.0 -p 8080
+    expose:
+      - "8080"
+    environment:
+      - LOG_LEVEL=debug
+      - DB_URL=/data/db.sqlite
+    volumes:
+      - todors:/data
+
+volumes:
+  todors:

@@ -16,8 +16,13 @@ COPY . .
 RUN apk add --update clang build-base && \
     cargo install --path .
 
-FROM scratch
+FROM scratch AS runner
 
 COPY --from=builder /usr/local/cargo/bin/todors /usr/local/bin/todors
 
-ENTRYPOINT ["/usr/local/bin/todors"]
+ONBUILD ENTRYPOINT ["/usr/local/bin/todors"]
+
+
+FROM runner AS http
+
+CMD [ "serve", "http", "-H", "0.0.0.0" ]

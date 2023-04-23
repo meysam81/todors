@@ -60,7 +60,6 @@ thiserror = "1.0.40"
 tokio = { version = "1", features = ["macros", "sync"] }
 
 [dev-dependencies]
-cargo-watch = "8.4.0"
 fake = { version = "2.5.0", features = ["derive"] }
 just = "1.13.0"
 
