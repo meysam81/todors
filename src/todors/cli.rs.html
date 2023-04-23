@@ -262,6 +262,9 @@
 <a href="#262" id="262">262</a>
 <a href="#263" id="263">263</a>
 <a href="#264" id="264">264</a>
+<a href="#265" id="265">265</a>
+<a href="#266" id="266">266</a>
+<a href="#267" id="267">267</a>
 </pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::logging::{error, info, Logger};
 <span class="kw">use </span><span class="kw">crate</span>::models::{TodoRead, TodoUpdate, TodoWrite};
 <span class="kw">use </span><span class="kw">crate</span>::serializers::to_json;
@@ -347,6 +350,9 @@
                 }
             }
         }
+        Local::Completion(Completion { shell }) =&gt; {
+            print_completions(shell);
+        }
     }
 }
 
@@ -364,8 +370,6 @@
     </span>Serve(Serve),
     <span class="attr">#[command(flatten)]
     </span>Local(Local),
-    <span class="doccomment">/// Generate shell completion
-    </span>Completion(Completion),
 }
 
 <span class="attr">#[derive(Subcommand, Debug)]
@@ -380,6 +384,8 @@
     </span>Update(Update),
     <span class="doccomment">/// Get a TODO by ID
     </span>Get(Get),
+    <span class="doccomment">/// Generate shell completion
+    </span>Completion(Completion),
 }
 
 <span class="attr">#[derive(Subcommand, Debug)]
@@ -446,7 +452,7 @@
     generate(gen, cmd, cmd.get_name().to_string(), <span class="kw-2">&amp;mut </span>io::stdout());
 }
 
-<span class="kw">pub fn </span>print_completions(shell: Shell) {
+<span class="kw">fn </span>print_completions(shell: Shell) {
     <span class="kw">use </span>clap::CommandFactory;
     <span class="kw">let </span><span class="kw-2">mut </span>cmd = Cli::command();
     generate_completions(shell, <span class="kw-2">&amp;mut </span>cmd);
