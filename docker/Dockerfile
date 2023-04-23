@@ -31,13 +31,14 @@ WORKDIR /usr/src/supervisor
 
 RUN apk add --update supervisor
 
+
 FROM runner AS all
 
 COPY --from=supervisor --chown=1000:1000 /usr/bin/supervisord /usr/local/bin/supervisord
 COPY --chown=1000:1000 ./supervisord.conf /etc/supervisord.conf
 
 USER 1000:1000
-CMD ["supervisord"]
+ENTRYPOINT ["supervisord"]
 
 
 FROM runner AS http
