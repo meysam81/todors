@@ -24,10 +24,7 @@ COPY --from=builder --chown=1000:1000 /usr/local/cargo/bin/todors /usr/local/bin
 ONBUILD ENTRYPOINT ["/usr/local/bin/todors"]
 
 
-FROM curlimages/curl AS supervisor
-
-USER root
-WORKDIR /usr/src/supervisor
+FROM alpine AS supervisor
 
 RUN apk add --update supervisor
 
