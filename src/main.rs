@@ -38,7 +38,7 @@ async fn main() -> Result<(), TodoErrors> {
         Commands::Serve(cli::Serve::Http(cli::ServerAddr { host, port })) => {
             info!(
                 logger,
-                "Starting server at {}:{} with {} threads...", host, port, settings.num_workers
+                "Starting server at {}:{} with {} threads...", &host, &port, &settings.num_workers
             );
             let web_state = http::AppState::new(todo_controller, logger.clone());
             let addr = format!("{}:{}", host, port);
