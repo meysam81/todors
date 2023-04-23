@@ -15,11 +15,11 @@ pub struct TodoHealthCheck {}
 
 #[tonic::async_trait]
 impl HealthCheck for TodoHealthCheck {
-    async fn poll(&self, request: Request<Ping>) -> Result<Response<Pong>, Status> {
+    async fn check(&self, request: Request<Ping>) -> Result<Response<Pong>, Status> {
         println!("Got a request: {:?}", request);
 
         let reply = proto::healthcheck::Pong {
-            message: Some("pong".to_string()),
+            message: "pong".to_string(),
         };
 
         Ok(Response::new(reply))

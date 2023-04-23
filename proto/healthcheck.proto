@@ -3,13 +3,13 @@ syntax = "proto3";
 package healthcheck;
 
 message Ping {
-    optional string message = 1;
+    string message = 1;
 }
 
 message Pong {
-    optional string message = 1;
+    string message = 1;
 }
 
 service HealthCheck {
-    rpc Poll(Ping) returns (Pong);
+    rpc Check(Ping) returns (Pong);
 }
