@@ -1,6 +1,7 @@
 use clap::Parser;
 use cli::{handle_local, Cli, Commands};
 use errors::TodoErrors;
+use grpc::{Channel, HealthCheckServer, Server as GrpcServer, TodoHealthCheck};
 use logging::{debug, error, info, trace, warn};
 use models::TodoController;
 use settings::Settings;
@@ -8,6 +9,7 @@ use settings::Settings;
 mod cli;
 mod db;
 mod errors;
+mod grpc;
 mod http;
 mod logging;
 mod models;
@@ -35,7 +37,7 @@ async fn main() -> Result<(), TodoErrors> {
             let cli_state = cli::CliState::new(todo_controller, logger);
             handle_local(local, cli_state).await;
         }
-        Commands::Serve(cli::Serve::Http(cli::ServerAddr { host, port })) => {
+        Commands::Serve(cli::Serve::Http(cli::HttpServerAddr { host, port })) => {
             info!(
                 logger,
                 "Starting server at {}:{} with {} threads...", &host, &port, &settings.num_workers
@@ -57,8 +59,23 @@ async fn main() -> Result<(), TodoErrors> {
                 Err(err) => error!(logger, "Server failed: {:?}", err),
             };
         }
-        _ => {
-            warn!(logger, "Not implemented yet");
+        Commands::Serve(cli::Serve::Grpc(cli::GrpcServerAddr { host, port })) => {
+            info!(
+                logger,
+                "Starting server at {}:{} with {} threads...", &host, &port, &settings.num_workers
+            );
+            let addr = format!("{}:{}", host, port);
+            let todo_greeter = TodoHealthCheck::default();
+            let r = GrpcServer::builder()
+                .concurrency_limit_per_connection(settings.num_workers)
+                .add_service(HealthCheckServer::new(todo_greeter))
+                .serve(addr.parse().unwrap())
+                .await;
+
+            match r {
+                Ok(_) => info!(logger, "Server stopped"),
+                Err(err) => error!(logger, "Server failed: {:?}", err),
+            };
         }
     };
 

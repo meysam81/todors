@@ -124,14 +124,25 @@ pub enum Local {
 #[derive(Subcommand, Debug)]
 pub enum Serve {
     /// Serve gRPC over HTTP server
-    Grpc(ServerAddr),
+    Grpc(GrpcServerAddr),
     /// Serve REST over HTTP server
-    Http(ServerAddr),
+    Http(HttpServerAddr),
 }
 
 #[derive(Args, Debug)]
-pub struct ServerAddr {
+pub struct HttpServerAddr {
     #[arg(short, long, default_value_t = 8080)]
+    #[arg(value_parser = clap::value_parser!(u16).range(1..))]
+    pub port: u16,
+    #[arg(short = 'H')]
+    #[arg(long, default_value = "127.0.0.1")]
+    #[arg(value_parser = clap::value_parser!(std::net::IpAddr))]
+    pub host: std::net::IpAddr,
+}
+
+#[derive(Args, Debug)]
+pub struct GrpcServerAddr {
+    #[arg(short, long, default_value_t = 50051)]
     #[arg(value_parser = clap::value_parser!(u16).range(1..))]
     pub port: u16,
     #[arg(short = 'H')]

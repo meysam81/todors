@@ -19,5 +19,11 @@ vendor:
 serve-http:
   cargo r --frozen -- serve http
 
+serve-grpc:
+  cargo r --frozen -- serve grpc
+
 test:
   cargo t --frozen
+
+clean:
+  cargo clean
