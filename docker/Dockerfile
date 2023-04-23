@@ -18,13 +18,27 @@ RUN apk add --update clang build-base protoc protobuf-dev && \
 
 FROM scratch AS runner
 
-USER 1000:1000
 
 COPY --from=builder --chown=1000:1000 /usr/local/cargo/bin/todors /usr/local/bin/todors
 
 ONBUILD ENTRYPOINT ["/usr/local/bin/todors"]
 
 
+FROM alpine AS supervisor
+
+RUN apk add --update supervisor
+
+
+FROM supervisor AS all
+
+COPY --from=builder --chown=1000:1000 /usr/local/cargo/bin/todors /usr/local/bin/todors
+COPY --chown=1000:1000 ./supervisord.conf /etc/supervisord.conf
+
+USER 1000:1000
+ENTRYPOINT ["supervisord"]
+
+
 FROM runner AS http
 
+USER 1000:1000
 CMD [ "serve", "http", "-H", "0.0.0.0" ]
