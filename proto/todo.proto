@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package todo;
+
+message ListTodosRequest {
+}
+
+message ListTodosResponse {
+  repeated TodoRead todos = 1;
+}
+
+message TodoRead {
+  uint32 id = 1;
+  string title = 2;
+  bool done = 3;
+}
+
+service Todo {
+  rpc ListTodos(ListTodosRequest) returns (ListTodosResponse);
+}

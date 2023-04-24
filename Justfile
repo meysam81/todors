@@ -29,5 +29,9 @@ clean:
   cargo clean
 
 # https://github.com/fullstorydev/grpcurl/releases/tag/v1.8.7
-ping-grpc:
+grpc-client-ping:
   grpcurl -proto proto/healthcheck.proto -import-path proto/ -plaintext -d '{"message": "Hello Rust!"}' localhost:50051 healthcheck.HealthCheck/Check
+
+
+grpc-client-list-todos:
+  grpcurl -proto ./proto/todo.proto -import-path ./proto/ -plaintext localhost:50051 todo.Todo/ListTodos

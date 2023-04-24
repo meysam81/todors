@@ -1,8 +1,8 @@
 use clap::Parser;
 use cli::{handle_local, Cli, Commands};
 use errors::TodoErrors;
-use grpc::{Channel, HealthCheckServer, Server as GrpcServer, TodoHealthCheck};
-use logging::{debug, error, info, trace, warn};
+use grpc::build_server;
+use logging::{debug, error, info, trace};
 use models::TodoController;
 use settings::Settings;
 
@@ -65,10 +65,7 @@ async fn main() -> Result<(), TodoErrors> {
                 "Starting server at {}:{} with {} threads...", &host, &port, &settings.num_workers
             );
             let addr = format!("{}:{}", host, port);
-            let todo_greeter = TodoHealthCheck::default();
-            let r = GrpcServer::builder()
-                .concurrency_limit_per_connection(settings.num_workers)
-                .add_service(HealthCheckServer::new(todo_greeter))
+            let r = build_server(settings.num_workers)
                 .serve(addr.parse().unwrap())
                 .await;
 
