@@ -1,10 +1,10 @@
 use tonic::transport::{server::Router, Server};
 use tonic::{Request, Response, Status};
 
-pub use proto::healthcheck::health_check_server::{HealthCheck, HealthCheckServer};
+use proto::healthcheck::health_check_server::{HealthCheck, HealthCheckServer};
 use proto::healthcheck::{Ping, Pong};
 
-pub use proto::todo::todo_server::{Todo, TodoServer};
+use proto::todo::todo_server::{Todo, TodoServer};
 use proto::todo::{ListTodosRequest, ListTodosResponse, TodoRead};
 
 mod proto {
@@ -32,7 +32,7 @@ impl HealthCheck for TodoHealthCheck {
     async fn check(&self, request: Request<Ping>) -> Result<Response<Pong>, Status> {
         println!("Got a request: {:?}", request);
 
-        let reply = proto::healthcheck::Pong {
+        let reply = Pong {
             message: "pong".to_string(),
         };
 
