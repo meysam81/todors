@@ -38,12 +38,12 @@ async fn main() -> Result<(), TodoErrors> {
             handle_local(local, cli_state).await;
         }
         Commands::Serve(cli::Serve::Http(cli::HttpServerAddr { host, port })) => {
+            let addr = format!("{}:{}", host, port);
             info!(
                 logger,
-                "Starting server at {}:{} with {} threads...", &host, &port, &settings.num_workers
+                "Starting server at {} with {} threads...", &addr, &settings.num_workers
             );
             let web_state = http::AppState::new(todo_controller, logger.clone());
-            let addr = format!("{}:{}", host, port);
             let r = http::HttpServer::new(move || {
                 http::App::new()
                     .app_data(web_state.clone())
