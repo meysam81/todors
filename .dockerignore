@@ -7,3 +7,4 @@ README.md
 Justfile
 LICENSE
 Cargo.lock
+benchmark

@@ -26,3 +26,4 @@ rust-project.json
 
 vendor
 secrets
+benchmark
