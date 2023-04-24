@@ -2,7 +2,8 @@ use crate::errors::TodoErrors;
 use crate::logging::{error, Logger};
 use crate::traits::Controller;
 
-pub use actix_web::{get, web, App, HttpResponse, HttpServer, Responder};
+use actix_web::{get, web, HttpResponse};
+pub use actix_web::{App, HttpServer};
 
 pub struct AppState<T>
 where
@@ -104,10 +105,12 @@ pub fn configure<T>(cfg: &mut web::ServiceConfig)
 where
     T: Controller + 'static,
 {
-    cfg.service(index)
-        .route("/api/v1/todos", web::post().to(create_todo::<T>))
-        .route("/api/v1/todos/{id}", web::get().to(get_todo::<T>))
-        .route("/api/v1/todos/{id}", web::delete().to(delete_todo::<T>))
-        .route("/api/v1/todos", web::get().to(list_todos::<T>))
-        .route("/api/v1/todos/{id}", web::patch().to(update_todo::<T>));
+    cfg.service(index).service(
+        web::scope("/api/v1")
+            .route("/todos", web::post().to(create_todo::<T>))
+            .route("/todos/{id}", web::get().to(get_todo::<T>))
+            .route("/todos/{id}", web::delete().to(delete_todo::<T>))
+            .route("/todos", web::get().to(list_todos::<T>))
+            .route("/todos/{id}", web::patch().to(update_todo::<T>)),
+    );
 }
