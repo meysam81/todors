@@ -40,7 +40,7 @@ cargo install todors
 ### Download binary
 
 You can also head over to the
-[GitHub release page](https://github.com/meysam81/todors/releases) and download the
+[GitHub release page](https://github.com/meysam81/todors/releases/latest) and download the
 binary for your platform.
 
 ### Docker
