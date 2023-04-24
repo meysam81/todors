@@ -24,7 +24,9 @@ where
 
 #[get("/")]
 async fn index() -> HttpResponse {
-    HttpResponse::Ok().body("Hello from Rust!")
+    HttpResponse::Ok()
+        .content_type("text/plain".as_bytes())
+        .body("Hello from Todors written in Rust!")
 }
 
 async fn create_todo<T>(state: web::Data<AppState<T>>, todo: web::Json<T::Input>) -> HttpResponse
