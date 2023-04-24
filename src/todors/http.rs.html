@@ -111,11 +111,17 @@
 <a href="#111" id="111">111</a>
 <a href="#112" id="112">112</a>
 <a href="#113" id="113">113</a>
+<a href="#114" id="114">114</a>
+<a href="#115" id="115">115</a>
+<a href="#116" id="116">116</a>
+<a href="#117" id="117">117</a>
+<a href="#118" id="118">118</a>
 </pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::errors::TodoErrors;
 <span class="kw">use </span><span class="kw">crate</span>::logging::{error, Logger};
 <span class="kw">use </span><span class="kw">crate</span>::traits::Controller;
 
-<span class="kw">pub use </span>actix_web::{get, web, App, HttpResponse, HttpServer, Responder};
+<span class="kw">use </span>actix_web::{get, web, HttpResponse};
+<span class="kw">pub use </span>actix_web::{App, HttpServer};
 
 <span class="kw">pub struct </span>AppState&lt;T&gt;
 <span class="kw">where
@@ -136,7 +142,9 @@
 
 <span class="attr">#[get(<span class="string">&quot;/&quot;</span>)]
 </span><span class="kw">async fn </span>index() -&gt; HttpResponse {
-    HttpResponse::Ok().body(<span class="string">&quot;Hello from Rust!&quot;</span>)
+    HttpResponse::Ok()
+        .content_type(<span class="string">&quot;text/plain&quot;</span>.as_bytes())
+        .body(<span class="string">&quot;Hello from Todors written in Rust!&quot;</span>)
 }
 
 <span class="kw">async fn </span>create_todo&lt;T&gt;(state: web::Data&lt;AppState&lt;T&gt;&gt;, todo: web::Json&lt;T::Input&gt;) -&gt; HttpResponse
@@ -217,12 +225,14 @@
 <span class="kw">where
     </span>T: Controller + <span class="lifetime">&#39;static</span>,
 {
-    cfg.service(index)
-        .route(<span class="string">&quot;/api/v1/todos&quot;</span>, web::post().to(create_todo::&lt;T&gt;))
-        .route(<span class="string">&quot;/api/v1/todos/{id}&quot;</span>, web::get().to(get_todo::&lt;T&gt;))
-        .route(<span class="string">&quot;/api/v1/todos/{id}&quot;</span>, web::delete().to(delete_todo::&lt;T&gt;))
-        .route(<span class="string">&quot;/api/v1/todos&quot;</span>, web::get().to(list_todos::&lt;T&gt;))
-        .route(<span class="string">&quot;/api/v1/todos/{id}&quot;</span>, web::patch().to(update_todo::&lt;T&gt;));
+    cfg.service(index).service(
+        web::scope(<span class="string">&quot;/api/v1&quot;</span>)
+            .route(<span class="string">&quot;/todos&quot;</span>, web::post().to(create_todo::&lt;T&gt;))
+            .route(<span class="string">&quot;/todos/{id}&quot;</span>, web::get().to(get_todo::&lt;T&gt;))
+            .route(<span class="string">&quot;/todos/{id}&quot;</span>, web::delete().to(delete_todo::&lt;T&gt;))
+            .route(<span class="string">&quot;/todos&quot;</span>, web::get().to(list_todos::&lt;T&gt;))
+            .route(<span class="string">&quot;/todos/{id}&quot;</span>, web::patch().to(update_todo::&lt;T&gt;)),
+    );
 }
 </code></pre></div>
 </section></main><div id="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="todors" data-themes="" data-resource-suffix="" data-rustdoc-version="1.69.0 (84c898d65 2023-04-16)" data-search-js="search-8a59a8356673ec1f.js" data-settings-js="settings-f0c5c39777a9a2f6.js" data-settings-css="settings-0bcba95ff279c1db.css" ></div></body></html>

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["STRUCT_NAME"],"fn":["ScalarWrapper"],"mod":["todo_client","todo_server"],"struct":["ListTodosRequest","ListTodosResponse","TodoRead"]};

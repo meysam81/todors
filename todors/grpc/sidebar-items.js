@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["proto"],"struct":["Channel","Server","TodoHealthCheck"]};
+window.SIDEBAR_ITEMS = {"fn":["build_server"],"mod":["proto"],"struct":["TodoHealthCheck","TodoService"]};

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["healthcheck"]};
+window.SIDEBAR_ITEMS = {"mod":["healthcheck","todo"]};

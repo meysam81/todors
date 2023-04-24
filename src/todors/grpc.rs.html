@@ -25,16 +25,67 @@
 <a href="#25" id="25">25</a>
 <a href="#26" id="26">26</a>
 <a href="#27" id="27">27</a>
-</pre><pre class="rust"><code><span class="kw">pub use </span>tonic::transport::{Channel, Server};
+<a href="#28" id="28">28</a>
+<a href="#29" id="29">29</a>
+<a href="#30" id="30">30</a>
+<a href="#31" id="31">31</a>
+<a href="#32" id="32">32</a>
+<a href="#33" id="33">33</a>
+<a href="#34" id="34">34</a>
+<a href="#35" id="35">35</a>
+<a href="#36" id="36">36</a>
+<a href="#37" id="37">37</a>
+<a href="#38" id="38">38</a>
+<a href="#39" id="39">39</a>
+<a href="#40" id="40">40</a>
+<a href="#41" id="41">41</a>
+<a href="#42" id="42">42</a>
+<a href="#43" id="43">43</a>
+<a href="#44" id="44">44</a>
+<a href="#45" id="45">45</a>
+<a href="#46" id="46">46</a>
+<a href="#47" id="47">47</a>
+<a href="#48" id="48">48</a>
+<a href="#49" id="49">49</a>
+<a href="#50" id="50">50</a>
+<a href="#51" id="51">51</a>
+<a href="#52" id="52">52</a>
+<a href="#53" id="53">53</a>
+<a href="#54" id="54">54</a>
+<a href="#55" id="55">55</a>
+<a href="#56" id="56">56</a>
+<a href="#57" id="57">57</a>
+<a href="#58" id="58">58</a>
+<a href="#59" id="59">59</a>
+<a href="#60" id="60">60</a>
+<a href="#61" id="61">61</a>
+<a href="#62" id="62">62</a>
+<a href="#63" id="63">63</a>
+<a href="#64" id="64">64</a>
+</pre><pre class="rust"><code><span class="kw">use </span>tonic::transport::{server::Router, Server};
 <span class="kw">use </span>tonic::{Request, Response, Status};
 
-<span class="kw">pub use </span>proto::healthcheck::health_check_server::{HealthCheck, HealthCheckServer};
+<span class="kw">use </span>proto::healthcheck::health_check_server::{HealthCheck, HealthCheckServer};
 <span class="kw">use </span>proto::healthcheck::{Ping, Pong};
+
+<span class="kw">use </span>proto::todo::todo_server::{Todo, TodoServer};
+<span class="kw">use </span>proto::todo::{ListTodosRequest, ListTodosResponse, TodoRead};
 
 <span class="kw">mod </span>proto {
     <span class="kw">pub mod </span>healthcheck {
         <span class="macro">tonic::include_proto!</span>(<span class="string">&quot;healthcheck&quot;</span>);
     }
+
+    <span class="kw">pub mod </span>todo {
+        <span class="macro">tonic::include_proto!</span>(<span class="string">&quot;todo&quot;</span>);
+    }
+}
+
+<span class="kw">pub fn </span>build_server(num_workers: usize) -&gt; Router {
+    Server::builder()
+        .concurrency_limit_per_connection(num_workers)
+        .add_service(HealthCheckServer::new(TodoHealthCheck::default()))
+        .add_service(TodoServer::new(TodoService::default()))
 }
 
 <span class="attr">#[derive(Debug, Default)]
@@ -45,8 +96,31 @@
     <span class="kw">async fn </span>check(<span class="kw-2">&amp;</span><span class="self">self</span>, request: Request&lt;Ping&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;Response&lt;Pong&gt;, Status&gt; {
         <span class="macro">println!</span>(<span class="string">&quot;Got a request: {:?}&quot;</span>, request);
 
-        <span class="kw">let </span>reply = proto::healthcheck::Pong {
+        <span class="kw">let </span>reply = Pong {
             message: <span class="string">&quot;pong&quot;</span>.to_string(),
+        };
+
+        <span class="prelude-val">Ok</span>(Response::new(reply))
+    }
+}
+
+<span class="attr">#[derive(Debug, Default)]
+</span><span class="kw">pub struct </span>TodoService {}
+
+<span class="attr">#[tonic::async_trait]
+</span><span class="kw">impl </span>Todo <span class="kw">for </span>TodoService {
+    <span class="kw">async fn </span>list_todos(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        request: Request&lt;ListTodosRequest&gt;,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;Response&lt;ListTodosResponse&gt;, Status&gt; {
+        <span class="macro">println!</span>(<span class="string">&quot;Got a request: {:?}&quot;</span>, request);
+
+        <span class="kw">let </span>reply = ListTodosResponse {
+            todos: <span class="macro">vec!</span>[TodoRead {
+                id: <span class="number">1</span>,
+                title: <span class="string">&quot;todo 1&quot;</span>.to_string(),
+                done: <span class="bool-val">true</span>,
+            }],
         };
 
         <span class="prelude-val">Ok</span>(Response::new(reply))
