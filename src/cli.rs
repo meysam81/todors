@@ -1,7 +1,7 @@
 use crate::logging::{error, info, Logger};
 use crate::models::{TodoRead, TodoUpdate, TodoWrite};
 use crate::serializers::to_json;
-use crate::traits::Controller;
+use crate::traits::{Controller, ListRequest};
 use clap::{Args, Command, Parser, Subcommand};
 use clap_complete::{generate, Generator, Shell};
 use std::io;
@@ -55,15 +55,17 @@ where
                 error!(state.logger, "Failed to get todo: {:?}", err);
             }
         },
-        Local::List => match state.controller.list().await {
-            Ok(todos) => {
-                let todos = to_json(&todos).unwrap();
-                println!("{}", todos) /*  */
+        Local::List(List { offset, limit }) => {
+            match state.controller.list(ListRequest { offset, limit }).await {
+                Ok(todos) => {
+                    let todos = to_json(&todos).unwrap();
+                    println!("{}", todos)
+                }
+                Err(err) => {
+                    error!(state.logger, "Failed to list todos: {:?}", err);
+                }
             }
-            Err(err) => {
-                error!(state.logger, "Failed to list todos: {:?}", err);
-            }
-        },
+        }
         Local::Update(Update {
             id,
             title,
@@ -112,7 +114,7 @@ pub enum Local {
     /// Delete a TODO by ID
     Delete(Delete),
     /// List all TODOs
-    List,
+    List(List),
     /// Update a TODO by ID
     Update(Update),
     /// Get a TODO by ID
@@ -161,6 +163,16 @@ pub struct Create {
 pub struct Delete {
     /// The ID of the TODO to delete
     pub id: u32,
+}
+
+#[derive(Args, Debug)]
+pub struct List {
+    /// Start of the query
+    #[arg(short, long, default_value = "0")]
+    pub offset: Option<u32>,
+    /// Number of results to return
+    #[arg(short, long, default_value = "100")]
+    pub limit: Option<u32>,
 }
 
 #[derive(Args, Debug)]

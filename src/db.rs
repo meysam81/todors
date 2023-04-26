@@ -1,6 +1,6 @@
 use sqlx::sqlite::{SqlitePool, SqlitePoolOptions};
 pub use sqlx::sqlite::{SqlitePool as Pool, SqliteQueryResult as QueryResult};
-pub use sqlx::{query, query_as, Error, FromRow};
+pub use sqlx::{query, query_as, Error, FromRow, Row};
 
 pub async fn connect(conn: &str, max_conn: Option<u32>) -> Result<SqlitePool, sqlx::Error> {
     let max_conn = max_conn.unwrap_or(5);

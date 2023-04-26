@@ -1,6 +1,6 @@
 use crate::errors::TodoErrors;
-use crate::logging::{error, Logger};
-use crate::traits::Controller;
+use crate::logging::{debug, error, Logger};
+use crate::traits::{Controller, ListRequest};
 
 use actix_web::{get, web, HttpResponse};
 pub use actix_web::{App, HttpServer};
@@ -69,11 +69,21 @@ where
     }
 }
 
-async fn list_todos<T>(state: web::Data<AppState<T>>) -> HttpResponse
+impl From<web::Query<ListRequest>> for ListRequest {
+    fn from(query: web::Query<ListRequest>) -> Self {
+        query.into_inner()
+    }
+}
+
+async fn list_todos<T>(
+    state: web::Data<AppState<T>>,
+    pagination: web::Query<ListRequest>,
+) -> HttpResponse
 where
     T: Controller,
 {
-    match state.controller.list().await {
+    debug!(state.logger, "Listing todos with request: {:?}", pagination);
+    match state.controller.list(pagination.into()).await {
         Ok(todos) => HttpResponse::Ok().json(todos),
         Err(err) => {
             error!(state.logger, "Failed to list todos: {:?}", err);
