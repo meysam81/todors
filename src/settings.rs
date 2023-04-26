@@ -11,6 +11,8 @@ pub struct Settings {
     pub num_workers: usize,
     #[serde(default = "default_pagination_limit")]
     pub pagination_limit: u32,
+    #[serde(default = "default_pagination_hard_limit")]
+    pub pagination_hard_limit: u32,
 }
 
 impl Settings {
@@ -40,4 +42,8 @@ fn default_loglevel() -> String {
 
 fn default_pagination_limit() -> u32 {
     100
+}
+
+fn default_pagination_hard_limit() -> u32 {
+    1000
 }

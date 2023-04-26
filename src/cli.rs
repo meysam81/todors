@@ -168,10 +168,10 @@ pub struct Delete {
 #[derive(Args, Debug)]
 pub struct List {
     /// Start of the query
-    #[arg(short, long, default_value = "0")]
+    #[arg(short, long)]
     pub offset: Option<u32>,
     /// Number of results to return
-    #[arg(short, long, default_value = "100")]
+    #[arg(short, long)]
     pub limit: Option<u32>,
 }
 
