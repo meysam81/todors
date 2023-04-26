@@ -27,7 +27,7 @@ async fn main() -> Result<(), TodoErrors> {
     let conn = db::connect(&settings.db_url, None).await?;
     trace!(logger, "{:?}", conn);
 
-    let todo_controller = TodoController::new(conn);
+    let todo_controller = TodoController::new(conn, Some(settings.pagination_limit));
 
     let cli = Cli::parse();
     debug!(logger, "{:?}", cli);

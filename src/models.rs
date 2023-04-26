@@ -1,7 +1,8 @@
-use crate::db::{query, query_as, FromRow, Pool};
+use crate::db::{query, query_as, FromRow, Pool, Row};
 use crate::errors::TodoErrors;
 use crate::serializers::{Deserialize, Serialize};
-use crate::traits::{async_trait, Controller};
+use crate::traits::{async_trait, Controller, ListRequest, ListResponse};
+use std::cmp;
 
 #[derive(Debug, Serialize, FromRow)]
 pub struct TodoRead {
@@ -39,11 +40,15 @@ impl TodoUpdate {
 
 pub struct TodoController {
     pool: Pool,
+    pagination_limit: u32,
 }
 
 impl TodoController {
-    pub fn new(pool: Pool) -> TodoController {
-        TodoController { pool }
+    pub fn new(pool: Pool, pagination_limit: Option<u32>) -> TodoController {
+        TodoController {
+            pool,
+            pagination_limit: pagination_limit.unwrap_or(100),
+        }
     }
 }
 
@@ -106,17 +111,39 @@ impl Controller for TodoController {
         }
     }
 
-    async fn list(&self) -> Result<Vec<Self::Output>, TodoErrors> {
+    async fn list(&self, req: ListRequest) -> Result<ListResponse<Self::Output>, TodoErrors> {
         let todos = query_as::<_, TodoRead>(
             r#"
             SELECT id, title, done
             FROM todo
+            ORDER BY id
+            LIMIT ?
+            OFFSET ?
             "#,
         )
+        .bind(req.limit.unwrap_or(self.pagination_limit))
+        .bind(req.offset.unwrap_or(0))
         .fetch_all(&self.pool)
         .await?;
 
-        Ok(todos)
+        let total = query(
+            r#"
+            SELECT COUNT(*) as total
+            FROM todo
+            "#,
+        )
+        .fetch_one(&self.pool)
+        .await?
+        .get::<u32, _>("total");
+
+        let queried_count = todos.len() as u32;
+
+        Ok(ListResponse {
+            data: todos,
+            total: total as u32,
+            limit: cmp::min(req.limit.unwrap_or(self.pagination_limit), queried_count),
+            offset: req.offset.unwrap_or(0),
+        })
     }
 
     async fn update(&self, id: Self::Id, todo: &Self::OptionalInput) -> Result<(), TodoErrors> {

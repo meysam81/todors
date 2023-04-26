@@ -9,6 +9,8 @@ pub struct Settings {
     pub log_level: String,
     #[serde(default = "num_cpus::get")]
     pub num_workers: usize,
+    #[serde(default = "default_pagination_limit")]
+    pub pagination_limit: u32,
 }
 
 impl Settings {
@@ -34,4 +36,8 @@ fn default_dburl() -> String {
 
 fn default_loglevel() -> String {
     "info".to_string()
+}
+
+fn default_pagination_limit() -> u32 {
+    100
 }
