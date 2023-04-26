@@ -458,10 +458,10 @@
 <span class="attr">#[derive(Args, Debug)]
 </span><span class="kw">pub struct </span>List {
     <span class="doccomment">/// Start of the query
-    </span><span class="attr">#[arg(short, long, default_value = <span class="string">&quot;0&quot;</span>)]
+    </span><span class="attr">#[arg(short, long)]
     </span><span class="kw">pub </span>offset: <span class="prelude-ty">Option</span>&lt;u32&gt;,
     <span class="doccomment">/// Number of results to return
-    </span><span class="attr">#[arg(short, long, default_value = <span class="string">&quot;100&quot;</span>)]
+    </span><span class="attr">#[arg(short, long)]
     </span><span class="kw">pub </span>limit: <span class="prelude-ty">Option</span>&lt;u32&gt;,
 }
 

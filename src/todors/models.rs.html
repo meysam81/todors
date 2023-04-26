@@ -386,6 +386,16 @@
 <a href="#386" id="386">386</a>
 <a href="#387" id="387">387</a>
 <a href="#388" id="388">388</a>
+<a href="#389" id="389">389</a>
+<a href="#390" id="390">390</a>
+<a href="#391" id="391">391</a>
+<a href="#392" id="392">392</a>
+<a href="#393" id="393">393</a>
+<a href="#394" id="394">394</a>
+<a href="#395" id="395">395</a>
+<a href="#396" id="396">396</a>
+<a href="#397" id="397">397</a>
+<a href="#398" id="398">398</a>
 </pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::db::{query, query_as, FromRow, Pool, Row};
 <span class="kw">use </span><span class="kw">crate</span>::errors::TodoErrors;
 <span class="kw">use </span><span class="kw">crate</span>::serializers::{Deserialize, Serialize};
@@ -429,13 +439,19 @@
 <span class="kw">pub struct </span>TodoController {
     pool: Pool,
     pagination_limit: u32,
+    pagination_hard_limit: u32,
 }
 
 <span class="kw">impl </span>TodoController {
-    <span class="kw">pub fn </span>new(pool: Pool, pagination_limit: <span class="prelude-ty">Option</span>&lt;u32&gt;) -&gt; TodoController {
+    <span class="kw">pub fn </span>new(
+        pool: Pool,
+        pagination_limit: <span class="prelude-ty">Option</span>&lt;u32&gt;,
+        pagination_hard_limit: <span class="prelude-ty">Option</span>&lt;u32&gt;,
+    ) -&gt; TodoController {
         TodoController {
             pool,
             pagination_limit: pagination_limit.unwrap_or(<span class="number">100</span>),
+            pagination_hard_limit: pagination_hard_limit.unwrap_or(<span class="number">1000</span>),
         }
     }
 }
@@ -500,6 +516,10 @@
     }
 
     <span class="kw">async fn </span>list(<span class="kw-2">&amp;</span><span class="self">self</span>, req: ListRequest) -&gt; <span class="prelude-ty">Result</span>&lt;ListResponse&lt;<span class="self">Self</span>::Output&gt;, TodoErrors&gt; {
+        <span class="kw">let </span>limit = cmp::min(
+            req.limit.unwrap_or(<span class="self">self</span>.pagination_limit),
+            <span class="self">self</span>.pagination_hard_limit,
+        );
         <span class="kw">let </span>todos = query_as::&lt;<span class="kw">_</span>, TodoRead&gt;(
             <span class="string">r#&quot;
             SELECT id, title, done
@@ -509,7 +529,7 @@
             OFFSET ?
             &quot;#</span>,
         )
-        .bind(req.limit.unwrap_or(<span class="self">self</span>.pagination_limit))
+        .bind(limit)
         .bind(req.offset.unwrap_or(<span class="number">0</span>))
         .fetch_all(<span class="kw-2">&amp;</span><span class="self">self</span>.pool)
         .<span class="kw">await</span><span class="question-mark">?</span>;
