@@ -276,10 +276,22 @@
 <a href="#276" id="276">276</a>
 <a href="#277" id="277">277</a>
 <a href="#278" id="278">278</a>
+<a href="#279" id="279">279</a>
+<a href="#280" id="280">280</a>
+<a href="#281" id="281">281</a>
+<a href="#282" id="282">282</a>
+<a href="#283" id="283">283</a>
+<a href="#284" id="284">284</a>
+<a href="#285" id="285">285</a>
+<a href="#286" id="286">286</a>
+<a href="#287" id="287">287</a>
+<a href="#288" id="288">288</a>
+<a href="#289" id="289">289</a>
+<a href="#290" id="290">290</a>
 </pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::logging::{error, info, Logger};
 <span class="kw">use </span><span class="kw">crate</span>::models::{TodoRead, TodoUpdate, TodoWrite};
 <span class="kw">use </span><span class="kw">crate</span>::serializers::to_json;
-<span class="kw">use </span><span class="kw">crate</span>::traits::Controller;
+<span class="kw">use </span><span class="kw">crate</span>::traits::{Controller, ListRequest};
 <span class="kw">use </span>clap::{Args, Command, Parser, Subcommand};
 <span class="kw">use </span>clap_complete::{generate, Generator, Shell};
 <span class="kw">use </span>std::io;
@@ -333,15 +345,17 @@
                 <span class="macro">error!</span>(state.logger, <span class="string">&quot;Failed to get todo: {:?}&quot;</span>, err);
             }
         },
-        Local::List =&gt; <span class="kw">match </span>state.controller.list().<span class="kw">await </span>{
-            <span class="prelude-val">Ok</span>(todos) =&gt; {
-                <span class="kw">let </span>todos = to_json(<span class="kw-2">&amp;</span>todos).unwrap();
-                <span class="macro">println!</span>(<span class="string">&quot;{}&quot;</span>, todos) <span class="comment">/*  */
-            </span>}
-            <span class="prelude-val">Err</span>(err) =&gt; {
-                <span class="macro">error!</span>(state.logger, <span class="string">&quot;Failed to list todos: {:?}&quot;</span>, err);
+        Local::List(List { offset, limit }) =&gt; {
+            <span class="kw">match </span>state.controller.list(ListRequest { offset, limit }).<span class="kw">await </span>{
+                <span class="prelude-val">Ok</span>(todos) =&gt; {
+                    <span class="kw">let </span>todos = to_json(<span class="kw-2">&amp;</span>todos).unwrap();
+                    <span class="macro">println!</span>(<span class="string">&quot;{}&quot;</span>, todos)
+                }
+                <span class="prelude-val">Err</span>(err) =&gt; {
+                    <span class="macro">error!</span>(state.logger, <span class="string">&quot;Failed to list todos: {:?}&quot;</span>, err);
+                }
             }
-        },
+        }
         Local::Update(Update {
             id,
             title,
@@ -390,7 +404,7 @@
     <span class="doccomment">/// Delete a TODO by ID
     </span>Delete(Delete),
     <span class="doccomment">/// List all TODOs
-    </span>List,
+    </span>List(List),
     <span class="doccomment">/// Update a TODO by ID
     </span>Update(Update),
     <span class="doccomment">/// Get a TODO by ID
@@ -439,6 +453,16 @@
 </span><span class="kw">pub struct </span>Delete {
     <span class="doccomment">/// The ID of the TODO to delete
     </span><span class="kw">pub </span>id: u32,
+}
+
+<span class="attr">#[derive(Args, Debug)]
+</span><span class="kw">pub struct </span>List {
+    <span class="doccomment">/// Start of the query
+    </span><span class="attr">#[arg(short, long, default_value = <span class="string">&quot;0&quot;</span>)]
+    </span><span class="kw">pub </span>offset: <span class="prelude-ty">Option</span>&lt;u32&gt;,
+    <span class="doccomment">/// Number of results to return
+    </span><span class="attr">#[arg(short, long, default_value = <span class="string">&quot;100&quot;</span>)]
+    </span><span class="kw">pub </span>limit: <span class="prelude-ty">Option</span>&lt;u32&gt;,
 }
 
 <span class="attr">#[derive(Args, Debug)]

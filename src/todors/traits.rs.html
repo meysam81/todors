@@ -15,9 +15,43 @@
 <a href="#15" id="15">15</a>
 <a href="#16" id="16">16</a>
 <a href="#17" id="17">17</a>
+<a href="#18" id="18">18</a>
+<a href="#19" id="19">19</a>
+<a href="#20" id="20">20</a>
+<a href="#21" id="21">21</a>
+<a href="#22" id="22">22</a>
+<a href="#23" id="23">23</a>
+<a href="#24" id="24">24</a>
+<a href="#25" id="25">25</a>
+<a href="#26" id="26">26</a>
+<a href="#27" id="27">27</a>
+<a href="#28" id="28">28</a>
+<a href="#29" id="29">29</a>
+<a href="#30" id="30">30</a>
+<a href="#31" id="31">31</a>
+<a href="#32" id="32">32</a>
+<a href="#33" id="33">33</a>
+<a href="#34" id="34">34</a>
 </pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::errors::TodoErrors;
 <span class="kw">use </span><span class="kw">crate</span>::serializers::{Deserialize, Serialize};
 <span class="kw">pub use </span>async_trait::async_trait;
+
+<span class="attr">#[derive(Debug, Deserialize)]
+</span><span class="kw">pub struct </span>ListRequest {
+    <span class="kw">pub </span>limit: <span class="prelude-ty">Option</span>&lt;u32&gt;,
+    <span class="kw">pub </span>offset: <span class="prelude-ty">Option</span>&lt;u32&gt;,
+}
+
+<span class="attr">#[derive(Debug, Serialize)]
+</span><span class="kw">pub struct </span>ListResponse&lt;T&gt;
+<span class="kw">where
+    </span>T: Serialize,
+{
+    <span class="kw">pub </span>data: Vec&lt;T&gt;,
+    <span class="kw">pub </span>total: u32,
+    <span class="kw">pub </span>limit: u32,
+    <span class="kw">pub </span>offset: u32,
+}
 
 <span class="attr">#[async_trait(<span class="question-mark">?</span>Send)]
 </span><span class="kw">pub trait </span>Controller {
@@ -29,7 +63,7 @@
     <span class="kw">async fn </span>create(<span class="kw-2">&amp;</span><span class="self">self</span>, todo: <span class="kw-2">&amp;</span><span class="self">Self</span>::Input) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>::Output, TodoErrors&gt;;
     <span class="kw">async fn </span>delete(<span class="kw-2">&amp;</span><span class="self">self</span>, id: <span class="self">Self</span>::Id) -&gt; <span class="prelude-ty">Result</span>&lt;(), TodoErrors&gt;;
     <span class="kw">async fn </span>get(<span class="kw-2">&amp;</span><span class="self">self</span>, id: <span class="self">Self</span>::Id) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>::Output, TodoErrors&gt;;
-    <span class="kw">async fn </span>list(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;<span class="self">Self</span>::Output&gt;, TodoErrors&gt;;
+    <span class="kw">async fn </span>list(<span class="kw-2">&amp;</span><span class="self">self</span>, req: ListRequest) -&gt; <span class="prelude-ty">Result</span>&lt;ListResponse&lt;<span class="self">Self</span>::Output&gt;, TodoErrors&gt;;
     <span class="kw">async fn </span>update(<span class="kw-2">&amp;</span><span class="self">self</span>, id: <span class="self">Self</span>::Id, todo: <span class="kw-2">&amp;</span><span class="self">Self</span>::OptionalInput) -&gt; <span class="prelude-ty">Result</span>&lt;(), TodoErrors&gt;;
 }
 </code></pre></div>

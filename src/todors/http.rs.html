@@ -116,9 +116,19 @@
 <a href="#116" id="116">116</a>
 <a href="#117" id="117">117</a>
 <a href="#118" id="118">118</a>
+<a href="#119" id="119">119</a>
+<a href="#120" id="120">120</a>
+<a href="#121" id="121">121</a>
+<a href="#122" id="122">122</a>
+<a href="#123" id="123">123</a>
+<a href="#124" id="124">124</a>
+<a href="#125" id="125">125</a>
+<a href="#126" id="126">126</a>
+<a href="#127" id="127">127</a>
+<a href="#128" id="128">128</a>
 </pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::errors::TodoErrors;
-<span class="kw">use </span><span class="kw">crate</span>::logging::{error, Logger};
-<span class="kw">use </span><span class="kw">crate</span>::traits::Controller;
+<span class="kw">use </span><span class="kw">crate</span>::logging::{debug, error, Logger};
+<span class="kw">use </span><span class="kw">crate</span>::traits::{Controller, ListRequest};
 
 <span class="kw">use </span>actix_web::{get, web, HttpResponse};
 <span class="kw">pub use </span>actix_web::{App, HttpServer};
@@ -187,11 +197,21 @@
     }
 }
 
-<span class="kw">async fn </span>list_todos&lt;T&gt;(state: web::Data&lt;AppState&lt;T&gt;&gt;) -&gt; HttpResponse
+<span class="kw">impl </span>From&lt;web::Query&lt;ListRequest&gt;&gt; <span class="kw">for </span>ListRequest {
+    <span class="kw">fn </span>from(query: web::Query&lt;ListRequest&gt;) -&gt; <span class="self">Self </span>{
+        query.into_inner()
+    }
+}
+
+<span class="kw">async fn </span>list_todos&lt;T&gt;(
+    state: web::Data&lt;AppState&lt;T&gt;&gt;,
+    pagination: web::Query&lt;ListRequest&gt;,
+) -&gt; HttpResponse
 <span class="kw">where
     </span>T: Controller,
 {
-    <span class="kw">match </span>state.controller.list().<span class="kw">await </span>{
+    <span class="macro">debug!</span>(state.logger, <span class="string">&quot;Listing todos with request: {:?}&quot;</span>, pagination);
+    <span class="kw">match </span>state.controller.list(pagination.into()).<span class="kw">await </span>{
         <span class="prelude-val">Ok</span>(todos) =&gt; HttpResponse::Ok().json(todos),
         <span class="prelude-val">Err</span>(err) =&gt; {
             <span class="macro">error!</span>(state.logger, <span class="string">&quot;Failed to list todos: {:?}&quot;</span>, err);

@@ -107,7 +107,7 @@
     <span class="kw">let </span>conn = db::connect(<span class="kw-2">&amp;</span>settings.db_url, <span class="prelude-val">None</span>).<span class="kw">await</span><span class="question-mark">?</span>;
     <span class="macro">trace!</span>(logger, <span class="string">&quot;{:?}&quot;</span>, conn);
 
-    <span class="kw">let </span>todo_controller = TodoController::new(conn);
+    <span class="kw">let </span>todo_controller = TodoController::new(conn, <span class="prelude-val">Some</span>(settings.pagination_limit));
 
     <span class="kw">let </span>cli = Cli::parse();
     <span class="macro">debug!</span>(logger, <span class="string">&quot;{:?}&quot;</span>, cli);
