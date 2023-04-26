@@ -28,6 +28,10 @@ jobs:
           rustup toolchain install stable
       - name: Install mold
         uses: rui314/setup-mold@v1
+      - name: Install protoc
+        run: |
+          sudo apt update
+          sudo apt install -y protobuf-compiler libprotobuf-dev
       - name: Publish
         uses: katyo/publish-crates@v2
         with:
