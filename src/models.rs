@@ -41,13 +41,19 @@ impl TodoUpdate {
 pub struct TodoController {
     pool: Pool,
     pagination_limit: u32,
+    pagination_hard_limit: u32,
 }
 
 impl TodoController {
-    pub fn new(pool: Pool, pagination_limit: Option<u32>) -> TodoController {
+    pub fn new(
+        pool: Pool,
+        pagination_limit: Option<u32>,
+        pagination_hard_limit: Option<u32>,
+    ) -> TodoController {
         TodoController {
             pool,
             pagination_limit: pagination_limit.unwrap_or(100),
+            pagination_hard_limit: pagination_hard_limit.unwrap_or(1000),
         }
     }
 }
@@ -112,6 +118,10 @@ impl Controller for TodoController {
     }
 
     async fn list(&self, req: ListRequest) -> Result<ListResponse<Self::Output>, TodoErrors> {
+        let limit = cmp::min(
+            req.limit.unwrap_or(self.pagination_limit),
+            self.pagination_hard_limit,
+        );
         let todos = query_as::<_, TodoRead>(
             r#"
             SELECT id, title, done
@@ -121,7 +131,7 @@ impl Controller for TodoController {
             OFFSET ?
             "#,
         )
-        .bind(req.limit.unwrap_or(self.pagination_limit))
+        .bind(limit)
         .bind(req.offset.unwrap_or(0))
         .fetch_all(&self.pool)
         .await?;
