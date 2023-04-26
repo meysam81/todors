@@ -6,6 +6,8 @@ on:
       - docker-images-edge
     types:
       - completed
+    branches:
+      - main
 
 jobs:
   deploy:
