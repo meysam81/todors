@@ -11,7 +11,16 @@ categories = [
     "web-programming",
     "web-programming::http-server",
 ]
-include = ["src", "migrations", ".cargo", "Cargo.toml", "LICENSE", "README.md"]
+include = [
+    ".cargo",
+    "migrations",
+    "proto",
+    "src",
+    "build.rs",
+    "Cargo.toml",
+    "LICENSE",
+    "README.md",
+]
 exclude = [
     "Cargo.lock",
     ".github",
