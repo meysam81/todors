@@ -4,29 +4,14 @@ description = "todo app with CLI, REST & gRPC interfaces"
 readme = "README.md"
 repository = "https://github.com/meysam81/todors"
 documentation = "https://docs.rs/todors"
-authors = [
-    "Meysam <contact@meysam.io>",
-]
-keywords = [
-    "todo",
-    "cli",
-    "productivity",
-    "http",
-    "grpc",
-]
+authors = ["Meysam <contact@meysam.io>"]
+keywords = ["todo", "cli", "productivity", "http", "grpc"]
 categories = [
     "command-line-utilities",
     "web-programming",
     "web-programming::http-server",
 ]
-include = [
-    "src",
-    "migrations",
-    ".cargo",
-    "Cargo.toml",
-    "LICENSE",
-    "README.md",
-]
+include = ["src", "migrations", ".cargo", "Cargo.toml", "LICENSE", "README.md"]
 exclude = [
     "Cargo.lock",
     ".github",
@@ -39,7 +24,7 @@ exclude = [
     "sonar-project.properties",
 ]
 license = "MIT"
-version = "0.5.0"
+version = "0.6.0"
 edition = "2021"
 rust-version = "1.68"
 
@@ -57,7 +42,11 @@ serde_json = "1.0.96"
 slog = "2.7.0"
 slog-async = "2.7.0"
 slog-term = "2.9.0"
-sqlx = { version = "0.6.3", features = ["sqlite", "runtime-tokio-rustls", "migrate"] }
+sqlx = { version = "0.6.3", features = [
+    "sqlite",
+    "runtime-tokio-rustls",
+    "migrate",
+] }
 thiserror = "1.0.40"
 tokio = { version = "1", features = ["macros", "sync", "rt-multi-thread"] }
 tonic = { version = "0.9.2", features = ["gzip"] }
