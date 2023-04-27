@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/work/todors/todors/target/debug/build/todors-8357154697611d36/out/healthcheck.rs`."><title>healthcheck.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../../../../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../../../../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../../../../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../../../../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../../../../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../../../../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../../../../../../../../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../../../../../../../../../../static.files/rustdoc-c4dbdcde0fbd8430.css" id="mainThemeStyle"><link rel="stylesheet" id="themeStyle" href="../../../../../../../../../../../../static.files/light-db279b6232be9c13.css"><link rel="stylesheet" disabled href="../../../../../../../../../../../../static.files/dark-cf923f49f397b216.css"><link rel="stylesheet" disabled href="../../../../../../../../../../../../static.files/ayu-be46fdc453a55015.css"><script src="../../../../../../../../../../../../static.files/storage-3891ce972e3a2bf8.js"></script><script defer src="../../../../../../../../../../../../static.files/source-script-1b95b7cca98b26e5.js"></script><script defer src="../../../../../../../../../../../../source-files.js"></script><script defer src="../../../../../../../../../../../../static.files/main-98a684e84ae5b08b.js"></script><noscript><link rel="stylesheet" href="../../../../../../../../../../../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../../../../../../../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../../../../../../../../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../../../../../../../../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../../../../../../../../../../../todors/index.html"><img class="rust-logo" src="../../../../../../../../../../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../../../../../../../../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../../../../../../../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../../../../../../../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/work/todors/todors/target/debug/build/todors-98c60efab584fbbb/out/todo.rs`."><title>todo.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../../../../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../../../../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../../../../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../../../../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../../../../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../../../../../../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../../../../../../../../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../../../../../../../../../../static.files/rustdoc-c4dbdcde0fbd8430.css" id="mainThemeStyle"><link rel="stylesheet" id="themeStyle" href="../../../../../../../../../../../../static.files/light-db279b6232be9c13.css"><link rel="stylesheet" disabled href="../../../../../../../../../../../../static.files/dark-cf923f49f397b216.css"><link rel="stylesheet" disabled href="../../../../../../../../../../../../static.files/ayu-be46fdc453a55015.css"><script src="../../../../../../../../../../../../static.files/storage-3891ce972e3a2bf8.js"></script><script defer src="../../../../../../../../../../../../static.files/source-script-1b95b7cca98b26e5.js"></script><script defer src="../../../../../../../../../../../../source-files.js"></script><script defer src="../../../../../../../../../../../../static.files/main-98a684e84ae5b08b.js"></script><noscript><link rel="stylesheet" href="../../../../../../../../../../../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../../../../../../../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../../../../../../../../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../../../../../../../../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../../../../../../../../../../../todors/index.html"><img class="rust-logo" src="../../../../../../../../../../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../../../../../../../../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../../../../../../../../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../../../../../../../../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -293,28 +293,45 @@
 <a href="#293" id="293">293</a>
 <a href="#294" id="294">294</a>
 <a href="#295" id="295">295</a>
+<a href="#296" id="296">296</a>
+<a href="#297" id="297">297</a>
+<a href="#298" id="298">298</a>
+<a href="#299" id="299">299</a>
+<a href="#300" id="300">300</a>
+<a href="#301" id="301">301</a>
+<a href="#302" id="302">302</a>
+<a href="#303" id="303">303</a>
+<a href="#304" id="304">304</a>
+<a href="#305" id="305">305</a>
 </pre><pre class="rust"><code><span class="attr">#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-</span><span class="kw">pub struct </span>Ping {
-    <span class="attr">#[prost(string, tag = <span class="string">&quot;1&quot;</span>)]
-    </span><span class="kw">pub </span>message: ::prost::alloc::string::String,
+</span><span class="kw">pub struct </span>ListTodosRequest {}
+<span class="attr">#[allow(clippy::derive_partial_eq_without_eq)]
+#[derive(Clone, PartialEq, ::prost::Message)]
+</span><span class="kw">pub struct </span>ListTodosResponse {
+    <span class="attr">#[prost(message, repeated, tag = <span class="string">&quot;1&quot;</span>)]
+    </span><span class="kw">pub </span>todos: ::prost::alloc::vec::Vec&lt;TodoRead&gt;,
 }
 <span class="attr">#[allow(clippy::derive_partial_eq_without_eq)]
 #[derive(Clone, PartialEq, ::prost::Message)]
-</span><span class="kw">pub struct </span>Pong {
-    <span class="attr">#[prost(string, tag = <span class="string">&quot;1&quot;</span>)]
-    </span><span class="kw">pub </span>message: ::prost::alloc::string::String,
+</span><span class="kw">pub struct </span>TodoRead {
+    <span class="attr">#[prost(uint32, tag = <span class="string">&quot;1&quot;</span>)]
+    </span><span class="kw">pub </span>id: u32,
+    <span class="attr">#[prost(string, tag = <span class="string">&quot;2&quot;</span>)]
+    </span><span class="kw">pub </span>title: ::prost::alloc::string::String,
+    <span class="attr">#[prost(bool, tag = <span class="string">&quot;3&quot;</span>)]
+    </span><span class="kw">pub </span>done: bool,
 }
 <span class="doccomment">/// Generated client implementations.
-</span><span class="kw">pub mod </span>health_check_client {
+</span><span class="kw">pub mod </span>todo_client {
     <span class="attr">#![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
     </span><span class="kw">use </span>tonic::codegen::<span class="kw-2">*</span>;
     <span class="kw">use </span>tonic::codegen::http::Uri;
     <span class="attr">#[derive(Debug, Clone)]
-    </span><span class="kw">pub struct </span>HealthCheckClient&lt;T&gt; {
+    </span><span class="kw">pub struct </span>TodoClient&lt;T&gt; {
         inner: tonic::client::Grpc&lt;T&gt;,
     }
-    <span class="kw">impl </span>HealthCheckClient&lt;tonic::transport::Channel&gt; {
+    <span class="kw">impl </span>TodoClient&lt;tonic::transport::Channel&gt; {
         <span class="doccomment">/// Attempt to create a new client by connecting to a given endpoint.
         </span><span class="kw">pub async fn </span>connect&lt;D&gt;(dst: D) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, tonic::transport::Error&gt;
         <span class="kw">where
@@ -325,7 +342,7 @@
             <span class="prelude-val">Ok</span>(<span class="self">Self</span>::new(conn))
         }
     }
-    <span class="kw">impl</span>&lt;T&gt; HealthCheckClient&lt;T&gt;
+    <span class="kw">impl</span>&lt;T&gt; TodoClient&lt;T&gt;
     <span class="kw">where
         </span>T: tonic::client::GrpcService&lt;tonic::body::BoxBody&gt;,
         T::Error: Into&lt;StdError&gt;,
@@ -343,7 +360,7 @@
         <span class="kw">pub fn </span>with_interceptor&lt;F&gt;(
             inner: T,
             interceptor: F,
-        ) -&gt; HealthCheckClient&lt;InterceptedService&lt;T, F&gt;&gt;
+        ) -&gt; TodoClient&lt;InterceptedService&lt;T, F&gt;&gt;
         <span class="kw">where
             </span>F: tonic::service::Interceptor,
             T::ResponseBody: Default,
@@ -357,7 +374,7 @@
                 http::Request&lt;tonic::body::BoxBody&gt;,
             &gt;&gt;::Error: Into&lt;StdError&gt; + Send + Sync,
         {
-            HealthCheckClient::new(InterceptedService::new(inner, interceptor))
+            TodoClient::new(InterceptedService::new(inner, interceptor))
         }
         <span class="doccomment">/// Compress requests with the given encoding.
         ///
@@ -390,10 +407,13 @@
             <span class="self">self</span>.inner = <span class="self">self</span>.inner.max_encoding_message_size(limit);
             <span class="self">self
         </span>}
-        <span class="kw">pub async fn </span>check(
+        <span class="kw">pub async fn </span>list_todos(
             <span class="kw-2">&amp;mut </span><span class="self">self</span>,
-            request: <span class="kw">impl </span>tonic::IntoRequest&lt;<span class="kw">super</span>::Ping&gt;,
-        ) -&gt; std::result::Result&lt;tonic::Response&lt;<span class="kw">super</span>::Pong&gt;, tonic::Status&gt; {
+            request: <span class="kw">impl </span>tonic::IntoRequest&lt;<span class="kw">super</span>::ListTodosRequest&gt;,
+        ) -&gt; std::result::Result&lt;
+            tonic::Response&lt;<span class="kw">super</span>::ListTodosResponse&gt;,
+            tonic::Status,
+        &gt; {
             <span class="self">self</span>.inner
                 .ready()
                 .<span class="kw">await
@@ -404,30 +424,30 @@
                     )
                 })<span class="question-mark">?</span>;
             <span class="kw">let </span>codec = tonic::codec::ProstCodec::default();
-            <span class="kw">let </span>path = http::uri::PathAndQuery::from_static(
-                <span class="string">&quot;/healthcheck.HealthCheck/Check&quot;</span>,
-            );
+            <span class="kw">let </span>path = http::uri::PathAndQuery::from_static(<span class="string">&quot;/todo.Todo/ListTodos&quot;</span>);
             <span class="kw">let </span><span class="kw-2">mut </span>req = request.into_request();
-            req.extensions_mut()
-                .insert(GrpcMethod::new(<span class="string">&quot;healthcheck.HealthCheck&quot;</span>, <span class="string">&quot;Check&quot;</span>));
+            req.extensions_mut().insert(GrpcMethod::new(<span class="string">&quot;todo.Todo&quot;</span>, <span class="string">&quot;ListTodos&quot;</span>));
             <span class="self">self</span>.inner.unary(req, path, codec).<span class="kw">await
         </span>}
     }
 }
 <span class="doccomment">/// Generated server implementations.
-</span><span class="kw">pub mod </span>health_check_server {
+</span><span class="kw">pub mod </span>todo_server {
     <span class="attr">#![allow(unused_variables, dead_code, missing_docs, clippy::let_unit_value)]
     </span><span class="kw">use </span>tonic::codegen::<span class="kw-2">*</span>;
-    <span class="doccomment">/// Generated trait containing gRPC methods that should be implemented for use with HealthCheckServer.
+    <span class="doccomment">/// Generated trait containing gRPC methods that should be implemented for use with TodoServer.
     </span><span class="attr">#[async_trait]
-    </span><span class="kw">pub trait </span>HealthCheck: Send + Sync + <span class="lifetime">&#39;static </span>{
-        <span class="kw">async fn </span>check(
+    </span><span class="kw">pub trait </span>Todo: Send + Sync + <span class="lifetime">&#39;static </span>{
+        <span class="kw">async fn </span>list_todos(
             <span class="kw-2">&amp;</span><span class="self">self</span>,
-            request: tonic::Request&lt;<span class="kw">super</span>::Ping&gt;,
-        ) -&gt; std::result::Result&lt;tonic::Response&lt;<span class="kw">super</span>::Pong&gt;, tonic::Status&gt;;
+            request: tonic::Request&lt;<span class="kw">super</span>::ListTodosRequest&gt;,
+        ) -&gt; std::result::Result&lt;
+            tonic::Response&lt;<span class="kw">super</span>::ListTodosResponse&gt;,
+            tonic::Status,
+        &gt;;
     }
     <span class="attr">#[derive(Debug)]
-    </span><span class="kw">pub struct </span>HealthCheckServer&lt;T: HealthCheck&gt; {
+    </span><span class="kw">pub struct </span>TodoServer&lt;T: Todo&gt; {
         inner: _Inner&lt;T&gt;,
         accept_compression_encodings: EnabledCompressionEncodings,
         send_compression_encodings: EnabledCompressionEncodings,
@@ -435,7 +455,7 @@
         max_encoding_message_size: <span class="prelude-ty">Option</span>&lt;usize&gt;,
     }
     <span class="kw">struct </span>_Inner&lt;T&gt;(Arc&lt;T&gt;);
-    <span class="kw">impl</span>&lt;T: HealthCheck&gt; HealthCheckServer&lt;T&gt; {
+    <span class="kw">impl</span>&lt;T: Todo&gt; TodoServer&lt;T&gt; {
         <span class="kw">pub fn </span>new(inner: T) -&gt; <span class="self">Self </span>{
             <span class="self">Self</span>::from_arc(Arc::new(inner))
         }
@@ -487,9 +507,9 @@
             <span class="self">self
         </span>}
     }
-    <span class="kw">impl</span>&lt;T, B&gt; tonic::codegen::Service&lt;http::Request&lt;B&gt;&gt; <span class="kw">for </span>HealthCheckServer&lt;T&gt;
+    <span class="kw">impl</span>&lt;T, B&gt; tonic::codegen::Service&lt;http::Request&lt;B&gt;&gt; <span class="kw">for </span>TodoServer&lt;T&gt;
     <span class="kw">where
-        </span>T: HealthCheck,
+        </span>T: Todo,
         B: Body + Send + <span class="lifetime">&#39;static</span>,
         B::Error: Into&lt;StdError&gt; + Send + <span class="lifetime">&#39;static</span>,
     {
@@ -505,22 +525,22 @@
         <span class="kw">fn </span>call(<span class="kw-2">&amp;mut </span><span class="self">self</span>, req: http::Request&lt;B&gt;) -&gt; <span class="self">Self</span>::Future {
             <span class="kw">let </span>inner = <span class="self">self</span>.inner.clone();
             <span class="kw">match </span>req.uri().path() {
-                <span class="string">&quot;/healthcheck.HealthCheck/Check&quot; </span>=&gt; {
+                <span class="string">&quot;/todo.Todo/ListTodos&quot; </span>=&gt; {
                     <span class="attr">#[allow(non_camel_case_types)]
-                    </span><span class="kw">struct </span>CheckSvc&lt;T: HealthCheck&gt;(<span class="kw">pub </span>Arc&lt;T&gt;);
-                    <span class="kw">impl</span>&lt;T: HealthCheck&gt; tonic::server::UnaryService&lt;<span class="kw">super</span>::Ping&gt;
-                    <span class="kw">for </span>CheckSvc&lt;T&gt; {
-                        <span class="kw">type </span>Response = <span class="kw">super</span>::Pong;
+                    </span><span class="kw">struct </span>ListTodosSvc&lt;T: Todo&gt;(<span class="kw">pub </span>Arc&lt;T&gt;);
+                    <span class="kw">impl</span>&lt;T: Todo&gt; tonic::server::UnaryService&lt;<span class="kw">super</span>::ListTodosRequest&gt;
+                    <span class="kw">for </span>ListTodosSvc&lt;T&gt; {
+                        <span class="kw">type </span>Response = <span class="kw">super</span>::ListTodosResponse;
                         <span class="kw">type </span>Future = BoxFuture&lt;
                             tonic::Response&lt;<span class="self">Self</span>::Response&gt;,
                             tonic::Status,
                         &gt;;
                         <span class="kw">fn </span>call(
                             <span class="kw-2">&amp;mut </span><span class="self">self</span>,
-                            request: tonic::Request&lt;<span class="kw">super</span>::Ping&gt;,
+                            request: tonic::Request&lt;<span class="kw">super</span>::ListTodosRequest&gt;,
                         ) -&gt; <span class="self">Self</span>::Future {
                             <span class="kw">let </span>inner = Arc::clone(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>);
-                            <span class="kw">let </span>fut = <span class="kw">async move </span>{ (<span class="kw-2">*</span>inner).check(request).<span class="kw">await </span>};
+                            <span class="kw">let </span>fut = <span class="kw">async move </span>{ (<span class="kw-2">*</span>inner).list_todos(request).<span class="kw">await </span>};
                             Box::pin(fut)
                         }
                     }
@@ -531,7 +551,7 @@
                     <span class="kw">let </span>inner = <span class="self">self</span>.inner.clone();
                     <span class="kw">let </span>fut = <span class="kw">async move </span>{
                         <span class="kw">let </span>inner = inner.<span class="number">0</span>;
-                        <span class="kw">let </span>method = CheckSvc(inner);
+                        <span class="kw">let </span>method = ListTodosSvc(inner);
                         <span class="kw">let </span>codec = tonic::codec::ProstCodec::default();
                         <span class="kw">let </span><span class="kw-2">mut </span>grpc = tonic::server::Grpc::new(codec)
                             .apply_compression_config(
@@ -562,7 +582,7 @@
             }
         }
     }
-    <span class="kw">impl</span>&lt;T: HealthCheck&gt; Clone <span class="kw">for </span>HealthCheckServer&lt;T&gt; {
+    <span class="kw">impl</span>&lt;T: Todo&gt; Clone <span class="kw">for </span>TodoServer&lt;T&gt; {
         <span class="kw">fn </span>clone(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self </span>{
             <span class="kw">let </span>inner = <span class="self">self</span>.inner.clone();
             <span class="self">Self </span>{
@@ -574,7 +594,7 @@
             }
         }
     }
-    <span class="kw">impl</span>&lt;T: HealthCheck&gt; Clone <span class="kw">for </span>_Inner&lt;T&gt; {
+    <span class="kw">impl</span>&lt;T: Todo&gt; Clone <span class="kw">for </span>_Inner&lt;T&gt; {
         <span class="kw">fn </span>clone(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self </span>{
             <span class="self">Self</span>(Arc::clone(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>))
         }
@@ -584,8 +604,8 @@
             <span class="macro">write!</span>(f, <span class="string">&quot;{:?}&quot;</span>, <span class="self">self</span>.<span class="number">0</span>)
         }
     }
-    <span class="kw">impl</span>&lt;T: HealthCheck&gt; tonic::server::NamedService <span class="kw">for </span>HealthCheckServer&lt;T&gt; {
-        <span class="kw">const </span>NAME: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>str = <span class="string">&quot;healthcheck.HealthCheck&quot;</span>;
+    <span class="kw">impl</span>&lt;T: Todo&gt; tonic::server::NamedService <span class="kw">for </span>TodoServer&lt;T&gt; {
+        <span class="kw">const </span>NAME: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>str = <span class="string">&quot;todo.Todo&quot;</span>;
     }
 }
 </code></pre></div>

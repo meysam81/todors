@@ -396,20 +396,26 @@
 <a href="#396" id="396">396</a>
 <a href="#397" id="397">397</a>
 <a href="#398" id="398">398</a>
-</pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::db::{query, query_as, FromRow, Pool, Row};
+<a href="#399" id="399">399</a>
+<a href="#400" id="400">400</a>
+<a href="#401" id="401">401</a>
+<a href="#402" id="402">402</a>
+<a href="#403" id="403">403</a>
+</pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::apidoc::ToSchema;
+<span class="kw">use </span><span class="kw">crate</span>::db::{query, query_as, FromRow, Pool, Row};
 <span class="kw">use </span><span class="kw">crate</span>::errors::TodoErrors;
 <span class="kw">use </span><span class="kw">crate</span>::serializers::{Deserialize, Serialize};
 <span class="kw">use </span><span class="kw">crate</span>::traits::{async_trait, Controller, ListRequest, ListResponse};
 <span class="kw">use </span>std::cmp;
 
-<span class="attr">#[derive(Debug, Serialize, FromRow)]
+<span class="attr">#[derive(Debug, Serialize, FromRow, ToSchema)]
 </span><span class="kw">pub struct </span>TodoRead {
     id: u32,
     <span class="kw">pub </span>title: String,
     done: bool,
 }
 
-<span class="attr">#[derive(Debug, Deserialize)]
+<span class="attr">#[derive(Debug, Deserialize, ToSchema)]
 </span><span class="kw">pub struct </span>TodoWrite {
     title: String,
     done: bool,
@@ -424,7 +430,7 @@
     }
 }
 
-<span class="attr">#[derive(Debug, Deserialize)]
+<span class="attr">#[derive(Debug, Deserialize, ToSchema)]
 </span><span class="kw">pub struct </span>TodoUpdate {
     title: <span class="prelude-ty">Option</span>&lt;String&gt;,
     done: <span class="prelude-ty">Option</span>&lt;bool&gt;,
@@ -548,7 +554,7 @@
 
         <span class="prelude-val">Ok</span>(ListResponse {
             data: todos,
-            total: total <span class="kw">as </span>u32,
+            total,
             limit: cmp::min(req.limit.unwrap_or(<span class="self">self</span>.pagination_limit), queried_count),
             offset: req.offset.unwrap_or(<span class="number">0</span>),
         })
@@ -587,7 +593,11 @@
 
         tx.commit().<span class="kw">await</span><span class="question-mark">?</span>;
 
-        <span class="prelude-val">Ok</span>(())
+        <span class="comment">// NOTE: `changes()` will always return zero if called after the tx
+        // it will also return always one if called within the the tx
+        // I don&#39;t know of any other way to get the number of rows affected ATM
+
+        </span><span class="prelude-val">Ok</span>(())
     }
 }
 

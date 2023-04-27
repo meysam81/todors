@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["create_todo","delete_todo","get_todo","list_todos","update_todo"],"static":["LOC","RS"]};
