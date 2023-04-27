@@ -190,6 +190,10 @@ impl Controller for TodoController {
 
         tx.commit().await?;
 
+        // NOTE: `changes()` will always return zero if called after the tx
+        // it will also return always one if called within the the tx
+        // I don't know of any other way to get the number of rows affected ATM
+
         Ok(())
     }
 }
