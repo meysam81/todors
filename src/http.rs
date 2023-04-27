@@ -6,7 +6,7 @@ use actix_web::{get, web, HttpResponse};
 pub use actix_web::{App, HttpServer};
 
 use utoipa::OpenApi;
-use utoipa_swagger_ui::SwaggerUi;
+use utoipa_swagger_ui::{Config, SwaggerUi};
 
 pub struct AppState<T>
 where
@@ -27,7 +27,7 @@ where
 
 #[utoipa::path(
     responses(
-        (status = 200, content_type = "application/json", description = "Index URI responding with hello world.", example = json!("Hello world!"), body = String),
+        (status = 200, content_type = "text/plain", description = "Index URI responding with hello world.", example = json!("Hello world!"), body = String),
     ),
     tag = "index"
 )]
@@ -126,6 +126,23 @@ pub fn configure<T>(cfg: &mut web::ServiceConfig)
 where
     T: Controller + 'static,
 {
+    cfg.service(index)
+        .service(
+            web::scope("/api/v1")
+                .route("/todos", web::post().to(create_todo::<T>))
+                .route("/todos/{id}", web::get().to(get_todo::<T>))
+                .route("/todos/{id}", web::delete().to(delete_todo::<T>))
+                .route("/todos", web::get().to(list_todos::<T>))
+                .route("/todos/{id}", web::patch().to(update_todo::<T>)),
+        )
+        .service(
+            SwaggerUi::new("/docs/{_:.*}")
+                .url("/openapi.json", build_apidoc())
+                .config(build_apidoc_config()),
+        );
+}
+
+fn build_apidoc() -> utoipa::openapi::OpenApi {
     use crate::models;
 
     #[derive(OpenApi)]
@@ -148,14 +165,16 @@ where
     )]
     struct ApiDoc;
 
-    cfg.service(index)
-        .service(
-            web::scope("/api/v1")
-                .route("/todos", web::post().to(create_todo::<T>))
-                .route("/todos/{id}", web::get().to(get_todo::<T>))
-                .route("/todos/{id}", web::delete().to(delete_todo::<T>))
-                .route("/todos", web::get().to(list_todos::<T>))
-                .route("/todos/{id}", web::patch().to(update_todo::<T>)),
-        )
-        .service(SwaggerUi::new("/docs/{_:.*}").url("/openapi.json", ApiDoc::openapi()));
+    ApiDoc::openapi()
+}
+
+fn build_apidoc_config<'a>() -> Config<'a> {
+    Config::default()
+        .try_it_out_enabled(true)
+        .default_models_expand_depth(2)
+        .display_request_duration(true)
+        .filter(true)
+        .show_common_extensions(true)
+        .request_snippets_enabled(true)
+        .persist_authorization(true)
 }
