@@ -9,6 +9,7 @@ TODO app, mainly for a practical learning experience of Rust
 [![Commit Intervals](https://img.shields.io/github/commit-activity/m/meysam81/todors)](https://github.com/meysam81/todors/commits)
 [![Last Release](https://img.shields.io/github/release-date/meysam81/todors?label=last%20release)](https://github.com/meysam81/todors/releases)
 [![GitHub Stars](https://img.shields.io/github/stars/meysam81/todors?label=GitHub%20stars)](https://github.com/meysam81/todors/stargazers)
+[![GitHub Release Downloads](https://img.shields.io/github/downloads/meysam81/todors/total?label=GitHub%20Release%20Downloads)](https://github.com/meysam81/todors/releases)
 [![Cargo Crate](https://img.shields.io/crates/v/todors)](https://crates.io/crates/todors)
 [![Crate Download](https://img.shields.io/crates/d/todors?label=crate%20download)](https://crates.io/crates/todors)
 [![Docker pulls](https://img.shields.io/docker/pulls/meysam81/todors?label=Docker%20pulls)](https://hub.docker.com/r/meysam81/todors)
@@ -65,6 +66,7 @@ todors create "My first todo"
 todors list
 todors update 1 --title "My first todo updated"
 todors update 1 --done
+todors update 1 --undone
 todors delete 1
 
 todors completion bash | sudo tee /etc/bash_completion.d/todors
