@@ -6,6 +6,7 @@ use logging::{debug, error, info, trace};
 use models::TodoController;
 use settings::Settings;
 
+mod apidoc;
 mod cli;
 mod db;
 mod errors;

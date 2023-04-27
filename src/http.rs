@@ -5,6 +5,9 @@ use crate::traits::{Controller, ListRequest};
 use actix_web::{get, web, HttpResponse};
 pub use actix_web::{App, HttpServer};
 
+use utoipa::OpenApi;
+use utoipa_swagger_ui::SwaggerUi;
+
 pub struct AppState<T>
 where
     T: Controller,
@@ -22,6 +25,12 @@ where
     }
 }
 
+#[utoipa::path(
+    responses(
+        (status = 200, content_type = "application/json", description = "Index URI responding with hello world.", example = json!("Hello world!"), body = String),
+    ),
+    tag = "index"
+)]
 #[get("/")]
 async fn index() -> HttpResponse {
     HttpResponse::Ok()
@@ -117,12 +126,36 @@ pub fn configure<T>(cfg: &mut web::ServiceConfig)
 where
     T: Controller + 'static,
 {
-    cfg.service(index).service(
-        web::scope("/api/v1")
-            .route("/todos", web::post().to(create_todo::<T>))
-            .route("/todos/{id}", web::get().to(get_todo::<T>))
-            .route("/todos/{id}", web::delete().to(delete_todo::<T>))
-            .route("/todos", web::get().to(list_todos::<T>))
-            .route("/todos/{id}", web::patch().to(update_todo::<T>)),
-    );
+    use crate::models;
+
+    #[derive(OpenApi)]
+    #[openapi(
+        paths(
+            index,
+            // create_todo,
+            // delete_todo,
+            // get_todo,
+            // list_todos,
+            // update_todo,
+        ),
+        components(
+            schemas(models::TodoRead, models::TodoWrite, models::TodoUpdate),
+        ),
+        tags(
+            (name = "todo", description = "Todo management endpoints."),
+            (name = "index", description = "Index endpoint."),
+        ),
+    )]
+    struct ApiDoc;
+
+    cfg.service(index)
+        .service(
+            web::scope("/api/v1")
+                .route("/todos", web::post().to(create_todo::<T>))
+                .route("/todos/{id}", web::get().to(get_todo::<T>))
+                .route("/todos/{id}", web::delete().to(delete_todo::<T>))
+                .route("/todos", web::get().to(list_todos::<T>))
+                .route("/todos/{id}", web::patch().to(update_todo::<T>)),
+        )
+        .service(SwaggerUi::new("/docs/{_:.*}").url("/openapi.json", ApiDoc::openapi()));
 }

@@ -1,17 +1,18 @@
+use crate::apidoc::ToSchema;
 use crate::db::{query, query_as, FromRow, Pool, Row};
 use crate::errors::TodoErrors;
 use crate::serializers::{Deserialize, Serialize};
 use crate::traits::{async_trait, Controller, ListRequest, ListResponse};
 use std::cmp;
 
-#[derive(Debug, Serialize, FromRow)]
+#[derive(Debug, Serialize, FromRow, ToSchema)]
 pub struct TodoRead {
     id: u32,
     pub title: String,
     done: bool,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, ToSchema)]
 pub struct TodoWrite {
     title: String,
     done: bool,
@@ -26,7 +27,7 @@ impl TodoWrite {
     }
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, ToSchema)]
 pub struct TodoUpdate {
     title: Option<String>,
     done: Option<bool>,
@@ -150,7 +151,7 @@ impl Controller for TodoController {
 
         Ok(ListResponse {
             data: todos,
-            total: total as u32,
+            total,
             limit: cmp::min(req.limit.unwrap_or(self.pagination_limit), queried_count),
             offset: req.offset.unwrap_or(0),
         })
