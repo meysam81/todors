@@ -401,6 +401,32 @@
 <a href="#401" id="401">401</a>
 <a href="#402" id="402">402</a>
 <a href="#403" id="403">403</a>
+<a href="#404" id="404">404</a>
+<a href="#405" id="405">405</a>
+<a href="#406" id="406">406</a>
+<a href="#407" id="407">407</a>
+<a href="#408" id="408">408</a>
+<a href="#409" id="409">409</a>
+<a href="#410" id="410">410</a>
+<a href="#411" id="411">411</a>
+<a href="#412" id="412">412</a>
+<a href="#413" id="413">413</a>
+<a href="#414" id="414">414</a>
+<a href="#415" id="415">415</a>
+<a href="#416" id="416">416</a>
+<a href="#417" id="417">417</a>
+<a href="#418" id="418">418</a>
+<a href="#419" id="419">419</a>
+<a href="#420" id="420">420</a>
+<a href="#421" id="421">421</a>
+<a href="#422" id="422">422</a>
+<a href="#423" id="423">423</a>
+<a href="#424" id="424">424</a>
+<a href="#425" id="425">425</a>
+<a href="#426" id="426">426</a>
+<a href="#427" id="427">427</a>
+<a href="#428" id="428">428</a>
+<a href="#429" id="429">429</a>
 </pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::apidoc::ToSchema;
 <span class="kw">use </span><span class="kw">crate</span>::db::{query, query_as, FromRow, Pool, Row};
 <span class="kw">use </span><span class="kw">crate</span>::errors::TodoErrors;
@@ -489,6 +515,32 @@
             title: todo.title.clone(),
             done: todo.done,
         })
+    }
+
+    <span class="kw">async fn </span>create_batch(<span class="kw-2">&amp;</span><span class="self">self</span>, todos: <span class="kw-2">&amp;</span>[<span class="self">Self</span>::Input]) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;<span class="self">Self</span>::Id&gt;, TodoErrors&gt; {
+        <span class="kw">let </span><span class="kw-2">mut </span>tx = <span class="self">self</span>.pool.begin().<span class="kw">await</span><span class="question-mark">?</span>;
+
+        <span class="kw">let </span><span class="kw-2">mut </span>ids = Vec::with_capacity(todos.len());
+
+        <span class="kw">for </span>todo <span class="kw">in </span>todos {
+            <span class="kw">let </span>res = query(
+                <span class="string">r#&quot;
+                INSERT INTO todo (title, done)
+                VALUES (?, ?)
+                RETURNING id
+                &quot;#</span>,
+            )
+            .bind(<span class="kw-2">&amp;</span>todo.title)
+            .bind(todo.done)
+            .execute(<span class="kw-2">&amp;mut </span>tx)
+            .<span class="kw">await</span><span class="question-mark">?</span>;
+
+            ids.push(res.last_insert_rowid() <span class="kw">as </span>u32);
+        }
+
+        tx.commit().<span class="kw">await</span><span class="question-mark">?</span>;
+
+        <span class="prelude-val">Ok</span>(ids)
     }
 
     <span class="kw">async fn </span>delete(<span class="kw-2">&amp;</span><span class="self">self</span>, id: <span class="self">Self</span>::Id) -&gt; <span class="prelude-ty">Result</span>&lt;(), TodoErrors&gt; {

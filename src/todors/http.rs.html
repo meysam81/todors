@@ -269,6 +269,39 @@
 <a href="#269" id="269">269</a>
 <a href="#270" id="270">270</a>
 <a href="#271" id="271">271</a>
+<a href="#272" id="272">272</a>
+<a href="#273" id="273">273</a>
+<a href="#274" id="274">274</a>
+<a href="#275" id="275">275</a>
+<a href="#276" id="276">276</a>
+<a href="#277" id="277">277</a>
+<a href="#278" id="278">278</a>
+<a href="#279" id="279">279</a>
+<a href="#280" id="280">280</a>
+<a href="#281" id="281">281</a>
+<a href="#282" id="282">282</a>
+<a href="#283" id="283">283</a>
+<a href="#284" id="284">284</a>
+<a href="#285" id="285">285</a>
+<a href="#286" id="286">286</a>
+<a href="#287" id="287">287</a>
+<a href="#288" id="288">288</a>
+<a href="#289" id="289">289</a>
+<a href="#290" id="290">290</a>
+<a href="#291" id="291">291</a>
+<a href="#292" id="292">292</a>
+<a href="#293" id="293">293</a>
+<a href="#294" id="294">294</a>
+<a href="#295" id="295">295</a>
+<a href="#296" id="296">296</a>
+<a href="#297" id="297">297</a>
+<a href="#298" id="298">298</a>
+<a href="#299" id="299">299</a>
+<a href="#300" id="300">300</a>
+<a href="#301" id="301">301</a>
+<a href="#302" id="302">302</a>
+<a href="#303" id="303">303</a>
+<a href="#304" id="304">304</a>
 </pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::errors::TodoErrors;
 <span class="kw">use </span><span class="kw">crate</span>::logging::{debug, error, Logger};
 <span class="kw">use </span><span class="kw">crate</span>::models;
@@ -340,6 +373,37 @@
     {
         <span class="kw">match </span>state.controller.create(<span class="kw-2">&amp;</span>todo.into_inner()).<span class="kw">await </span>{
             <span class="prelude-val">Ok</span>(todo) =&gt; HttpResponse::Created().json(todo),
+            <span class="prelude-val">Err</span>(TodoErrors::DatabaseError(err)) =&gt; HttpResponse::Conflict()
+                .content_type(<span class="string">&quot;text/plain&quot;</span>)
+                .body(err.to_string()),
+            <span class="prelude-val">Err</span>(err) =&gt; {
+                <span class="macro">error!</span>(state.logger, <span class="string">&quot;Failed to create todo: {:?}&quot;</span>, err);
+                HttpResponse::InternalServerError().finish()
+            }
+        }
+    }
+
+    <span class="attr">#[utoipa::path(
+        put,
+        path = <span class="string">&quot;/todos&quot;</span>,
+        operation_id = <span class="string">&quot;Create a batch of TODOs&quot;</span>,
+        context_path = <span class="string">&quot;/api/v1&quot;</span>,
+        request_body(content = Vec&lt;TodoWrite&gt;, example = <span class="macro">json!</span>([{<span class="string">&quot;title&quot;</span>: <span class="string">&quot;Call Jack&quot;</span>, <span class="string">&quot;done&quot;</span>: <span class="bool-val">false</span>}, {<span class="string">&quot;title&quot;</span>: <span class="string">&quot;Buy milk&quot;</span>, <span class="string">&quot;done&quot;</span>: <span class="bool-val">false</span>}, {<span class="string">&quot;title&quot;</span>: <span class="string">&quot;Go to gym&quot;</span>, <span class="string">&quot;done&quot;</span>: <span class="bool-val">false</span>}]</span>)),
+        responses(
+            (status = <span class="number">201</span>, content_type = <span class="string">&quot;application/json&quot;</span>, example = <span class="macro">json!</span>([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]), body = Vec&lt;u32&gt;),
+            (status = <span class="number">409</span>, description = <span class="string">&quot;a TODO with the same title exists&quot;</span>, content_type = <span class="string">&quot;text/plain&quot;</span>, example = <span class="macro">json!</span>(<span class="string">&quot;Todo already exists&quot;</span>), body = String),
+            (status = <span class="number">500</span>, description = <span class="string">&quot;Internal server error&quot;</span>, content_type = <span class="string">&quot;text/plain&quot;</span>, example = <span class="macro">json!</span>(<span class="string">&quot;Internal server error&quot;</span>), body = String),
+        ),
+    )]
+    <span class="kw">pub async fn </span>create_batch&lt;T&gt;(
+        state: web::Data&lt;AppState&lt;T&gt;&gt;,
+        todos: web::Json&lt;Vec&lt;T::Input&gt;&gt;,
+    ) -&gt; HttpResponse
+    <span class="kw">where
+        </span>T: Controller,
+    {
+        <span class="kw">match </span>state.controller.create_batch(<span class="kw-2">&amp;</span>todos.into_inner()).<span class="kw">await </span>{
+            <span class="prelude-val">Ok</span>(ids) =&gt; HttpResponse::Created().json(ids),
             <span class="prelude-val">Err</span>(TodoErrors::DatabaseError(err)) =&gt; HttpResponse::Conflict()
                 .content_type(<span class="string">&quot;text/plain&quot;</span>)
                 .body(err.to_string()),
@@ -493,6 +557,7 @@
         .service(
             web::scope(<span class="string">&quot;/api/v1&quot;</span>)
                 .route(<span class="string">&quot;/todos&quot;</span>, web::post().to(todo::create_todo::&lt;T&gt;))
+                .route(<span class="string">&quot;/todos&quot;</span>, web::put().to(todo::create_batch::&lt;T&gt;))
                 .route(<span class="string">&quot;/todos/{id}&quot;</span>, web::get().to(todo::get_todo::&lt;T&gt;))
                 .route(<span class="string">&quot;/todos/{id}&quot;</span>, web::delete().to(todo::delete_todo::&lt;T&gt;))
                 .route(<span class="string">&quot;/todos&quot;</span>, web::get().to(todo::list_todos::&lt;T&gt;))
@@ -511,6 +576,7 @@
         paths(
             index::index,
             todo::create_todo,
+            todo::create_batch,
             todo::delete_todo,
             todo::get_todo,
             todo::list_todos,
