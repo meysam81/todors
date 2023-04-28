@@ -38,7 +38,7 @@ edition = "2021"
 rust-version = "1.68"
 
 [dependencies]
-actix-web = "4"
+actix-web = "4.3"
 async-trait = "0.1.68"
 clap = { version = "4.2.2", features = ["derive"] }
 clap_complete = "4.2.0"
@@ -57,7 +57,7 @@ sqlx = { version = "0.6.3", features = [
     "migrate",
 ] }
 thiserror = "1.0.40"
-tokio = { version = "1", features = ["macros", "sync", "rt-multi-thread"] }
+tokio = { version = "^1.28", features = ["macros", "sync", "rt-multi-thread"] }
 tonic = { version = "0.9.2", features = ["gzip"] }
 utoipa = { version = "3.3.0", features = [
     "actix_extras",
