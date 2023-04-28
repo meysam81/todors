@@ -2,7 +2,7 @@
 
 TODO app, mainly for a practical learning experience of Rust
 
-[![Deployment](https://github.com/meysam81/todors/actions/workflows/deploy-fly.yml/badge.svg)](https://todors.fly.dev)
+[![Deployment](https://github.com/meysam81/todors/actions/workflows/deploy-fly.yml/badge.svg)](https://todors.fly.dev/docs/)
 [![Code Size](https://img.shields.io/github/languages/code-size/meysam81/todors)](https://github.com/meysam81/todors)
 [![Repo Size](https://img.shields.io/github/repo-size/meysam81/todors)](https://github.com/meysam81/todors)
 [![Language Count](https://img.shields.io/github/languages/count/meysam81/todors)](https://github.com/meysam81/todors)
