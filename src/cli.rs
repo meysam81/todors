@@ -1,6 +1,6 @@
 use crate::logging::{error, info, Logger};
 use crate::models::{TodoRead, TodoUpdate, TodoWrite};
-use crate::serializers::to_json;
+use crate::serializers::{to_json, to_pretty_json};
 use crate::traits::{Controller, ListRequest};
 use clap::{Args, Command, Parser, Subcommand};
 use clap_complete::{generate, Generator, Shell};
@@ -50,26 +50,30 @@ where
                 error!(state.logger, "Failed to delete todo: {:?}", err);
             }
         },
-        Local::Get(Get { id }) => match state.controller.get(id).await {
+        Local::Get(Get { id, pretty }) => match state.controller.get(id).await {
             Ok(todo) => {
-                let todo = to_json(&todo).unwrap();
+                let printer = if pretty { to_pretty_json } else { to_json };
+                let todo = printer(&todo).unwrap();
                 println!("{}", todo)
             }
             Err(err) => {
                 error!(state.logger, "Failed to get todo: {:?}", err);
             }
         },
-        Local::List(List { offset, limit }) => {
-            match state.controller.list(ListRequest { offset, limit }).await {
-                Ok(todos) => {
-                    let todos = to_json(&todos).unwrap();
-                    println!("{}", todos)
-                }
-                Err(err) => {
-                    error!(state.logger, "Failed to list todos: {:?}", err);
-                }
+        Local::List(List {
+            offset,
+            limit,
+            pretty,
+        }) => match state.controller.list(ListRequest { offset, limit }).await {
+            Ok(todos) => {
+                let printer = if pretty { to_pretty_json } else { to_json };
+                let todos = printer(&todos).unwrap();
+                println!("{}", todos)
             }
-        }
+            Err(err) => {
+                error!(state.logger, "Failed to list todos: {:?}", err);
+            }
+        },
         Local::Update(Update {
             id,
             title,
@@ -183,6 +187,10 @@ pub struct List {
     /// Number of results to return
     #[arg(short, long)]
     pub limit: Option<u32>,
+    /// Whether or not to print indented JSON
+    #[arg(short, long)]
+    #[arg(action = clap::ArgAction::SetTrue)]
+    pub pretty: bool,
 }
 
 #[derive(Args, Debug)]
@@ -206,6 +214,10 @@ pub struct Update {
 pub struct Get {
     /// The ID of the TODO to get
     pub id: u32,
+    /// Whether or not to print indented JSON
+    #[arg(short, long)]
+    #[arg(action = clap::ArgAction::SetTrue)]
+    pub pretty: bool,
 }
 
 #[derive(Args, Debug)]
