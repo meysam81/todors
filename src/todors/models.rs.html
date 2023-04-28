@@ -427,6 +427,15 @@
 <a href="#427" id="427">427</a>
 <a href="#428" id="428">428</a>
 <a href="#429" id="429">429</a>
+<a href="#430" id="430">430</a>
+<a href="#431" id="431">431</a>
+<a href="#432" id="432">432</a>
+<a href="#433" id="433">433</a>
+<a href="#434" id="434">434</a>
+<a href="#435" id="435">435</a>
+<a href="#436" id="436">436</a>
+<a href="#437" id="437">437</a>
+<a href="#438" id="438">438</a>
 </pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::apidoc::ToSchema;
 <span class="kw">use </span><span class="kw">crate</span>::db::{query, query_as, FromRow, Pool, Row};
 <span class="kw">use </span><span class="kw">crate</span>::errors::TodoErrors;
@@ -472,6 +481,7 @@
     pool: Pool,
     pagination_limit: u32,
     pagination_hard_limit: u32,
+    create_batch_hard_limit: u32,
 }
 
 <span class="kw">impl </span>TodoController {
@@ -479,11 +489,13 @@
         pool: Pool,
         pagination_limit: <span class="prelude-ty">Option</span>&lt;u32&gt;,
         pagination_hard_limit: <span class="prelude-ty">Option</span>&lt;u32&gt;,
+        create_batch_hard_limit: <span class="prelude-ty">Option</span>&lt;u32&gt;,
     ) -&gt; TodoController {
         TodoController {
             pool,
             pagination_limit: pagination_limit.unwrap_or(<span class="number">100</span>),
             pagination_hard_limit: pagination_hard_limit.unwrap_or(<span class="number">1000</span>),
+            create_batch_hard_limit: create_batch_hard_limit.unwrap_or(<span class="number">1000</span>),
         }
     }
 }
@@ -518,6 +530,12 @@
     }
 
     <span class="kw">async fn </span>create_batch(<span class="kw-2">&amp;</span><span class="self">self</span>, todos: <span class="kw-2">&amp;</span>[<span class="self">Self</span>::Input]) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;<span class="self">Self</span>::Id&gt;, TodoErrors&gt; {
+        <span class="kw">if </span>todos.len() &gt; <span class="self">self</span>.create_batch_hard_limit <span class="kw">as </span>usize {
+            <span class="kw">return </span><span class="prelude-val">Err</span>(TodoErrors::BatchTooLarge {
+                max_size: <span class="self">self</span>.create_batch_hard_limit,
+            });
+        }
+
         <span class="kw">let </span><span class="kw-2">mut </span>tx = <span class="self">self</span>.pool.begin().<span class="kw">await</span><span class="question-mark">?</span>;
 
         <span class="kw">let </span><span class="kw-2">mut </span>ids = Vec::with_capacity(todos.len());

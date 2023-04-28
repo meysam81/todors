@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["default_dburl","default_loglevel","default_pagination_hard_limit","default_pagination_limit"],"struct":["Settings"]};
+window.SIDEBAR_ITEMS = {"fn":["default_create_batch_hard_limit","default_dburl","default_loglevel","default_pagination_hard_limit","default_pagination_limit"],"struct":["Settings"]};

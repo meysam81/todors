@@ -83,6 +83,7 @@
 <a href="#83" id="83">83</a>
 <a href="#84" id="84">84</a>
 <a href="#85" id="85">85</a>
+<a href="#86" id="86">86</a>
 </pre><pre class="rust"><code><span class="kw">use </span>clap::Parser;
 <span class="kw">use </span>cli::{handle_local, Cli, Commands};
 <span class="kw">use </span>errors::TodoErrors;
@@ -117,6 +118,7 @@
         conn,
         <span class="prelude-val">Some</span>(settings.pagination_limit),
         <span class="prelude-val">Some</span>(settings.pagination_hard_limit),
+        <span class="prelude-val">Some</span>(settings.create_batch_hard_limit),
     );
 
     <span class="kw">let </span>cli = Cli::parse();
