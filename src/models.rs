@@ -88,6 +88,32 @@ impl Controller for TodoController {
         })
     }
 
+    async fn create_batch(&self, todos: &[Self::Input]) -> Result<Vec<Self::Id>, TodoErrors> {
+        let mut tx = self.pool.begin().await?;
+
+        let mut ids = Vec::with_capacity(todos.len());
+
+        for todo in todos {
+            let res = query(
+                r#"
+                INSERT INTO todo (title, done)
+                VALUES (?, ?)
+                RETURNING id
+                "#,
+            )
+            .bind(&todo.title)
+            .bind(todo.done)
+            .execute(&mut tx)
+            .await?;
+
+            ids.push(res.last_insert_rowid() as u32);
+        }
+
+        tx.commit().await?;
+
+        Ok(ids)
+    }
+
     async fn delete(&self, id: Self::Id) -> Result<(), TodoErrors> {
         let r = query("DELETE FROM todo WHERE id = ?")
             .bind(id)

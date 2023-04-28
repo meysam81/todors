@@ -80,6 +80,37 @@ mod todo {
     }
 
     #[utoipa::path(
+        put,
+        path = "/todos",
+        operation_id = "Create a batch of TODOs",
+        context_path = "/api/v1",
+        request_body(content = Vec<TodoWrite>, example = json!([{"title": "Call Jack", "done": false}, {"title": "Buy milk", "done": false}, {"title": "Go to gym", "done": false}])),
+        responses(
+            (status = 201, content_type = "application/json", example = json!([1, 2, 3]), body = Vec<u32>),
+            (status = 409, description = "a TODO with the same title exists", content_type = "text/plain", example = json!("Todo already exists"), body = String),
+            (status = 500, description = "Internal server error", content_type = "text/plain", example = json!("Internal server error"), body = String),
+        ),
+    )]
+    pub async fn create_batch<T>(
+        state: web::Data<AppState<T>>,
+        todos: web::Json<Vec<T::Input>>,
+    ) -> HttpResponse
+    where
+        T: Controller,
+    {
+        match state.controller.create_batch(&todos.into_inner()).await {
+            Ok(ids) => HttpResponse::Created().json(ids),
+            Err(TodoErrors::DatabaseError(err)) => HttpResponse::Conflict()
+                .content_type("text/plain")
+                .body(err.to_string()),
+            Err(err) => {
+                error!(state.logger, "Failed to create todo: {:?}", err);
+                HttpResponse::InternalServerError().finish()
+            }
+        }
+    }
+
+    #[utoipa::path(
         delete,
         path = "/todos/{id}",
         operation_id = "Delete a TODO by id",
@@ -222,6 +253,7 @@ where
         .service(
             web::scope("/api/v1")
                 .route("/todos", web::post().to(todo::create_todo::<T>))
+                .route("/todos", web::put().to(todo::create_batch::<T>))
                 .route("/todos/{id}", web::get().to(todo::get_todo::<T>))
                 .route("/todos/{id}", web::delete().to(todo::delete_todo::<T>))
                 .route("/todos", web::get().to(todo::list_todos::<T>))
@@ -240,6 +272,7 @@ fn build_apidoc() -> utoipa::openapi::OpenApi {
         paths(
             index::index,
             todo::create_todo,
+            todo::create_batch,
             todo::delete_todo,
             todo::get_todo,
             todo::list_todos,
