@@ -1,0 +1,25 @@
+name: carbon-footprint-calculator
+concurrency:
+  group: carbon-calculator-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+env:
+  WEBSITE_URL: https://todors.fly.dev/
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Calculate CO2 🌱
+        uses: GeopJr/CO2@v1
+        with:
+          url: "${{ env.WEBSITE_URL }}"
+          renewable: true
