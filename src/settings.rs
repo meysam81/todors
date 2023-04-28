@@ -13,6 +13,8 @@ pub struct Settings {
     pub pagination_limit: u32,
     #[serde(default = "default_pagination_hard_limit")]
     pub pagination_hard_limit: u32,
+    #[serde(default = "default_create_batch_hard_limit")]
+    pub create_batch_hard_limit: u32,
 }
 
 impl Settings {
@@ -45,5 +47,9 @@ fn default_pagination_limit() -> u32 {
 }
 
 fn default_pagination_hard_limit() -> u32 {
+    1000
+}
+
+fn default_create_batch_hard_limit() -> u32 {
     1000
 }

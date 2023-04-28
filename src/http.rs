@@ -100,6 +100,9 @@ mod todo {
     {
         match state.controller.create_batch(&todos.into_inner()).await {
             Ok(ids) => HttpResponse::Created().json(ids),
+            Err(TodoErrors::BatchTooLarge { max_size }) => HttpResponse::PayloadTooLarge()
+                .content_type("text/plain")
+                .body(format!("Batch too large, max batch size is {}", max_size)),
             Err(TodoErrors::DatabaseError(err)) => HttpResponse::Conflict()
                 .content_type("text/plain")
                 .body(err.to_string()),

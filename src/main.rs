@@ -32,6 +32,7 @@ async fn main() -> Result<(), TodoErrors> {
         conn,
         Some(settings.pagination_limit),
         Some(settings.pagination_hard_limit),
+        Some(settings.create_batch_hard_limit),
     );
 
     let cli = Cli::parse();

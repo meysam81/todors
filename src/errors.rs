@@ -16,4 +16,7 @@ pub enum TodoErrors {
 
     #[error("io error")]
     IoError(#[from] IoError),
+
+    #[error("batch too large, max batch size is {max_size}")]
+    BatchTooLarge { max_size: u32 },
 }

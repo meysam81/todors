@@ -1,3 +1,4 @@
+use crate::errors::TodoErrors;
 use crate::logging::{error, info, Logger};
 use crate::models::{TodoRead, TodoUpdate, TodoWrite};
 use crate::serializers::{to_json, to_pretty_json};
@@ -37,7 +38,13 @@ where
             match state.controller.create_batch(&todos).await {
                 Ok(todo) => {
                     let todo = to_json(&todo).unwrap();
-                    println!("Inserted ids: {}", todo)
+                    println!("Inserted ids: {}", todo);
+                }
+                Err(TodoErrors::BatchTooLarge { max_size }) => {
+                    error!(
+                        state.logger,
+                        "Batch too large, max batch size is {}", max_size
+                    );
                 }
                 Err(err) => {
                     error!(state.logger, "Failed to create todo: {:?}", err);

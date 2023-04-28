@@ -43,6 +43,7 @@ pub struct TodoController {
     pool: Pool,
     pagination_limit: u32,
     pagination_hard_limit: u32,
+    create_batch_hard_limit: u32,
 }
 
 impl TodoController {
@@ -50,11 +51,13 @@ impl TodoController {
         pool: Pool,
         pagination_limit: Option<u32>,
         pagination_hard_limit: Option<u32>,
+        create_batch_hard_limit: Option<u32>,
     ) -> TodoController {
         TodoController {
             pool,
             pagination_limit: pagination_limit.unwrap_or(100),
             pagination_hard_limit: pagination_hard_limit.unwrap_or(1000),
+            create_batch_hard_limit: create_batch_hard_limit.unwrap_or(1000),
         }
     }
 }
@@ -89,6 +92,12 @@ impl Controller for TodoController {
     }
 
     async fn create_batch(&self, todos: &[Self::Input]) -> Result<Vec<Self::Id>, TodoErrors> {
+        if todos.len() > self.create_batch_hard_limit as usize {
+            return Err(TodoErrors::BatchTooLarge {
+                max_size: self.create_batch_hard_limit,
+            });
+        }
+
         let mut tx = self.pool.begin().await?;
 
         let mut ids = Vec::with_capacity(todos.len());
