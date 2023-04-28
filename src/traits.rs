@@ -27,6 +27,7 @@ pub trait Controller {
     type Output: Serialize;
 
     async fn create(&self, todo: &Self::Input) -> Result<Self::Output, TodoErrors>;
+    async fn create_batch(&self, todos: &[Self::Input]) -> Result<Vec<Self::Id>, TodoErrors>;
     async fn delete(&self, id: Self::Id) -> Result<(), TodoErrors>;
     async fn get(&self, id: Self::Id) -> Result<Self::Output, TodoErrors>;
     async fn list(&self, req: ListRequest) -> Result<ListResponse<Self::Output>, TodoErrors>;
