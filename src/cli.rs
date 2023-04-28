@@ -28,12 +28,16 @@ where
     T: Controller<Input = TodoWrite, Output = TodoRead, Id = u32, OptionalInput = TodoUpdate>,
 {
     match local {
-        Local::Create(Create { title }) => {
-            let todo = TodoWrite::new(title, None);
-            match state.controller.create(&todo).await {
+        Local::Create(Create { title, done }) => {
+            let todos = title
+                .into_iter()
+                .map(|title| TodoWrite::new(title, done))
+                .collect::<Vec<_>>();
+
+            match state.controller.create_batch(&todos).await {
                 Ok(todo) => {
                     let todo = to_json(&todo).unwrap();
-                    println!("{}", todo)
+                    println!("Inserted ids: {}", todo)
                 }
                 Err(err) => {
                     error!(state.logger, "Failed to create todo: {:?}", err);
@@ -156,7 +160,13 @@ pub struct GrpcServerAddr {
 #[derive(Args, Debug)]
 pub struct Create {
     /// The title of the TODO
-    pub title: String,
+    #[arg(action = clap::ArgAction::Append)]
+    pub title: Vec<String>,
+    /// Whether or not the provided TODOs are done
+    #[arg(short, long)]
+    #[arg(default_value = "false")]
+    #[arg(action = clap::ArgAction::SetTrue)]
+    pub done: Option<bool>,
 }
 
 #[derive(Args, Debug)]
