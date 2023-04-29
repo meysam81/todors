@@ -162,6 +162,7 @@ impl Controller for TodoController {
             r#"
             SELECT id, title, done
             FROM todo
+            ORDER BY id
             LIMIT ?
             OFFSET ?
             "#,
