@@ -162,7 +162,9 @@ mod todo {
     {
         match state.controller.get(id.into_inner()).await {
             Ok(todo) => HttpResponse::Ok().json(todo),
-            Err(TodoErrors::TodoNotFound) => HttpResponse::NotFound().finish(),
+            Err(TodoErrors::TodoNotFound) => HttpResponse::NotFound()
+                .content_type("text/plain")
+                .body("TODO not found"),
             Err(err) => {
                 error!(state.logger, "Failed to get todo: {:?}", err);
                 HttpResponse::InternalServerError().finish()
