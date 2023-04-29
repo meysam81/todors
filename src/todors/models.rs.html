@@ -435,6 +435,7 @@
 <a href="#435" id="435">435</a>
 <a href="#436" id="436">436</a>
 <a href="#437" id="437">437</a>
+<a href="#438" id="438">438</a>
 </pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::apidoc::ToSchema;
 <span class="kw">use </span><span class="kw">crate</span>::db::{query, query_as, FromRow, Pool, Row};
 <span class="kw">use </span><span class="kw">crate</span>::errors::TodoErrors;
@@ -599,6 +600,7 @@
             <span class="string">r#&quot;
             SELECT id, title, done
             FROM todo
+            ORDER BY id
             LIMIT ?
             OFFSET ?
             &quot;#</span>,
