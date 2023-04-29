@@ -354,7 +354,7 @@
                 .map(|title| TodoWrite::new(title, done))
                 .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
 
-            <span class="kw">match </span>state.controller.create_batch(<span class="kw-2">&amp;</span>todos).<span class="kw">await </span>{
+            <span class="kw">match </span>state.controller.create_batch(todos).<span class="kw">await </span>{
                 <span class="prelude-val">Ok</span>(todo) =&gt; {
                     <span class="kw">let </span>todo = to_json(<span class="kw-2">&amp;</span>todo).unwrap();
                     <span class="macro">println!</span>(<span class="string">&quot;Inserted ids: {}&quot;</span>, todo);
@@ -412,7 +412,7 @@
                 done
             };
             <span class="kw">let </span>todo = TodoUpdate::new(title, done);
-            <span class="kw">match </span>state.controller.update(id, <span class="kw-2">&amp;</span>todo).<span class="kw">await </span>{
+            <span class="kw">match </span>state.controller.update(id, todo).<span class="kw">await </span>{
                 <span class="prelude-val">Ok</span>(<span class="kw">_</span>) =&gt; <span class="macro">info!</span>(state.logger, <span class="string">&quot;Successfully updated: {}&quot;</span>, id),
                 <span class="prelude-val">Err</span>(err) =&gt; {
                     <span class="macro">error!</span>(state.logger, <span class="string">&quot;Failed to update todo: {:?}&quot;</span>, err);

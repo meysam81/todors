@@ -61,12 +61,12 @@
     <span class="kw">type </span>OptionalInput: <span class="kw">for</span>&lt;<span class="lifetime">&#39;a</span>&gt; Deserialize&lt;<span class="lifetime">&#39;a</span>&gt;;
     <span class="kw">type </span>Output: Serialize;
 
-    <span class="kw">async fn </span>create(<span class="kw-2">&amp;</span><span class="self">self</span>, todo: <span class="kw-2">&amp;</span><span class="self">Self</span>::Input) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>::Output, TodoErrors&gt;;
-    <span class="kw">async fn </span>create_batch(<span class="kw-2">&amp;</span><span class="self">self</span>, todos: <span class="kw-2">&amp;</span>[<span class="self">Self</span>::Input]) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;<span class="self">Self</span>::Id&gt;, TodoErrors&gt;;
+    <span class="kw">async fn </span>create(<span class="kw-2">&amp;</span><span class="self">self</span>, todo: <span class="self">Self</span>::Input) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>::Output, TodoErrors&gt;;
+    <span class="kw">async fn </span>create_batch(<span class="kw-2">&amp;</span><span class="self">self</span>, todos: Vec&lt;<span class="self">Self</span>::Input&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;<span class="self">Self</span>::Id&gt;, TodoErrors&gt;;
     <span class="kw">async fn </span>delete(<span class="kw-2">&amp;</span><span class="self">self</span>, id: <span class="self">Self</span>::Id) -&gt; <span class="prelude-ty">Result</span>&lt;(), TodoErrors&gt;;
     <span class="kw">async fn </span>get(<span class="kw-2">&amp;</span><span class="self">self</span>, id: <span class="self">Self</span>::Id) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>::Output, TodoErrors&gt;;
     <span class="kw">async fn </span>list(<span class="kw-2">&amp;</span><span class="self">self</span>, req: ListRequest) -&gt; <span class="prelude-ty">Result</span>&lt;ListResponse&lt;<span class="self">Self</span>::Output&gt;, TodoErrors&gt;;
-    <span class="kw">async fn </span>update(<span class="kw-2">&amp;</span><span class="self">self</span>, id: <span class="self">Self</span>::Id, todo: <span class="kw-2">&amp;</span><span class="self">Self</span>::OptionalInput) -&gt; <span class="prelude-ty">Result</span>&lt;(), TodoErrors&gt;;
+    <span class="kw">async fn </span>update(<span class="kw-2">&amp;</span><span class="self">self</span>, id: <span class="self">Self</span>::Id, todo: <span class="self">Self</span>::OptionalInput) -&gt; <span class="prelude-ty">Result</span>&lt;(), TodoErrors&gt;;
 }
 </code></pre></div>
 </section></main><div id="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="todors" data-themes="" data-resource-suffix="" data-rustdoc-version="1.69.0 (84c898d65 2023-04-16)" data-search-js="search-8a59a8356673ec1f.js" data-settings-js="settings-f0c5c39777a9a2f6.js" data-settings-css="settings-0bcba95ff279c1db.css" ></div></body></html>

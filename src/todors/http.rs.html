@@ -305,6 +305,8 @@
 <a href="#305" id="305">305</a>
 <a href="#306" id="306">306</a>
 <a href="#307" id="307">307</a>
+<a href="#308" id="308">308</a>
+<a href="#309" id="309">309</a>
 </pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::errors::TodoErrors;
 <span class="kw">use </span><span class="kw">crate</span>::logging::{debug, error, Logger};
 <span class="kw">use </span><span class="kw">crate</span>::models;
@@ -374,7 +376,7 @@
     <span class="kw">where
         </span>T: Controller,
     {
-        <span class="kw">match </span>state.controller.create(<span class="kw-2">&amp;</span>todo.into_inner()).<span class="kw">await </span>{
+        <span class="kw">match </span>state.controller.create(todo.into_inner()).<span class="kw">await </span>{
             <span class="prelude-val">Ok</span>(todo) =&gt; HttpResponse::Created().json(todo),
             <span class="prelude-val">Err</span>(TodoErrors::DatabaseError(err)) =&gt; HttpResponse::Conflict()
                 .content_type(<span class="string">&quot;text/plain&quot;</span>)
@@ -405,7 +407,7 @@
     <span class="kw">where
         </span>T: Controller,
     {
-        <span class="kw">match </span>state.controller.create_batch(<span class="kw-2">&amp;</span>todos.into_inner()).<span class="kw">await </span>{
+        <span class="kw">match </span>state.controller.create_batch(todos.into_inner()).<span class="kw">await </span>{
             <span class="prelude-val">Ok</span>(ids) =&gt; HttpResponse::Created().json(ids),
             <span class="prelude-val">Err</span>(TodoErrors::BatchTooLarge { max_size }) =&gt; HttpResponse::PayloadTooLarge()
                 .content_type(<span class="string">&quot;text/plain&quot;</span>)
@@ -469,7 +471,9 @@
     {
         <span class="kw">match </span>state.controller.get(id.into_inner()).<span class="kw">await </span>{
             <span class="prelude-val">Ok</span>(todo) =&gt; HttpResponse::Ok().json(todo),
-            <span class="prelude-val">Err</span>(TodoErrors::TodoNotFound) =&gt; HttpResponse::NotFound().finish(),
+            <span class="prelude-val">Err</span>(TodoErrors::TodoNotFound) =&gt; HttpResponse::NotFound()
+                .content_type(<span class="string">&quot;text/plain&quot;</span>)
+                .body(<span class="string">&quot;TODO not found&quot;</span>),
             <span class="prelude-val">Err</span>(err) =&gt; {
                 <span class="macro">error!</span>(state.logger, <span class="string">&quot;Failed to get todo: {:?}&quot;</span>, err);
                 HttpResponse::InternalServerError().finish()
@@ -541,7 +545,7 @@
     {
         <span class="kw">match </span>state
             .controller
-            .update(id.into_inner(), <span class="kw-2">&amp;</span>todo.into_inner())
+            .update(id.into_inner(), todo.into_inner())
             .<span class="kw">await
         </span>{
             <span class="prelude-val">Ok</span>(<span class="kw">_</span>) =&gt; HttpResponse::Accepted()

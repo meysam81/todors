@@ -507,7 +507,7 @@
     <span class="kw">type </span>OptionalInput = TodoUpdate;
     <span class="kw">type </span>Output = TodoRead;
 
-    <span class="kw">async fn </span>create(<span class="kw-2">&amp;</span><span class="self">self</span>, todo: <span class="kw-2">&amp;</span><span class="self">Self</span>::Input) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>::Output, TodoErrors&gt; {
+    <span class="kw">async fn </span>create(<span class="kw-2">&amp;</span><span class="self">self</span>, todo: <span class="self">Self</span>::Input) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>::Output, TodoErrors&gt; {
         <span class="kw">let </span>res = query(
             <span class="string">r#&quot;
             INSERT INTO todo (title, done)
@@ -529,7 +529,7 @@
         })
     }
 
-    <span class="kw">async fn </span>create_batch(<span class="kw-2">&amp;</span><span class="self">self</span>, todos: <span class="kw-2">&amp;</span>[<span class="self">Self</span>::Input]) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;<span class="self">Self</span>::Id&gt;, TodoErrors&gt; {
+    <span class="kw">async fn </span>create_batch(<span class="kw-2">&amp;</span><span class="self">self</span>, todos: Vec&lt;<span class="self">Self</span>::Input&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;<span class="self">Self</span>::Id&gt;, TodoErrors&gt; {
         <span class="kw">if </span>todos.len() &gt; <span class="self">self</span>.create_batch_hard_limit <span class="kw">as </span>usize {
             <span class="kw">return </span><span class="prelude-val">Err</span>(TodoErrors::BatchTooLarge {
                 max_size: <span class="self">self</span>.create_batch_hard_limit,
@@ -630,7 +630,7 @@
         })
     }
 
-    <span class="kw">async fn </span>update(<span class="kw-2">&amp;</span><span class="self">self</span>, id: <span class="self">Self</span>::Id, todo: <span class="kw-2">&amp;</span><span class="self">Self</span>::OptionalInput) -&gt; <span class="prelude-ty">Result</span>&lt;(), TodoErrors&gt; {
+    <span class="kw">async fn </span>update(<span class="kw-2">&amp;</span><span class="self">self</span>, id: <span class="self">Self</span>::Id, todo: <span class="self">Self</span>::OptionalInput) -&gt; <span class="prelude-ty">Result</span>&lt;(), TodoErrors&gt; {
         <span class="kw">let </span><span class="kw-2">mut </span>tx = <span class="self">self</span>.pool.begin().<span class="kw">await</span><span class="question-mark">?</span>;
 
         <span class="kw">if let </span><span class="prelude-val">Some</span>(title) = <span class="kw-2">&amp;</span>todo.title {
