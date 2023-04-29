@@ -17,7 +17,7 @@ vendor:
   cargo vendor
 
 serve-http:
-  cargo watch -s sh -- sh -c "clear; cargo run -- serve http"
+  cargo watch -s sh -- sh -c "clear; cargo run --frozen -- serve http"
 
 serve-grpc:
   cargo r --frozen -- serve grpc
