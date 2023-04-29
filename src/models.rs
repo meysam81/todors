@@ -69,7 +69,7 @@ impl Controller for TodoController {
     type OptionalInput = TodoUpdate;
     type Output = TodoRead;
 
-    async fn create(&self, todo: &Self::Input) -> Result<Self::Output, TodoErrors> {
+    async fn create(&self, todo: Self::Input) -> Result<Self::Output, TodoErrors> {
         let res = query(
             r#"
             INSERT INTO todo (title, done)
@@ -91,7 +91,7 @@ impl Controller for TodoController {
         })
     }
 
-    async fn create_batch(&self, todos: &[Self::Input]) -> Result<Vec<Self::Id>, TodoErrors> {
+    async fn create_batch(&self, todos: Vec<Self::Input>) -> Result<Vec<Self::Id>, TodoErrors> {
         if todos.len() > self.create_batch_hard_limit as usize {
             return Err(TodoErrors::BatchTooLarge {
                 max_size: self.create_batch_hard_limit,
@@ -192,7 +192,7 @@ impl Controller for TodoController {
         })
     }
 
-    async fn update(&self, id: Self::Id, todo: &Self::OptionalInput) -> Result<(), TodoErrors> {
+    async fn update(&self, id: Self::Id, todo: Self::OptionalInput) -> Result<(), TodoErrors> {
         let mut tx = self.pool.begin().await?;
 
         if let Some(title) = &todo.title {

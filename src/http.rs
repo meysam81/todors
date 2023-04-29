@@ -67,7 +67,7 @@ mod todo {
     where
         T: Controller,
     {
-        match state.controller.create(&todo.into_inner()).await {
+        match state.controller.create(todo.into_inner()).await {
             Ok(todo) => HttpResponse::Created().json(todo),
             Err(TodoErrors::DatabaseError(err)) => HttpResponse::Conflict()
                 .content_type("text/plain")
@@ -98,7 +98,7 @@ mod todo {
     where
         T: Controller,
     {
-        match state.controller.create_batch(&todos.into_inner()).await {
+        match state.controller.create_batch(todos.into_inner()).await {
             Ok(ids) => HttpResponse::Created().json(ids),
             Err(TodoErrors::BatchTooLarge { max_size }) => HttpResponse::PayloadTooLarge()
                 .content_type("text/plain")
@@ -236,7 +236,7 @@ mod todo {
     {
         match state
             .controller
-            .update(id.into_inner(), &todo.into_inner())
+            .update(id.into_inner(), todo.into_inner())
             .await
         {
             Ok(_) => HttpResponse::Accepted()

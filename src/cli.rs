@@ -35,7 +35,7 @@ where
                 .map(|title| TodoWrite::new(title, done))
                 .collect::<Vec<_>>();
 
-            match state.controller.create_batch(&todos).await {
+            match state.controller.create_batch(todos).await {
                 Ok(todo) => {
                     let todo = to_json(&todo).unwrap();
                     println!("Inserted ids: {}", todo);
@@ -93,7 +93,7 @@ where
                 done
             };
             let todo = TodoUpdate::new(title, done);
-            match state.controller.update(id, &todo).await {
+            match state.controller.update(id, todo).await {
                 Ok(_) => info!(state.logger, "Successfully updated: {}", id),
                 Err(err) => {
                     error!(state.logger, "Failed to update todo: {:?}", err);
