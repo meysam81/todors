@@ -17,6 +17,7 @@ services:
       - todors:/data
     depends_on:
       - migration
+    restart: unless-stopped
 
   grpc:
     build:
@@ -34,6 +35,7 @@ services:
       - todors:/data
     depends_on:
       - migration
+    restart: unless-stopped
 
   supervisor:
     build:
@@ -50,6 +52,7 @@ services:
       - todors:/data
     depends_on:
       - migration
+    restart: unless-stopped
 
   migration:
     build:
@@ -62,6 +65,7 @@ services:
       - DB_URL=/data/db.sqlite
     volumes:
       - todors:/data
+    restart: on-failure
 
 volumes:
   todors:
