@@ -14,22 +14,33 @@ COPY --from=mold /usr/local/bin/mold /usr/local/bin/mold
 COPY . .
 
 RUN apk add --update clang build-base protoc protobuf-dev && \
-    cargo install --path .
+    cargo install --path . && \
+    addgroup -g 1000 todors && \
+    adduser -D -u 1000 -h /data -G todors todors && \
+    mkdir -p /data && \
+    chown -R 1000:1000 /data
 
 FROM scratch AS runner
 
+ARG DATA_DIR=/data
+ENV DATA_DIR=${DATA_DIR}
+ENV DB_URL="${DATA_DIR}/todors.db"
+VOLUME [ "${DATA_DIR}" ]
 
 COPY --from=builder --chown=1000:1000 /usr/local/cargo/bin/todors /usr/local/bin/todors
+COPY --from=builder --chown=1000:1000 /data /data
 
 ONBUILD ENTRYPOINT ["/usr/local/bin/todors"]
 
 
-FROM alpine AS supervisor
+FROM alpine:3 AS supervisor
 
 RUN apk add --update supervisor
 
-
-FROM supervisor AS all
+RUN addgroup -g 1000 todors && \
+    adduser -D -u 1000 -h /data -G todors todors && \
+    mkdir -p /data && \
+    chown -R 1000:1000 /data
 
 COPY --from=builder --chown=1000:1000 /usr/local/cargo/bin/todors /usr/local/bin/todors
 COPY --chown=1000:1000 ./supervisord.conf /etc/supervisord.conf
