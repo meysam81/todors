@@ -85,9 +85,24 @@
 <a href="#85" id="85">85</a>
 <a href="#86" id="86">86</a>
 <a href="#87" id="87">87</a>
+<a href="#88" id="88">88</a>
+<a href="#89" id="89">89</a>
+<a href="#90" id="90">90</a>
+<a href="#91" id="91">91</a>
+<a href="#92" id="92">92</a>
+<a href="#93" id="93">93</a>
+<a href="#94" id="94">94</a>
+<a href="#95" id="95">95</a>
+<a href="#96" id="96">96</a>
+<a href="#97" id="97">97</a>
+<a href="#98" id="98">98</a>
+<a href="#99" id="99">99</a>
+<a href="#100" id="100">100</a>
 </pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::logging::Logger;
 <span class="kw">use </span><span class="kw">crate</span>::models;
 <span class="kw">use </span><span class="kw">crate</span>::traits::Controller;
+
+<span class="kw">pub use </span>actix_web::dev::Server;
 
 <span class="kw">use </span>actix_web::web;
 <span class="kw">pub use </span>actix_web::{App, HttpServer};
@@ -115,7 +130,18 @@
 <span class="kw">mod </span>index;
 <span class="kw">mod </span>todo;
 
-<span class="kw">pub fn </span>configure&lt;T&gt;(cfg: <span class="kw-2">&amp;mut </span>web::ServiceConfig)
+<span class="kw">pub fn </span>build_server&lt;T&gt;(state: web::Data&lt;AppState&lt;T&gt;&gt;, addr: String, num_workers: usize) -&gt; Server
+<span class="kw">where
+    </span>T: Controller + <span class="lifetime">&#39;static </span>+ Sync + Send,
+{
+    HttpServer::new(<span class="kw">move </span>|| App::new().app_data(state.clone()).configure(configure::&lt;T&gt;))
+        .bind(addr)
+        .unwrap()
+        .workers(num_workers)
+        .run()
+}
+
+<span class="kw">fn </span>configure&lt;T&gt;(cfg: <span class="kw-2">&amp;mut </span>web::ServiceConfig)
 <span class="kw">where
     </span>T: Controller + <span class="lifetime">&#39;static</span>,
 {
