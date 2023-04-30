@@ -9,6 +9,7 @@ use settings::Settings;
 mod apidoc;
 mod cli;
 mod db;
+mod entities;
 mod errors;
 mod grpc;
 mod http;

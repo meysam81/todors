@@ -1,7 +1,8 @@
+use crate::entities::ListRequest;
 use crate::errors::TodoErrors;
 use crate::logging::{debug, error, Logger};
 use crate::models;
-use crate::traits::{Controller, ListRequest};
+use crate::traits::Controller;
 
 use actix_web::{get, web, HttpResponse};
 pub use actix_web::{App, HttpServer};

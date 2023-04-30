@@ -1,10 +1,10 @@
 use crate::apidoc::ToSchema;
 use crate::db::{query, query_as, FromRow, Pool, Row};
+use crate::entities::{ListRequest, ListResponse};
 use crate::errors::TodoErrors;
 use crate::serializers::{Deserialize, Serialize};
-use crate::traits::{async_trait, Controller, ListRequest, ListResponse};
+use crate::traits::{async_trait, Controller};
 use std::cmp;
-
 #[derive(Debug, Serialize, FromRow, ToSchema)]
 pub struct TodoRead {
     id: u32,

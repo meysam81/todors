@@ -1,8 +1,9 @@
+use crate::entities::ListRequest;
 use crate::errors::TodoErrors;
 use crate::logging::{error, info, Logger};
 use crate::models::{TodoRead, TodoUpdate, TodoWrite};
 use crate::serializers::{to_json, to_pretty_json};
-use crate::traits::{Controller, ListRequest};
+use crate::traits::Controller;
 use clap::{Args, Command, Parser, Subcommand};
 use clap_complete::{generate, Generator, Shell};
 use std::io;
