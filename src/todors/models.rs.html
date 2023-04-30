@@ -438,11 +438,11 @@
 <a href="#438" id="438">438</a>
 </pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::apidoc::ToSchema;
 <span class="kw">use </span><span class="kw">crate</span>::db::{query, query_as, FromRow, Pool, Row};
+<span class="kw">use </span><span class="kw">crate</span>::entities::{ListRequest, ListResponse};
 <span class="kw">use </span><span class="kw">crate</span>::errors::TodoErrors;
 <span class="kw">use </span><span class="kw">crate</span>::serializers::{Deserialize, Serialize};
-<span class="kw">use </span><span class="kw">crate</span>::traits::{async_trait, Controller, ListRequest, ListResponse};
+<span class="kw">use </span><span class="kw">crate</span>::traits::{async_trait, Controller};
 <span class="kw">use </span>std::cmp;
-
 <span class="attr">#[derive(Debug, Serialize, FromRow, ToSchema)]
 </span><span class="kw">pub struct </span>TodoRead {
     id: u32,

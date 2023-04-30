@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"attr":["async_trait"],"struct":["ListRequest","ListResponse"],"trait":["Controller"]};
+window.SIDEBAR_ITEMS = {"attr":["async_trait"],"trait":["Controller"]};

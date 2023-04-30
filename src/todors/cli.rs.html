@@ -317,11 +317,17 @@
 <a href="#317" id="317">317</a>
 <a href="#318" id="318">318</a>
 <a href="#319" id="319">319</a>
-</pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::errors::TodoErrors;
+<a href="#320" id="320">320</a>
+<a href="#321" id="321">321</a>
+<a href="#322" id="322">322</a>
+<a href="#323" id="323">323</a>
+<a href="#324" id="324">324</a>
+</pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::entities::ListRequest;
+<span class="kw">use </span><span class="kw">crate</span>::errors::TodoErrors;
 <span class="kw">use </span><span class="kw">crate</span>::logging::{error, info, Logger};
 <span class="kw">use </span><span class="kw">crate</span>::models::{TodoRead, TodoUpdate, TodoWrite};
 <span class="kw">use </span><span class="kw">crate</span>::serializers::{to_json, to_pretty_json};
-<span class="kw">use </span><span class="kw">crate</span>::traits::{Controller, ListRequest};
+<span class="kw">use </span><span class="kw">crate</span>::traits::Controller;
 <span class="kw">use </span>clap::{Args, Command, Parser, Subcommand};
 <span class="kw">use </span>clap_complete::{generate, Generator, Shell};
 <span class="kw">use </span>std::io;
@@ -576,9 +582,13 @@
     </span><span class="kw">async fn </span>verify_create_subcommand_works() {
         <span class="kw">let </span>args = <span class="macro">vec!</span>[<span class="string">&quot;todors&quot;</span>, <span class="string">&quot;create&quot;</span>, <span class="string">&quot;Hello Rust!&quot;</span>];
         <span class="kw">let </span>c = Cli::parse_from(args);
-        <span class="kw">match </span>c.command {
-            Commands::Local(Local::Create(Create { title })) =&gt; {
-                <span class="macro">assert_eq!</span>(title, <span class="string">&quot;Hello Rust!&quot;</span>);
+        <span class="comment">// let done: Option&lt;bool&gt; = false;
+        </span><span class="kw">match </span>c.command {
+            Commands::Local(Local::Create(Create {
+                title,
+                done: <span class="prelude-val">Some</span>(<span class="bool-val">false</span>),
+            })) =&gt; {
+                <span class="macro">assert_eq!</span>(title[<span class="number">0</span>], <span class="string">&quot;Hello Rust!&quot;</span>);
             }
             <span class="kw">_ </span>=&gt; <span class="macro">panic!</span>(<span class="string">&quot;Expected a Create command&quot;</span>),
         }

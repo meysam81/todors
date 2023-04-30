@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["create_batch","create_todo","delete_todo","get_todo","list_todos","update_todo"],"static":["LOC","RS"]};
+window.SIDEBAR_ITEMS = {"fn":["create_batch","create_todo","delete_todo","get_todo","list_todos","update_todo"],"static":["LOC","RS"],"struct":["App","HttpServer"]};
