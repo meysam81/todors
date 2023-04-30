@@ -4,3 +4,10 @@ repos:
     hooks:
       - id: fmt
       - id: cargo-check
+        args:
+          - --frozen
+      - id: clippy
+        args:
+          - --no-deps
+          - --fix
+          - --allow-staged
