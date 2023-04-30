@@ -257,9 +257,13 @@ mod test {
     async fn verify_create_subcommand_works() {
         let args = vec!["todors", "create", "Hello Rust!"];
         let c = Cli::parse_from(args);
+        // let done: Option<bool> = false;
         match c.command {
-            Commands::Local(Local::Create(Create { title })) => {
-                assert_eq!(title, "Hello Rust!");
+            Commands::Local(Local::Create(Create {
+                title,
+                done: Some(false),
+            })) => {
+                assert_eq!(title[0], "Hello Rust!");
             }
             _ => panic!("Expected a Create command"),
         }
