@@ -51,15 +51,7 @@ async fn main() -> Result<(), TodoErrors> {
                 "Starting server at {} with {} threads...", &addr, &settings.num_workers
             );
             let web_state = http::AppState::new(todo_controller, logger.clone());
-            let r = http::HttpServer::new(move || {
-                http::App::new()
-                    .app_data(web_state.clone())
-                    .configure(http::configure::<TodoController>)
-            })
-            .workers(settings.num_workers)
-            .bind(addr)?
-            .run()
-            .await;
+            let r = http::build_server(web_state, addr, settings.num_workers).await;
 
             match r {
                 Ok(_) => info!(logger, "Server stopped"),

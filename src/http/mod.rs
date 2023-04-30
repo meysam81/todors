@@ -2,6 +2,7 @@ use crate::logging::Logger;
 use crate::models;
 use crate::traits::Controller;
 
+pub use actix_web::dev::Server;
 use actix_web::web;
 pub use actix_web::{App, HttpServer};
 
@@ -28,7 +29,7 @@ where
 mod index;
 mod todo;
 
-pub fn configure<T>(cfg: &mut web::ServiceConfig)
+fn configure<T>(cfg: &mut web::ServiceConfig)
 where
     T: Controller + 'static,
 {
@@ -47,6 +48,17 @@ where
                 .url("/openapi.json", build_apidoc())
                 .config(build_apidoc_config()),
         );
+}
+
+pub fn build_server<T>(state: web::Data<AppState<T>>, addr: String, num_workers: usize) -> Server
+where
+    T: Controller + 'static + Sync + Send,
+{
+    HttpServer::new(move || App::new().app_data(state.clone()).configure(configure::<T>))
+        .bind(addr)
+        .unwrap()
+        .workers(num_workers)
+        .run()
 }
 
 fn build_apidoc() -> utoipa::openapi::OpenApi {
