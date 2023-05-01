@@ -40,10 +40,10 @@ rust-version = "1.68"
 [dependencies]
 actix-web = "4.3"
 async-trait = "0.1.68"
-clap = { version = "4.2.2", features = ["derive"] }
+clap = { version = "4.2.5", features = ["derive"] }
 clap_complete = "4.2.0"
 config = "0.13.3"
-dirs = "5.0.0"
+dirs = "5.0.1"
 futures-util = { version = "0.3.28", default-features = false }
 num_cpus = "1.15.0"
 prost = "0.11.9"
