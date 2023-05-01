@@ -2567,6 +2567,7 @@ dependencies = [
  "config",
  "dirs 5.0.0",
  "fake",
+ "futures-util",
  "just",
  "num_cpus",
  "prost",

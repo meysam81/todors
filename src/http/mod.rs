@@ -28,17 +28,23 @@ where
 }
 
 mod index;
+mod logging;
 mod todo;
 
 pub fn build_server<T>(state: web::Data<AppState<T>>, addr: String, num_workers: usize) -> Server
 where
     T: Controller + 'static + Sync + Send,
 {
-    HttpServer::new(move || App::new().app_data(state.clone()).configure(configure::<T>))
-        .bind(addr)
-        .unwrap()
-        .workers(num_workers)
-        .run()
+    HttpServer::new(move || {
+        App::new()
+            .app_data(state.clone())
+            .configure(configure::<T>)
+            .wrap(logging::LogMiddleware::default())
+    })
+    .bind(addr)
+    .unwrap()
+    .workers(num_workers)
+    .run()
 }
 
 fn configure<T>(cfg: &mut web::ServiceConfig)
