@@ -1,0 +1,3 @@
+(function() {var implementors = {
+"todors":[["impl&lt;S, B&gt; Transform&lt;S, ServiceRequest&gt; for <a class=\"struct\" href=\"todors/http/logging/struct.LogMiddleware.html\" title=\"struct todors::http::logging::LogMiddleware\">LogMiddleware</a><span class=\"where fmt-newline\">where\n    S: Service&lt;ServiceRequest, Response = ServiceResponse&lt;B&gt;, Error = ActixError&gt;,\n    S::Future: 'static,\n    B: 'static,</span>"]]
+};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
