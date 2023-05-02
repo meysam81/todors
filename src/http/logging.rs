@@ -94,7 +94,10 @@ where
                 .iter()
                 .fold(String::new(), |acc, (key, value)| {
                     format!("{}{}: {}\n", acc, key, value.to_str().unwrap())
-                });
+                })
+                .strip_suffix('\n')
+                .unwrap_or_default()
+                .to_string();
             log.status_code = res.status().to_string();
             log.latency = format!("{:?}", elapsed);
 
