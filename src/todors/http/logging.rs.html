@@ -107,6 +107,8 @@
 <a href="#107" id="107">107</a>
 <a href="#108" id="108">108</a>
 <a href="#109" id="109">109</a>
+<a href="#110" id="110">110</a>
+<a href="#111" id="111">111</a>
 </pre><pre class="rust"><code><span class="kw">use </span>std::future::{ready, Ready};
 
 <span class="kw">use </span><span class="kw">crate</span>::serializers::{to_json, Serialize};
@@ -128,6 +130,7 @@
     timestamp: String,
     method: String,
     path: String,
+    query_params: String,
     http_version: String,
     client_ip: String,
     client_real_ip: String,
@@ -176,6 +179,7 @@
             timestamp: chrono::Utc::now().to_rfc3339_opts(chrono::SecondsFormat::Secs, <span class="bool-val">true</span>),
             method: req.method().to_string(),
             path: req.path().to_string(),
+            query_params: req.query_string().to_string(),
             http_version: <span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, req.version()),
             client_ip: req
                 .connection_info()

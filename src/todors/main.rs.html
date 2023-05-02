@@ -77,6 +77,8 @@
 <a href="#77" id="77">77</a>
 <a href="#78" id="78">78</a>
 <a href="#79" id="79">79</a>
+<a href="#80" id="80">80</a>
+<a href="#81" id="81">81</a>
 </pre><pre class="rust"><code><span class="kw">use </span>clap::Parser;
 <span class="kw">use </span>cli::{handle_local, Cli, Commands};
 <span class="kw">use </span>errors::TodoErrors;
@@ -84,6 +86,7 @@
 <span class="kw">use </span>logging::{debug, error, info, trace};
 <span class="kw">use </span>models::TodoController;
 <span class="kw">use </span>settings::Settings;
+<span class="kw">use </span>std::sync::Arc;
 
 <span class="kw">mod </span>apidoc;
 <span class="kw">mod </span>cli;
@@ -102,6 +105,7 @@
 </span><span class="kw">async fn </span>main() -&gt; <span class="prelude-ty">Result</span>&lt;(), TodoErrors&gt; {
     <span class="kw">let </span>settings = Settings::new().unwrap();
     <span class="kw">let </span>logger = logging::init(settings.log_level.as_str());
+    <span class="kw">let </span>logger = Arc::new(logger);
 
     <span class="macro">debug!</span>(logger, <span class="string">&quot;{:?}&quot;</span>, settings);
 

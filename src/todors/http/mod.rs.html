@@ -104,9 +104,11 @@
 <a href="#104" id="104">104</a>
 <a href="#105" id="105">105</a>
 <a href="#106" id="106">106</a>
+<a href="#107" id="107">107</a>
 </pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::logging::Logger;
 <span class="kw">use </span><span class="kw">crate</span>::models;
 <span class="kw">use </span><span class="kw">crate</span>::traits::Controller;
+<span class="kw">use </span>std::sync::Arc;
 
 <span class="kw">pub use </span>actix_web::dev::Server;
 
@@ -121,14 +123,14 @@
     </span>T: Controller,
 {
     controller: T,
-    logger: Logger,
+    logger: Arc&lt;Logger&gt;,
 }
 
 <span class="kw">impl</span>&lt;T&gt; AppState&lt;T&gt;
 <span class="kw">where
     </span>T: Controller,
 {
-    <span class="kw">pub fn </span>new(controller: T, logger: Logger) -&gt; web::Data&lt;AppState&lt;T&gt;&gt; {
+    <span class="kw">pub fn </span>new(controller: T, logger: Arc&lt;Logger&gt;) -&gt; web::Data&lt;AppState&lt;T&gt;&gt; {
         web::Data::new(AppState { controller, logger })
     }
 }

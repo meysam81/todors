@@ -330,21 +330,21 @@
 <span class="kw">use </span><span class="kw">crate</span>::traits::Controller;
 <span class="kw">use </span>clap::{Args, Command, Parser, Subcommand};
 <span class="kw">use </span>clap_complete::{generate, Generator, Shell};
-<span class="kw">use </span>std::io;
+<span class="kw">use </span>std::{io, sync::Arc};
 
 <span class="kw">pub struct </span>CliState&lt;T&gt;
 <span class="kw">where
     </span>T: Controller,
 {
     controller: T,
-    logger: Logger,
+    logger: Arc&lt;Logger&gt;,
 }
 
 <span class="kw">impl</span>&lt;T&gt; CliState&lt;T&gt;
 <span class="kw">where
     </span>T: Controller,
 {
-    <span class="kw">pub fn </span>new(controller: T, logger: Logger) -&gt; <span class="self">Self </span>{
+    <span class="kw">pub fn </span>new(controller: T, logger: Arc&lt;Logger&gt;) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{ controller, logger }
     }
 }
