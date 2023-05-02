@@ -2,12 +2,9 @@ syntax = "proto3";
 
 package todo;
 
-message ListTodosRequest {
-}
+message ListTodosRequest {}
 
-message ListTodosResponse {
-  repeated TodoRead todos = 1;
-}
+message ListTodosResponse { repeated TodoRead todos = 1; }
 
 message TodoRead {
   uint32 id = 1;
@@ -15,6 +12,30 @@ message TodoRead {
   bool done = 3;
 }
 
+message TodoWrite {
+  string title = 1;
+  bool done = 2;
+}
+
+message TodoUpdate {
+  uint32 id = 1;
+  optional string title = 2;
+  optional bool done = 3;
+}
+
+message TodoId { uint32 id = 1; }
+
+enum Status {
+  OK = 0;
+  NOT_FOUND = 1;
+}
+
+message Confirmation { Status status = 1; }
+
 service Todo {
-  rpc ListTodos(ListTodosRequest) returns (ListTodosResponse);
+  rpc Create(TodoWrite) returns (TodoRead);
+  rpc Delete(TodoId) returns (Confirmation);
+  rpc Get(TodoId) returns (TodoRead);
+  rpc List(ListTodosRequest) returns (ListTodosResponse);
+  rpc Update(TodoUpdate) returns (Confirmation);
 }

@@ -45,7 +45,50 @@ pub struct TodoService {}
 
 #[tonic::async_trait]
 impl Todo for TodoService {
-    async fn list_todos(
+    async fn create(
+        &self,
+        request: Request<proto::todo::TodoWrite>,
+    ) -> Result<Response<proto::todo::TodoRead>, Status> {
+        println!("Got a request: {:?}", request);
+
+        let reply = proto::todo::TodoRead {
+            id: 1,
+            title: "todo 1".to_string(),
+            done: true,
+        };
+
+        Ok(Response::new(reply))
+    }
+
+    async fn delete(
+        &self,
+        request: Request<proto::todo::TodoId>,
+    ) -> Result<Response<proto::todo::Confirmation>, Status> {
+        println!("Got a request: {:?}", request);
+
+        let reply = proto::todo::Confirmation {
+            status: proto::todo::Status::Ok.into(),
+        };
+
+        Ok(Response::new(reply))
+    }
+
+    async fn get(
+        &self,
+        request: Request<proto::todo::TodoId>,
+    ) -> Result<Response<proto::todo::TodoRead>, Status> {
+        println!("Got a request: {:?}", request);
+
+        let reply = proto::todo::TodoRead {
+            id: 1,
+            title: "todo 1".to_string(),
+            done: true,
+        };
+
+        Ok(Response::new(reply))
+    }
+
+    async fn list(
         &self,
         request: Request<ListTodosRequest>,
     ) -> Result<Response<ListTodosResponse>, Status> {
@@ -57,6 +100,19 @@ impl Todo for TodoService {
                 title: "todo 1".to_string(),
                 done: true,
             }],
+        };
+
+        Ok(Response::new(reply))
+    }
+
+    async fn update(
+        &self,
+        request: Request<proto::todo::TodoUpdate>,
+    ) -> Result<Response<proto::todo::Confirmation>, Status> {
+        println!("Got a request: {:?}", request);
+
+        let reply = proto::todo::Confirmation {
+            status: proto::todo::Status::Ok.into(),
         };
 
         Ok(Response::new(reply))
