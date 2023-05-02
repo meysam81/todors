@@ -2723,6 +2723,7 @@ dependencies = [
  "just",
  "num_cpus",
  "prost",
+ "prost-build",
  "serde",
  "serde_json",
  "slog",

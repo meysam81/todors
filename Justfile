@@ -32,7 +32,6 @@ clean:
 grpc-client-ping:
   grpcurl -proto proto/healthcheck.proto -import-path proto/ -plaintext -d '{"message": "Hello Rust!"}' localhost:50051 healthcheck.HealthCheck/Check
 
-
 grpc-client-create-todo:
   grpcurl -proto ./proto/todo.proto -import-path ./proto/ -plaintext -d '{"title": "Hello Rust!", "done": true}' localhost:50051 todo.Todo/Create
 
