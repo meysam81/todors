@@ -11,7 +11,7 @@ check:
 format:
   clear
   cargo fmt
-  cargo clippy
+  cargo clippy --fix --allow-staged --allow-dirty
 
 vendor:
   cargo vendor
