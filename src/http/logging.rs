@@ -19,6 +19,7 @@ struct Log {
     timestamp: String,
     method: String,
     path: String,
+    query_params: String,
     http_version: String,
     client_ip: String,
     client_real_ip: String,
@@ -67,6 +68,7 @@ where
             timestamp: chrono::Utc::now().to_rfc3339_opts(chrono::SecondsFormat::Secs, true),
             method: req.method().to_string(),
             path: req.path().to_string(),
+            query_params: req.query_string().to_string(),
             http_version: format!("{:?}", req.version()),
             client_ip: req
                 .connection_info()
