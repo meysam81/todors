@@ -5,6 +5,7 @@ use grpc::build_server;
 use logging::{debug, error, info, trace};
 use models::TodoController;
 use settings::Settings;
+use std::sync::Arc;
 
 mod apidoc;
 mod cli;
@@ -23,6 +24,7 @@ mod traits;
 async fn main() -> Result<(), TodoErrors> {
     let settings = Settings::new().unwrap();
     let logger = logging::init(settings.log_level.as_str());
+    let logger = Arc::new(logger);
 
     debug!(logger, "{:?}", settings);
 

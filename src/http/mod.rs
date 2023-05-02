@@ -1,6 +1,7 @@
 use crate::logging::Logger;
 use crate::models;
 use crate::traits::Controller;
+use std::sync::Arc;
 
 pub use actix_web::dev::Server;
 
@@ -15,14 +16,14 @@ where
     T: Controller,
 {
     controller: T,
-    logger: Logger,
+    logger: Arc<Logger>,
 }
 
 impl<T> AppState<T>
 where
     T: Controller,
 {
-    pub fn new(controller: T, logger: Logger) -> web::Data<AppState<T>> {
+    pub fn new(controller: T, logger: Arc<Logger>) -> web::Data<AppState<T>> {
         web::Data::new(AppState { controller, logger })
     }
 }

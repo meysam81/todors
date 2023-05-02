@@ -6,21 +6,21 @@ use crate::serializers::{to_json, to_pretty_json};
 use crate::traits::Controller;
 use clap::{Args, Command, Parser, Subcommand};
 use clap_complete::{generate, Generator, Shell};
-use std::io;
+use std::{io, sync::Arc};
 
 pub struct CliState<T>
 where
     T: Controller,
 {
     controller: T,
-    logger: Logger,
+    logger: Arc<Logger>,
 }
 
 impl<T> CliState<T>
 where
     T: Controller,
 {
-    pub fn new(controller: T, logger: Logger) -> Self {
+    pub fn new(controller: T, logger: Arc<Logger>) -> Self {
         Self { controller, logger }
     }
 }
