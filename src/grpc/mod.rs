@@ -129,10 +129,7 @@ where
         &self,
         request: Request<proto::todo::GetTodoRequest>,
     ) -> Result<Response<proto::todo::TodoRead>, Status> {
-        let mut log = Log {
-            rpc: "todo.Todo/Get".to_string(),
-            ..Default::default()
-        };
+        let mut log = Log::new("todo.Todo/Get");
 
         let request = request.into_inner();
 
@@ -165,10 +162,7 @@ where
         &self,
         request: Request<ListTodosRequest>,
     ) -> Result<Response<ListTodosResponse>, Status> {
-        let mut log = Log {
-            rpc: "todo.Todo/List".to_string(),
-            ..Default::default()
-        };
+        let mut log = Log::new("todo.Todo/List");
 
         let request = request.into_inner();
 
