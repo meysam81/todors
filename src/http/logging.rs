@@ -29,6 +29,28 @@ struct Log {
     latency: String,
 }
 
+impl Log {
+    pub fn new(
+        method: String,
+        path: String,
+        query_params: String,
+        http_version: String,
+        client_ip: String,
+        client_real_ip: String,
+    ) -> Self {
+        Self {
+            timestamp: chrono::Utc::now().to_rfc3339_opts(chrono::SecondsFormat::Secs, true),
+            method,
+            path,
+            query_params,
+            http_version,
+            client_ip,
+            client_real_ip,
+            ..Default::default()
+        }
+    }
+}
+
 impl std::fmt::Display for Log {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         to_json(self).unwrap().fmt(f)
@@ -65,24 +87,20 @@ where
     forward_ready!(service);
 
     fn call(&self, req: ServiceRequest) -> Self::Future {
-        let mut log = Log {
-            timestamp: chrono::Utc::now().to_rfc3339_opts(chrono::SecondsFormat::Secs, true),
-            method: req.method().to_string(),
-            path: req.path().to_string(),
-            query_params: req.query_string().to_string(),
-            http_version: format!("{:?}", req.version()),
-            client_ip: req
-                .connection_info()
+        let mut log = Log::new(
+            req.method().to_string(),
+            req.path().to_string(),
+            req.query_string().to_string(),
+            format!("{:?}", req.version()),
+            req.connection_info()
                 .peer_addr()
                 .unwrap_or_default()
                 .to_string(),
-            client_real_ip: req
-                .connection_info()
+            req.connection_info()
                 .realip_remote_addr()
                 .unwrap_or_default()
                 .to_string(),
-            ..Default::default()
-        };
+        );
 
         let fut = self.service.call(req);
 
