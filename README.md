@@ -33,6 +33,7 @@ TODO app, mainly for a practical learning experience of Rust
         - [Visit URL](#visit-url)
     - [gRPC API doc](#grpc-api-doc)
       - [Look at the proto files](#look-at-the-proto-files)
+      - [Run gRPC server](#run-grpc-server)
   - [Help](#help)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -102,6 +103,13 @@ todors serve http
 #### Look at the proto files
 
 [proto directory](./proto)
+
+#### Run gRPC server
+
+```bash
+todors serve grpc
+# exposed at localhost:50051
+```
 
 ## Help
 
