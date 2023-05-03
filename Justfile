@@ -20,7 +20,7 @@ serve-http:
   cargo watch -s sh -- sh -c "clear; cargo run --frozen -- serve http"
 
 serve-grpc:
-  cargo watch -s sh -- sh -c "clear; cargo run --frozen -- serve grpc"
+  cargo watch -w 'src/' -s sh -- sh -c "clear; cargo run --frozen -- serve grpc"
 
 test:
   cargo t --frozen
@@ -42,7 +42,7 @@ grpc-client-get-todo:
   grpcurl -proto ./proto/todo.proto -import-path ./proto/ -plaintext -d '{"id": "1"}' localhost:50051 todo.Todo/Get
 
 grpc-client-list-todos:
-  grpcurl -proto ./proto/todo.proto -import-path ./proto/ -plaintext localhost:50051 todo.Todo/List
+  grpcurl -proto ./proto/todo.proto -import-path ./proto/ -plaintext -d '{"offset": 5, "limit": 5}' localhost:50051 todo.Todo/List
 
 grpc-client-update-todo:
   grpcurl -proto ./proto/todo.proto -import-path ./proto/ -plaintext -d '{"id": "1", "title": "Hello Rust!", "done": true}' localhost:50051 todo.Todo/Update

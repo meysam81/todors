@@ -34,7 +34,12 @@ mod todo;
 
 pub fn build_server<T>(state: web::Data<AppState<T>>, addr: String, num_workers: usize) -> Server
 where
-    T: Controller + 'static + Sync + Send,
+    T: Controller<
+        Input = models::TodoWrite,
+        Output = models::TodoRead,
+        Id = models::Id,
+        OptionalInput = models::TodoUpdate,
+    >,
 {
     HttpServer::new(move || {
         App::new()
@@ -50,7 +55,12 @@ where
 
 fn configure<T>(cfg: &mut web::ServiceConfig)
 where
-    T: Controller + 'static,
+    T: Controller<
+            Input = models::TodoWrite,
+            Output = models::TodoRead,
+            Id = models::Id,
+            OptionalInput = models::TodoUpdate,
+        > + 'static,
 {
     cfg.service(index::index)
         .service(

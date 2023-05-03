@@ -16,3 +16,14 @@ where
     pub limit: u32,
     pub offset: u32,
 }
+
+impl<T> Iterator for ListResponse<T>
+where
+    T: Serialize + Send + Sync + 'static,
+{
+    type Item = T;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.data.pop()
+    }
+}

@@ -3,8 +3,8 @@ use crate::errors::TodoErrors;
 use crate::serializers::{Deserialize, Serialize};
 pub use async_trait::async_trait;
 
-#[async_trait(?Send)]
-pub trait Controller {
+#[async_trait]
+pub trait Controller: Sync + Send + 'static {
     type Id: Serialize + for<'a> Deserialize<'a>;
     type Input: for<'a> Deserialize<'a>;
     type OptionalInput: for<'a> Deserialize<'a>;

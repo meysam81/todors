@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use tonic::transport::{server::Router, Server};
 use tonic::{Request, Response, Status};
 
@@ -6,6 +8,26 @@ use proto::healthcheck::{Ping, Pong};
 
 use proto::todo::todo_server::{Todo, TodoServer};
 use proto::todo::{ListTodosRequest, ListTodosResponse, TodoRead};
+
+use crate::logging::{error, info, Logger};
+use crate::{entities, models};
+
+use crate::traits::Controller;
+
+pub fn build_server<T>(num_workers: usize, state: AppState<T>) -> Router
+where
+    T: Controller<
+        Input = models::TodoWrite,
+        Output = models::TodoRead,
+        Id = models::Id,
+        OptionalInput = models::TodoUpdate,
+    >,
+{
+    Server::builder()
+        .concurrency_limit_per_connection(num_workers)
+        .add_service(HealthCheckServer::new(TodoHealthCheck::default()))
+        .add_service(TodoServer::new(TodoService::new(state)))
+}
 
 mod proto {
     pub mod healthcheck {
@@ -17,15 +39,39 @@ mod proto {
     }
 }
 
-pub fn build_server(num_workers: usize) -> Router {
-    Server::builder()
-        .concurrency_limit_per_connection(num_workers)
-        .add_service(HealthCheckServer::new(TodoHealthCheck::default()))
-        .add_service(TodoServer::new(TodoService::default()))
+impl<T> TodoService<T>
+where
+    T: Controller<
+        Input = models::TodoWrite,
+        Output = models::TodoRead,
+        Id = models::Id,
+        OptionalInput = models::TodoUpdate,
+    >,
+{
+    pub fn new(state: AppState<T>) -> Self {
+        Self { state }
+    }
+}
+
+pub struct AppState<T>
+where
+    T: Controller,
+{
+    controller: T,
+    logger: Arc<Logger>,
+}
+
+impl<T> AppState<T>
+where
+    T: Controller,
+{
+    pub fn new(controller: T, logger: Arc<Logger>) -> Self {
+        Self { controller, logger }
+    }
 }
 
 #[derive(Debug, Default)]
-pub struct TodoHealthCheck {}
+struct TodoHealthCheck {}
 
 #[tonic::async_trait]
 impl HealthCheck for TodoHealthCheck {
@@ -40,11 +86,28 @@ impl HealthCheck for TodoHealthCheck {
     }
 }
 
-#[derive(Debug, Default)]
-pub struct TodoService {}
+struct TodoService<T>
+where
+    T: Controller<
+        Input = models::TodoWrite,
+        Output = models::TodoRead,
+        Id = models::Id,
+        OptionalInput = models::TodoUpdate,
+    >,
+{
+    state: AppState<T>,
+}
 
 #[tonic::async_trait]
-impl Todo for TodoService {
+impl<T> Todo for TodoService<T>
+where
+    T: Controller<
+        Input = models::TodoWrite,
+        Output = models::TodoRead,
+        Id = models::Id,
+        OptionalInput = models::TodoUpdate,
+    >,
+{
     async fn create(
         &self,
         request: Request<proto::todo::TodoWrite>,
@@ -92,17 +155,47 @@ impl Todo for TodoService {
         &self,
         request: Request<ListTodosRequest>,
     ) -> Result<Response<ListTodosResponse>, Status> {
-        println!("Got a request: {:?}", request);
+        info!(&self.state.logger, "Got a request: {:?}", request);
 
-        let reply = ListTodosResponse {
-            todos: vec![TodoRead {
-                id: 1,
-                title: "todo 1".to_string(),
-                done: true,
-            }],
+        let request = request.into_inner();
+
+        let request = entities::ListRequest {
+            offset: request.limit,
+            limit: request.offset,
         };
 
-        Ok(Response::new(reply))
+        let res = self.state.controller.list(request).await;
+
+        match res {
+            Ok(entities::ListResponse {
+                data,
+                offset,
+                limit,
+                total,
+            }) => {
+                let data = data
+                    .into_iter()
+                    .map(|todo| TodoRead {
+                        id: todo.id,
+                        title: todo.title,
+                        done: todo.done,
+                    })
+                    .collect();
+
+                let reply = ListTodosResponse {
+                    data,
+                    limit,
+                    offset,
+                    total,
+                };
+
+                Ok(Response::new(reply))
+            }
+            Err(err) => {
+                error! {&self.state.logger, "Error: {}", err};
+                Err(Status::internal(err.to_string()))
+            }
+        }
     }
 
     async fn update(

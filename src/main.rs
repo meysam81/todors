@@ -61,12 +61,14 @@ async fn main() -> Result<(), TodoErrors> {
             };
         }
         Commands::Serve(cli::Serve::Grpc(cli::GrpcServerAddr { host, port })) => {
+            let state = grpc::AppState::new(todo_controller, logger.clone());
+
             info!(
                 logger,
                 "Starting server at {}:{} with {} threads...", &host, &port, &settings.num_workers
             );
             let addr = format!("{}:{}", host, port);
-            let r = build_server(settings.num_workers)
+            let r = build_server(settings.num_workers, state)
                 .serve(addr.parse().unwrap())
                 .await;
 

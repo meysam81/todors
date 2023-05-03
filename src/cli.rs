@@ -1,7 +1,7 @@
 use crate::entities::ListRequest;
 use crate::errors::TodoErrors;
 use crate::logging::{error, info, Logger};
-use crate::models::{TodoRead, TodoUpdate, TodoWrite};
+use crate::models;
 use crate::serializers::{to_json, to_pretty_json};
 use crate::traits::Controller;
 use clap::{Args, Command, Parser, Subcommand};
@@ -27,13 +27,18 @@ where
 
 pub async fn handle_local<T>(local: Local, state: CliState<T>)
 where
-    T: Controller<Input = TodoWrite, Output = TodoRead, Id = u32, OptionalInput = TodoUpdate>,
+    T: Controller<
+        Input = models::TodoWrite,
+        Output = models::TodoRead,
+        Id = models::Id,
+        OptionalInput = models::TodoUpdate,
+    >,
 {
     match local {
         Local::Create(Create { title, done }) => {
             let todos = title
                 .into_iter()
-                .map(|title| TodoWrite::new(title, done))
+                .map(|title| models::TodoWrite::new(title, done))
                 .collect::<Vec<_>>();
 
             match state.controller.create_batch(todos).await {
@@ -93,7 +98,7 @@ where
             } else {
                 done
             };
-            let todo = TodoUpdate::new(title, done);
+            let todo = models::TodoUpdate::new(title, done);
             match state.controller.update(id, todo).await {
                 Ok(_) => info!(state.logger, "Successfully updated: {}", id),
                 Err(err) => {

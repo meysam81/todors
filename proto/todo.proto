@@ -2,9 +2,17 @@ syntax = "proto3";
 
 package todo;
 
-message ListTodosRequest {}
+message ListTodosRequest {
+  optional uint32 offset = 1;
+  optional uint32 limit = 2;
+}
 
-message ListTodosResponse { repeated TodoRead todos = 1; }
+message ListTodosResponse {
+  repeated TodoRead data = 1;
+  uint32 total = 2;
+  uint32 offset = 3;
+  uint32 limit = 4;
+}
 
 message TodoRead {
   uint32 id = 1;
