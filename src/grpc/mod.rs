@@ -167,8 +167,8 @@ where
         let request = request.into_inner();
 
         let request = entities::ListRequest {
-            offset: request.limit,
-            limit: request.offset,
+            offset: request.offset,
+            limit: request.limit,
         };
 
         let start = std::time::Instant::now();
