@@ -44,5 +44,5 @@ grpc-client-get-todo ID:
 grpc-client-list-todos *BODY:
   grpcurl -proto ./proto/todo.proto -import-path ./proto/ -plaintext {{BODY}} localhost:50051 todo.Todo/List
 
-grpc-client-update-todo:
-  grpcurl -proto ./proto/todo.proto -import-path ./proto/ -plaintext -d '{"id": "1", "title": "Hello Rust!", "done": true}' localhost:50051 todo.Todo/Update
+grpc-client-update-todo ID:
+  grpcurl -proto ./proto/todo.proto -import-path ./proto/ -plaintext -d "{\"id\": \"{{ID}}\", \"title\": \"Hello Rust! $$\"}" localhost:50051 todo.Todo/Update

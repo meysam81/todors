@@ -150,6 +150,15 @@ impl From<entities::ListResponse<models::TodoRead>> for ListTodosResponse {
     }
 }
 
+impl From<proto::todo::UpdateTodoRequest> for models::TodoUpdate {
+    fn from(request: proto::todo::UpdateTodoRequest) -> Self {
+        Self {
+            title: request.title,
+            done: request.done,
+        }
+    }
+}
+
 #[tonic::async_trait]
 impl<T> Todo for TodoService<T>
 where
@@ -250,8 +259,25 @@ where
 
     async fn update(
         &self,
-        _request: Request<proto::todo::UpdateTodoRequest>,
+        request: Request<proto::todo::UpdateTodoRequest>,
     ) -> Result<Response<proto::todo::Confirmation>, Status> {
-        todo!()
+        let mut log = Log::new("todo.Todo/Update");
+
+        let request = request.into_inner();
+        log.args = Some(format!("{:?}", request));
+
+        let start = Instant::now();
+        let _res = self
+            .state
+            .controller
+            .update(request.id, models::TodoUpdate::from(request))
+            .await?;
+        let elapsed = start.elapsed();
+
+        log.latency = format!("{:?}", elapsed);
+
+        info!(&self.state.logger, "{}", log);
+
+        Ok(Response::new(proto::todo::Confirmation::from(())))
     }
 }
