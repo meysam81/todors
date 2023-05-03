@@ -8,7 +8,7 @@ use proto::healthcheck::health_check_server::{HealthCheck, HealthCheckServer};
 use proto::healthcheck::{Ping, Pong};
 
 use proto::todo::todo_server::{Todo, TodoServer};
-use proto::todo::{ListTodosRequest, ListTodosResponse, TodoRead};
+use proto::todo::{ListTodosRequest, ListTodosResponse};
 
 use crate::logging::{error, info, Logger};
 use crate::{entities, models};
@@ -102,6 +102,40 @@ where
     state: AppState<T>,
 }
 
+impl From<proto::todo::CreateTodoRequest> for models::TodoWrite {
+    fn from(request: proto::todo::CreateTodoRequest) -> Self {
+        Self {
+            title: request.title,
+            done: request.done,
+        }
+    }
+}
+
+impl From<models::TodoRead> for proto::todo::TodoRead {
+    fn from(todo: models::TodoRead) -> Self {
+        Self {
+            id: todo.id,
+            title: todo.title,
+            done: todo.done,
+        }
+    }
+}
+
+impl<T> From<entities::ListResponse<T>> for ListTodosResponse
+where
+    T: crate::serializers::Serialize + From<models::TodoRead>,
+    Vec<proto::todo::TodoRead>: std::convert::From<Vec<T>>,
+{
+    fn from(response: entities::ListResponse<T>) -> Self {
+        Self {
+            data: response.data.into(),
+            total: response.total,
+            offset: response.offset,
+            limit: response.limit,
+        }
+    }
+}
+
 #[tonic::async_trait]
 impl<T> Todo for TodoService<T>
 where
@@ -135,7 +169,7 @@ where
         let request = request.into_inner();
         log.args = Some(format!("{:?}", request));
 
-        let start = std::time::Instant::now();
+        let start = Instant::now();
         let res = self.state.controller.get(request.id).await;
         let elapsed = start.elapsed();
 
@@ -144,15 +178,7 @@ where
         info!(&self.state.logger, "{}", log);
 
         match res {
-            Ok(todo) => {
-                let reply = proto::todo::TodoRead {
-                    id: todo.id,
-                    title: todo.title,
-                    done: todo.done,
-                };
-
-                Ok(Response::new(reply))
-            }
+            Ok(todo) => Ok(Response::new(proto::todo::TodoRead::from(todo))),
             Err(err) => {
                 error! {&self.state.logger, "Error: {}", err};
                 Err(Status::internal(err.to_string()))
@@ -183,26 +209,12 @@ where
         info!(&self.state.logger, "{}", log);
 
         match res {
-            Ok(entities::ListResponse {
-                data,
-                offset,
-                limit,
-                total,
-            }) => {
-                let data = data
-                    .into_iter()
-                    .map(|todo| TodoRead {
-                        id: todo.id,
-                        title: todo.title,
-                        done: todo.done,
-                    })
-                    .collect();
-
+            Ok(result) => {
                 let reply = ListTodosResponse {
-                    data,
-                    limit,
-                    offset,
-                    total,
+                    data: result.data.into_iter().map(|todo| todo.into()).collect(),
+                    total: result.total,
+                    offset: result.offset,
+                    limit: result.limit,
                 };
 
                 Ok(Response::new(reply))
