@@ -322,10 +322,15 @@
 <a href="#322" id="322">322</a>
 <a href="#323" id="323">323</a>
 <a href="#324" id="324">324</a>
+<a href="#325" id="325">325</a>
+<a href="#326" id="326">326</a>
+<a href="#327" id="327">327</a>
+<a href="#328" id="328">328</a>
+<a href="#329" id="329">329</a>
 </pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::entities::ListRequest;
 <span class="kw">use </span><span class="kw">crate</span>::errors::TodoErrors;
 <span class="kw">use </span><span class="kw">crate</span>::logging::{error, info, Logger};
-<span class="kw">use </span><span class="kw">crate</span>::models::{TodoRead, TodoUpdate, TodoWrite};
+<span class="kw">use </span><span class="kw">crate</span>::models;
 <span class="kw">use </span><span class="kw">crate</span>::serializers::{to_json, to_pretty_json};
 <span class="kw">use </span><span class="kw">crate</span>::traits::Controller;
 <span class="kw">use </span>clap::{Args, Command, Parser, Subcommand};
@@ -351,13 +356,18 @@
 
 <span class="kw">pub async fn </span>handle_local&lt;T&gt;(local: Local, state: CliState&lt;T&gt;)
 <span class="kw">where
-    </span>T: Controller&lt;Input = TodoWrite, Output = TodoRead, Id = u32, OptionalInput = TodoUpdate&gt;,
+    </span>T: Controller&lt;
+        Input = models::TodoWrite,
+        Output = models::TodoRead,
+        Id = models::Id,
+        OptionalInput = models::TodoUpdate,
+    &gt;,
 {
     <span class="kw">match </span>local {
         Local::Create(Create { title, done }) =&gt; {
             <span class="kw">let </span>todos = title
                 .into_iter()
-                .map(|title| TodoWrite::new(title, done))
+                .map(|title| models::TodoWrite::new(title, done))
                 .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
 
             <span class="kw">match </span>state.controller.create_batch(todos).<span class="kw">await </span>{
@@ -417,7 +427,7 @@
             } <span class="kw">else </span>{
                 done
             };
-            <span class="kw">let </span>todo = TodoUpdate::new(title, done);
+            <span class="kw">let </span>todo = models::TodoUpdate::new(title, done);
             <span class="kw">match </span>state.controller.update(id, todo).<span class="kw">await </span>{
                 <span class="prelude-val">Ok</span>(<span class="kw">_</span>) =&gt; <span class="macro">info!</span>(state.logger, <span class="string">&quot;Successfully updated: {}&quot;</span>, id),
                 <span class="prelude-val">Err</span>(err) =&gt; {

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["ListTodosSvc","TodoServer","_Inner"],"trait":["Todo"]};
+window.SIDEBAR_ITEMS = {"struct":["CreateSvc","DeleteSvc","GetSvc","ListSvc","TodoServer","UpdateSvc","_Inner"],"trait":["Todo"]};

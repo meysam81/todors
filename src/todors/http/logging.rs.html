@@ -109,7 +109,29 @@
 <a href="#109" id="109">109</a>
 <a href="#110" id="110">110</a>
 <a href="#111" id="111">111</a>
-</pre><pre class="rust"><code><span class="kw">use </span>std::future::{ready, Ready};
+<a href="#112" id="112">112</a>
+<a href="#113" id="113">113</a>
+<a href="#114" id="114">114</a>
+<a href="#115" id="115">115</a>
+<a href="#116" id="116">116</a>
+<a href="#117" id="117">117</a>
+<a href="#118" id="118">118</a>
+<a href="#119" id="119">119</a>
+<a href="#120" id="120">120</a>
+<a href="#121" id="121">121</a>
+<a href="#122" id="122">122</a>
+<a href="#123" id="123">123</a>
+<a href="#124" id="124">124</a>
+<a href="#125" id="125">125</a>
+<a href="#126" id="126">126</a>
+<a href="#127" id="127">127</a>
+<a href="#128" id="128">128</a>
+<a href="#129" id="129">129</a>
+<a href="#130" id="130">130</a>
+<a href="#131" id="131">131</a>
+</pre><pre class="rust"><code><span class="kw">use </span>chrono::{SecondsFormat, Utc};
+<span class="kw">use </span>std::future::{ready, Ready};
+<span class="kw">use </span>std::time::Instant;
 
 <span class="kw">use </span><span class="kw">crate</span>::serializers::{to_json, Serialize};
 <span class="kw">use </span>actix_web::{
@@ -137,6 +159,28 @@
     request_headers: String,
     status_code: String,
     latency: String,
+}
+
+<span class="kw">impl </span>Log {
+    <span class="kw">pub fn </span>new(
+        method: String,
+        path: String,
+        query_params: String,
+        http_version: String,
+        client_ip: String,
+        client_real_ip: String,
+    ) -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{
+            timestamp: Utc::now().to_rfc3339_opts(SecondsFormat::Secs, <span class="bool-val">true</span>),
+            method,
+            path,
+            query_params,
+            http_version,
+            client_ip,
+            client_real_ip,
+            ..Default::default()
+        }
+    }
 }
 
 <span class="kw">impl </span>std::fmt::Display <span class="kw">for </span>Log {
@@ -175,29 +219,25 @@
     <span class="macro">forward_ready!</span>(service);
 
     <span class="kw">fn </span>call(<span class="kw-2">&amp;</span><span class="self">self</span>, req: ServiceRequest) -&gt; <span class="self">Self</span>::Future {
-        <span class="kw">let </span><span class="kw-2">mut </span>log = Log {
-            timestamp: chrono::Utc::now().to_rfc3339_opts(chrono::SecondsFormat::Secs, <span class="bool-val">true</span>),
-            method: req.method().to_string(),
-            path: req.path().to_string(),
-            query_params: req.query_string().to_string(),
-            http_version: <span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, req.version()),
-            client_ip: req
-                .connection_info()
+        <span class="kw">let </span><span class="kw-2">mut </span>log = Log::new(
+            req.method().to_string(),
+            req.path().to_string(),
+            req.query_string().to_string(),
+            <span class="macro">format!</span>(<span class="string">&quot;{:?}&quot;</span>, req.version()),
+            req.connection_info()
                 .peer_addr()
                 .unwrap_or_default()
                 .to_string(),
-            client_real_ip: req
-                .connection_info()
+            req.connection_info()
                 .realip_remote_addr()
                 .unwrap_or_default()
                 .to_string(),
-            ..Default::default()
-        };
+        );
 
         <span class="kw">let </span>fut = <span class="self">self</span>.service.call(req);
 
         Box::pin(<span class="kw">async move </span>{
-            <span class="kw">let </span>start = std::time::Instant::now();
+            <span class="kw">let </span>start = Instant::now();
             <span class="kw">let </span>res = fut.<span class="kw">await</span><span class="question-mark">?</span>;
             <span class="kw">let </span>elapsed = start.elapsed();
 

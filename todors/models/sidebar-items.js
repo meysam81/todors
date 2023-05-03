@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["TodoController","TodoRead","TodoUpdate","TodoWrite"]};
+window.SIDEBAR_ITEMS = {"mod":["todo"]};
