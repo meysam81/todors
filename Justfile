@@ -17,10 +17,10 @@ vendor:
   cargo vendor
 
 serve-http:
-  cargo watch -s sh -- sh -c "clear; cargo run --frozen -- serve http"
+  cargo watch -w src -w proto -s sh -- sh -c "clear; cargo run --frozen -- serve http"
 
 serve-grpc:
-  cargo r --frozen -- serve grpc
+  cargo watch -w src -w proto -s sh -- sh -c "clear; cargo run --frozen -- serve grpc"
 
 test:
   cargo t --frozen
@@ -32,6 +32,17 @@ clean:
 grpc-client-ping:
   grpcurl -proto proto/healthcheck.proto -import-path proto/ -plaintext -d '{"message": "Hello Rust!"}' localhost:50051 healthcheck.HealthCheck/Check
 
+grpc-client-create-todo:
+  grpcurl -proto ./proto/todo.proto -import-path ./proto/ -plaintext -d "{\"title\": \"Hello Rust! $$\", \"done\": true}" localhost:50051 todo.Todo/Create
 
-grpc-client-list-todos:
-  grpcurl -proto ./proto/todo.proto -import-path ./proto/ -plaintext localhost:50051 todo.Todo/ListTodos
+grpc-client-delete-todo ID:
+  grpcurl -proto ./proto/todo.proto -import-path ./proto/ -plaintext -d '{"id": "{{ID}}"}' localhost:50051 todo.Todo/Delete
+
+grpc-client-get-todo ID:
+  grpcurl -proto ./proto/todo.proto -import-path ./proto/ -plaintext -d '{"id": "{{ID}}"}' localhost:50051 todo.Todo/Get
+
+grpc-client-list-todos *BODY:
+  grpcurl -proto ./proto/todo.proto -import-path ./proto/ -plaintext {{BODY}} localhost:50051 todo.Todo/List
+
+grpc-client-update-todo ID:
+  grpcurl -proto ./proto/todo.proto -import-path ./proto/ -plaintext -d "{\"id\": \"{{ID}}\", \"title\": \"Hello Rust! $$\"}" localhost:50051 todo.Todo/Update

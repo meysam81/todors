@@ -3,10 +3,15 @@ syntax = "proto3";
 package todo;
 
 message ListTodosRequest {
+  optional uint32 offset = 1;
+  optional uint32 limit = 2;
 }
 
 message ListTodosResponse {
-  repeated TodoRead todos = 1;
+  repeated TodoRead data = 1;
+  uint32 total = 2;
+  uint32 offset = 3;
+  uint32 limit = 4;
 }
 
 message TodoRead {
@@ -15,6 +20,31 @@ message TodoRead {
   bool done = 3;
 }
 
+message CreateTodoRequest {
+  string title = 1;
+  bool done = 2;
+}
+
+message UpdateTodoRequest {
+  uint32 id = 1;
+  optional string title = 2;
+  optional bool done = 3;
+}
+
+message DeleteTodoRequest { uint32 id = 1; }
+message GetTodoRequest { uint32 id = 1; }
+
+enum Status {
+  OK = 0;
+  NOT_FOUND = 1;
+}
+
+message Confirmation { Status status = 1; }
+
 service Todo {
-  rpc ListTodos(ListTodosRequest) returns (ListTodosResponse);
+  rpc Create(CreateTodoRequest) returns (TodoRead);
+  rpc Delete(DeleteTodoRequest) returns (Confirmation);
+  rpc Get(GetTodoRequest) returns (TodoRead);
+  rpc List(ListTodosRequest) returns (ListTodosResponse);
+  rpc Update(UpdateTodoRequest) returns (Confirmation);
 }

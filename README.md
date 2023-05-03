@@ -26,6 +26,14 @@ TODO app, mainly for a practical learning experience of Rust
     - [Download binary](#download-binary)
     - [Docker](#docker)
   - [Usage](#usage)
+    - [REST API doc](#rest-api-doc)
+      - [Online](#online)
+      - [Local](#local)
+        - [Run HTTP server](#run-http-server)
+        - [Visit URL](#visit-url)
+    - [gRPC API doc](#grpc-api-doc)
+      - [Look at the proto files](#look-at-the-proto-files)
+      - [Run gRPC server](#run-grpc-server)
   - [Help](#help)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -70,6 +78,37 @@ todors update 1 --undone
 todors delete 1
 
 todors completion bash | sudo tee /etc/bash_completion.d/todors
+```
+
+### REST API doc
+
+#### Online
+
+<https://todors.fly.dev/docs/>
+
+#### Local
+
+##### Run HTTP server
+
+```bash
+todors serve http
+```
+
+##### Visit URL
+
+<http://localhost:8080/docs/>
+
+### gRPC API doc
+
+#### Look at the proto files
+
+[proto directory](./proto)
+
+#### Run gRPC server
+
+```bash
+todors serve grpc
+# exposed at localhost:50051
 ```
 
 ## Help

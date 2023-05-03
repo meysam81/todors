@@ -1,6 +1,7 @@
 use crate::entities::ListRequest;
 use crate::errors::TodoErrors;
 use crate::logging::{debug, error};
+use crate::models;
 use crate::traits::Controller;
 
 use actix_web::{web, HttpResponse};
@@ -26,7 +27,12 @@ pub async fn create_todo<T>(
     todo: web::Json<T::Input>,
 ) -> HttpResponse
 where
-    T: Controller,
+    T: Controller<
+        Input = models::TodoWrite,
+        Output = models::TodoRead,
+        Id = models::Id,
+        OptionalInput = models::TodoUpdate,
+    >,
 {
     match state.controller.create(todo.into_inner()).await {
         Ok(todo) => HttpResponse::Created().json(todo),
@@ -57,7 +63,12 @@ pub async fn create_batch<T>(
     todos: web::Json<Vec<T::Input>>,
 ) -> HttpResponse
 where
-    T: Controller,
+    T: Controller<
+        Input = models::TodoWrite,
+        Output = models::TodoRead,
+        Id = models::Id,
+        OptionalInput = models::TodoUpdate,
+    >,
 {
     match state.controller.create_batch(todos.into_inner()).await {
         Ok(ids) => HttpResponse::Created().json(ids),
@@ -91,7 +102,12 @@ where
 )]
 pub async fn delete_todo<T>(state: web::Data<AppState<T>>, id: web::Path<T::Id>) -> HttpResponse
 where
-    T: Controller,
+    T: Controller<
+        Input = models::TodoWrite,
+        Output = models::TodoRead,
+        Id = models::Id,
+        OptionalInput = models::TodoUpdate,
+    >,
 {
     match state.controller.delete(id.into_inner()).await {
         Ok(_) => HttpResponse::NoContent().finish(),
@@ -119,7 +135,12 @@ where
 )]
 pub async fn get_todo<T>(state: web::Data<AppState<T>>, id: web::Path<T::Id>) -> HttpResponse
 where
-    T: Controller,
+    T: Controller<
+        Input = models::TodoWrite,
+        Output = models::TodoRead,
+        Id = models::Id,
+        OptionalInput = models::TodoUpdate,
+    >,
 {
     match state.controller.get(id.into_inner()).await {
         Ok(todo) => HttpResponse::Ok().json(todo),
@@ -159,7 +180,12 @@ pub async fn list_todos<T>(
     pagination: web::Query<ListRequest>,
 ) -> HttpResponse
 where
-    T: Controller,
+    T: Controller<
+        Input = models::TodoWrite,
+        Output = models::TodoRead,
+        Id = models::Id,
+        OptionalInput = models::TodoUpdate,
+    >,
 {
     debug!(state.logger, "Listing todos with request: {:?}", pagination);
     match state.controller.list(pagination.into()).await {
@@ -193,7 +219,12 @@ pub async fn update_todo<T>(
     todo: web::Json<T::OptionalInput>,
 ) -> HttpResponse
 where
-    T: Controller,
+    T: Controller<
+        Input = models::TodoWrite,
+        Output = models::TodoRead,
+        Id = models::Id,
+        OptionalInput = models::TodoUpdate,
+    >,
 {
     match state
         .controller
