@@ -27,8 +27,10 @@ TODO app, mainly for a practical learning experience of Rust
     - [Docker](#docker)
   - [Usage](#usage)
     - [REST API doc](#rest-api-doc)
-      - [Run HTTP server](#run-http-server)
-      - [Visit URL](#visit-url)
+      - [Online](#online)
+      - [Local](#local)
+        - [Run HTTP server](#run-http-server)
+        - [Visit URL](#visit-url)
     - [gRPC API doc](#grpc-api-doc)
       - [Look at the proto files](#look-at-the-proto-files)
   - [Help](#help)
@@ -79,13 +81,19 @@ todors completion bash | sudo tee /etc/bash_completion.d/todors
 
 ### REST API doc
 
-#### Run HTTP server
+#### Online
+
+<https://todors.fly.dev/docs/>
+
+#### Local
+
+##### Run HTTP server
 
 ```bash
 todors serve http
 ```
 
-#### Visit URL
+##### Visit URL
 
 <http://localhost:8080/docs/>
 
