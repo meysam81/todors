@@ -20,18 +20,19 @@ message TodoRead {
   bool done = 3;
 }
 
-message TodoWrite {
+message CreateTodoRequest {
   string title = 1;
   bool done = 2;
 }
 
-message TodoUpdate {
+message UpdateTodoRequest {
   uint32 id = 1;
   optional string title = 2;
   optional bool done = 3;
 }
 
-message TodoId { uint32 id = 1; }
+message DeleteTodoRequest { uint32 id = 1; }
+message GetTodoRequest { uint32 id = 1; }
 
 enum Status {
   OK = 0;
@@ -41,9 +42,9 @@ enum Status {
 message Confirmation { Status status = 1; }
 
 service Todo {
-  rpc Create(TodoWrite) returns (TodoRead);
-  rpc Delete(TodoId) returns (Confirmation);
-  rpc Get(TodoId) returns (TodoRead);
+  rpc Create(CreateTodoRequest) returns (TodoRead);
+  rpc Delete(DeleteTodoRequest) returns (Confirmation);
+  rpc Get(GetTodoRequest) returns (TodoRead);
   rpc List(ListTodosRequest) returns (ListTodosResponse);
-  rpc Update(TodoUpdate) returns (Confirmation);
+  rpc Update(UpdateTodoRequest) returns (Confirmation);
 }

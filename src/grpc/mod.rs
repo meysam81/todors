@@ -12,6 +12,7 @@ use proto::todo::{ListTodosRequest, ListTodosResponse, TodoRead};
 use crate::logging::{error, info, Logger};
 use crate::{entities, models};
 
+use self::logging::Log;
 use crate::traits::Controller;
 
 pub fn build_server<T>(num_workers: usize, state: AppState<T>) -> Router
@@ -28,6 +29,8 @@ where
         .add_service(HealthCheckServer::new(TodoHealthCheck::default()))
         .add_service(TodoServer::new(TodoService::new(state)))
 }
+
+mod logging;
 
 mod proto {
     pub mod healthcheck {
@@ -110,52 +113,62 @@ where
 {
     async fn create(
         &self,
-        request: Request<proto::todo::TodoWrite>,
+        _request: Request<proto::todo::CreateTodoRequest>,
     ) -> Result<Response<proto::todo::TodoRead>, Status> {
-        println!("Got a request: {:?}", request);
-
-        let reply = proto::todo::TodoRead {
-            id: 1,
-            title: "todo 1".to_string(),
-            done: true,
-        };
-
-        Ok(Response::new(reply))
+        todo!()
     }
 
     async fn delete(
         &self,
-        request: Request<proto::todo::TodoId>,
+        _request: Request<proto::todo::DeleteTodoRequest>,
     ) -> Result<Response<proto::todo::Confirmation>, Status> {
-        println!("Got a request: {:?}", request);
-
-        let reply = proto::todo::Confirmation {
-            status: proto::todo::Status::Ok.into(),
-        };
-
-        Ok(Response::new(reply))
+        todo!()
     }
 
     async fn get(
         &self,
-        request: Request<proto::todo::TodoId>,
+        request: Request<proto::todo::GetTodoRequest>,
     ) -> Result<Response<proto::todo::TodoRead>, Status> {
-        println!("Got a request: {:?}", request);
-
-        let reply = proto::todo::TodoRead {
-            id: 1,
-            title: "todo 1".to_string(),
-            done: true,
+        let mut log = Log {
+            rpc: "todo.Todo/Get".to_string(),
+            ..Default::default()
         };
 
-        Ok(Response::new(reply))
+        let request = request.into_inner();
+
+        let start = std::time::Instant::now();
+        let res = self.state.controller.get(request.id).await;
+        let elapsed = start.elapsed();
+
+        log.latency = format!("{:?}", elapsed);
+
+        info!(&self.state.logger, "{}", log);
+
+        match res {
+            Ok(todo) => {
+                let reply = proto::todo::TodoRead {
+                    id: todo.id,
+                    title: todo.title,
+                    done: todo.done,
+                };
+
+                Ok(Response::new(reply))
+            }
+            Err(err) => {
+                error! {&self.state.logger, "Error: {}", err};
+                Err(Status::internal(err.to_string()))
+            }
+        }
     }
 
     async fn list(
         &self,
         request: Request<ListTodosRequest>,
     ) -> Result<Response<ListTodosResponse>, Status> {
-        info!(&self.state.logger, "Got a request: {:?}", request);
+        let mut log = Log {
+            rpc: "todo.Todo/List".to_string(),
+            ..Default::default()
+        };
 
         let request = request.into_inner();
 
@@ -164,7 +177,13 @@ where
             limit: request.offset,
         };
 
+        let start = std::time::Instant::now();
         let res = self.state.controller.list(request).await;
+        let elapsed = start.elapsed();
+
+        log.latency = format!("{:?}", elapsed);
+
+        info!(&self.state.logger, "{}", log);
 
         match res {
             Ok(entities::ListResponse {
@@ -200,14 +219,8 @@ where
 
     async fn update(
         &self,
-        request: Request<proto::todo::TodoUpdate>,
+        _request: Request<proto::todo::UpdateTodoRequest>,
     ) -> Result<Response<proto::todo::Confirmation>, Status> {
-        println!("Got a request: {:?}", request);
-
-        let reply = proto::todo::Confirmation {
-            status: proto::todo::Status::Ok.into(),
-        };
-
-        Ok(Response::new(reply))
+        todo!()
     }
 }

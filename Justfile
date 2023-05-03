@@ -20,7 +20,7 @@ serve-http:
   cargo watch -s sh -- sh -c "clear; cargo run --frozen -- serve http"
 
 serve-grpc:
-  cargo watch -w 'src/' -s sh -- sh -c "clear; cargo run --frozen -- serve grpc"
+  cargo watch -w src -w proto -s sh -- sh -c "clear; cargo run --frozen -- serve grpc"
 
 test:
   cargo t --frozen
