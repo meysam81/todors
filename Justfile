@@ -35,8 +35,8 @@ grpc-client-ping:
 grpc-client-create-todo:
   grpcurl -proto ./proto/todo.proto -import-path ./proto/ -plaintext -d "{\"title\": \"Hello Rust! $$\", \"done\": true}" localhost:50051 todo.Todo/Create
 
-grpc-client-delete-todo:
-  grpcurl -proto ./proto/todo.proto -import-path ./proto/ -plaintext -d '{"id": "1"}' localhost:50051 todo.Todo/Delete
+grpc-client-delete-todo ID:
+  grpcurl -proto ./proto/todo.proto -import-path ./proto/ -plaintext -d '{"id": "{{ID}}"}' localhost:50051 todo.Todo/Delete
 
 grpc-client-get-todo:
   grpcurl -proto ./proto/todo.proto -import-path ./proto/ -plaintext -d '{"id": "1"}' localhost:50051 todo.Todo/Get

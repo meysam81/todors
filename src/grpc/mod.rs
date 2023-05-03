@@ -10,6 +10,7 @@ use proto::healthcheck::{Ping, Pong};
 use proto::todo::todo_server::{Todo, TodoServer};
 use proto::todo::{ListTodosRequest, ListTodosResponse};
 
+use crate::errors::TodoErrors;
 use crate::logging::{error, info, Logger};
 use crate::{entities, models};
 
@@ -121,6 +122,20 @@ impl From<models::TodoRead> for proto::todo::TodoRead {
     }
 }
 
+impl From<()> for proto::todo::Confirmation {
+    fn from(_: ()) -> Self {
+        Self {
+            status: proto::todo::Status::Ok as i32,
+        }
+    }
+}
+
+impl From<TodoErrors> for Status {
+    fn from(err: TodoErrors) -> Self {
+        Status::internal(err.to_string())
+    }
+}
+
 impl<T> From<entities::ListResponse<T>> for ListTodosResponse
 where
     T: crate::serializers::Serialize + From<models::TodoRead>,
@@ -180,7 +195,26 @@ where
         &self,
         _request: Request<proto::todo::DeleteTodoRequest>,
     ) -> Result<Response<proto::todo::Confirmation>, Status> {
-        todo!()
+        let mut log = Log::new("todo.Todo/Delete");
+
+        let request = _request.into_inner();
+        log.args = Some(format!("{:?}", request));
+
+        let start = Instant::now();
+        let res = self.state.controller.delete(request.id).await;
+        let elapsed = start.elapsed();
+
+        log.latency = format!("{:?}", elapsed);
+
+        info!(&self.state.logger, "{}", log);
+
+        match res {
+            Ok(_) => Ok(Response::new(proto::todo::Confirmation::from(()))),
+            Err(err) => {
+                error! {&self.state.logger, "Error: {}", err};
+                Err(Status::internal(err.to_string()))
+            }
+        }
     }
 
     async fn get(
