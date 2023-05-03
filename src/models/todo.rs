@@ -67,7 +67,7 @@ impl TodoController {
 
 #[async_trait]
 impl Controller for TodoController {
-    type Id = u32;
+    type Id = super::Id;
     type Input = TodoWrite;
     type OptionalInput = TodoUpdate;
     type Output = TodoRead;
