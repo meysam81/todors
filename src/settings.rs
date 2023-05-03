@@ -43,7 +43,7 @@ fn default_loglevel() -> String {
 }
 
 fn default_pagination_limit() -> u32 {
-    100
+    crate::consts::DEFAULT_PAGE_LIMIT
 }
 
 fn default_pagination_hard_limit() -> u32 {

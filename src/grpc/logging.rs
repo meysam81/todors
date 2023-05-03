@@ -6,6 +6,7 @@ pub struct Log {
     pub timestamp: String,
     pub rpc: String,
     pub latency: String,
+    pub args: Option<String>,
 }
 
 impl std::fmt::Display for Log {

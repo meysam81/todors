@@ -1,9 +1,19 @@
+use crate::consts::DEFAULT_PAGE_LIMIT;
 use crate::serializers::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize)]
 pub struct ListRequest {
     pub limit: Option<u32>,
     pub offset: Option<u32>,
+}
+
+impl Default for ListRequest {
+    fn default() -> Self {
+        Self {
+            limit: Some(DEFAULT_PAGE_LIMIT),
+            offset: Some(0),
+        }
+    }
 }
 
 #[derive(Debug, Serialize)]

@@ -132,6 +132,7 @@ where
         let mut log = Log::new("todo.Todo/Get");
 
         let request = request.into_inner();
+        log.args = Some(format!("{:?}", request));
 
         let start = std::time::Instant::now();
         let res = self.state.controller.get(request.id).await;
@@ -170,6 +171,7 @@ where
             offset: request.offset,
             limit: request.limit,
         };
+        log.args = Some(format!("{:?}", request));
 
         let start = std::time::Instant::now();
         let res = self.state.controller.list(request).await;

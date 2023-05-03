@@ -9,6 +9,7 @@ use std::sync::Arc;
 
 mod apidoc;
 mod cli;
+mod consts;
 mod db;
 mod entities;
 mod errors;

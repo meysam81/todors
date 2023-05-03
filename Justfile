@@ -41,8 +41,8 @@ grpc-client-delete-todo:
 grpc-client-get-todo:
   grpcurl -proto ./proto/todo.proto -import-path ./proto/ -plaintext -d '{"id": "1"}' localhost:50051 todo.Todo/Get
 
-grpc-client-list-todos:
-  grpcurl -proto ./proto/todo.proto -import-path ./proto/ -plaintext -d '{"offset": 5, "limit": 5}' localhost:50051 todo.Todo/List
+grpc-client-list-todos *BODY:
+  grpcurl -proto ./proto/todo.proto -import-path ./proto/ -plaintext {{BODY}} localhost:50051 todo.Todo/List
 
 grpc-client-update-todo:
   grpcurl -proto ./proto/todo.proto -import-path ./proto/ -plaintext -d '{"id": "1", "title": "Hello Rust!", "done": true}' localhost:50051 todo.Todo/Update
