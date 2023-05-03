@@ -1,4 +1,5 @@
 use std::sync::Arc;
+use std::time::Instant;
 
 use tonic::transport::{server::Router, Server};
 use tonic::{Request, Response, Status};
@@ -173,7 +174,7 @@ where
         };
         log.args = Some(format!("{:?}", request));
 
-        let start = std::time::Instant::now();
+        let start = Instant::now();
         let res = self.state.controller.list(request).await;
         let elapsed = start.elapsed();
 

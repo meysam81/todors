@@ -1,4 +1,5 @@
 use std::future::{ready, Ready};
+use std::time::Instant;
 
 use crate::serializers::{to_json, Serialize};
 use actix_web::{
@@ -86,7 +87,7 @@ where
         let fut = self.service.call(req);
 
         Box::pin(async move {
-            let start = std::time::Instant::now();
+            let start = Instant::now();
             let res = fut.await?;
             let elapsed = start.elapsed();
 
