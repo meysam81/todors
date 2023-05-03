@@ -148,9 +148,32 @@ where
 {
     async fn create(
         &self,
-        _request: Request<proto::todo::CreateTodoRequest>,
+        request: Request<proto::todo::CreateTodoRequest>,
     ) -> Result<Response<proto::todo::TodoRead>, Status> {
-        todo!()
+        let mut log = Log::new("todo.Todo/Create");
+
+        let request = request.into_inner();
+        log.args = Some(format!("{:?}", request));
+
+        let start = Instant::now();
+        let res = self
+            .state
+            .controller
+            .create(models::TodoWrite::from(request))
+            .await;
+        let elapsed = start.elapsed();
+
+        log.latency = format!("{:?}", elapsed);
+
+        info!(&self.state.logger, "{}", log);
+
+        match res {
+            Ok(todo) => Ok(Response::new(proto::todo::TodoRead::from(todo))),
+            Err(err) => {
+                error! {&self.state.logger, "Error: {}", err};
+                Err(Status::internal(err.to_string()))
+            }
+        }
     }
 
     async fn delete(
