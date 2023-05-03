@@ -11,7 +11,7 @@ use proto::todo::todo_server::{Todo, TodoServer};
 use proto::todo::{ListTodosRequest, ListTodosResponse};
 
 use crate::errors::TodoErrors;
-use crate::logging::{error, info, Logger};
+use crate::logging::{info, Logger};
 use crate::{entities, models};
 
 use self::logging::Log;
@@ -132,18 +132,17 @@ impl From<()> for proto::todo::Confirmation {
 
 impl From<TodoErrors> for Status {
     fn from(err: TodoErrors) -> Self {
-        Status::internal(err.to_string())
+        match err {
+            TodoErrors::TodoNotFound => Status::not_found(err.to_string()),
+            _ => Status::internal(err.to_string()),
+        }
     }
 }
 
-impl<T> From<entities::ListResponse<T>> for ListTodosResponse
-where
-    T: crate::serializers::Serialize + From<models::TodoRead>,
-    Vec<proto::todo::TodoRead>: std::convert::From<Vec<T>>,
-{
-    fn from(response: entities::ListResponse<T>) -> Self {
+impl From<entities::ListResponse<models::TodoRead>> for ListTodosResponse {
+    fn from(response: entities::ListResponse<models::TodoRead>) -> Self {
         Self {
-            data: response.data.into(),
+            data: response.data.into_iter().map(|x| x.into()).collect(),
             total: response.total,
             offset: response.offset,
             limit: response.limit,
@@ -175,22 +174,15 @@ where
             .state
             .controller
             .create(models::TodoWrite::from(request))
-            .await;
+            .await?;
         let elapsed = start.elapsed();
 
         log.latency = format!("{:?}", elapsed);
 
         info!(&self.state.logger, "{}", log);
 
-        match res {
-            Ok(todo) => Ok(Response::new(proto::todo::TodoRead::from(todo))),
-            Err(err) => {
-                error! {&self.state.logger, "Error: {}", err};
-                Err(Status::internal(err.to_string()))
-            }
-        }
+        Ok(Response::new(proto::todo::TodoRead::from(res)))
     }
-
     async fn delete(
         &self,
         _request: Request<proto::todo::DeleteTodoRequest>,
@@ -201,20 +193,14 @@ where
         log.args = Some(format!("{:?}", request));
 
         let start = Instant::now();
-        let res = self.state.controller.delete(request.id).await;
+        let _res = self.state.controller.delete(request.id).await?;
         let elapsed = start.elapsed();
 
         log.latency = format!("{:?}", elapsed);
 
         info!(&self.state.logger, "{}", log);
 
-        match res {
-            Ok(_) => Ok(Response::new(proto::todo::Confirmation::from(()))),
-            Err(err) => {
-                error! {&self.state.logger, "Error: {}", err};
-                Err(Status::internal(err.to_string()))
-            }
-        }
+        Ok(Response::new(proto::todo::Confirmation::from(())))
     }
 
     async fn get(
@@ -227,20 +213,14 @@ where
         log.args = Some(format!("{:?}", request));
 
         let start = Instant::now();
-        let res = self.state.controller.get(request.id).await;
+        let res = self.state.controller.get(request.id).await?;
         let elapsed = start.elapsed();
 
         log.latency = format!("{:?}", elapsed);
 
         info!(&self.state.logger, "{}", log);
 
-        match res {
-            Ok(todo) => Ok(Response::new(proto::todo::TodoRead::from(todo))),
-            Err(err) => {
-                error! {&self.state.logger, "Error: {}", err};
-                Err(Status::internal(err.to_string()))
-            }
-        }
+        Ok(Response::new(proto::todo::TodoRead::from(res)))
     }
 
     async fn list(
@@ -258,29 +238,14 @@ where
         log.args = Some(format!("{:?}", request));
 
         let start = Instant::now();
-        let res = self.state.controller.list(request).await;
+        let res = self.state.controller.list(request).await?;
         let elapsed = start.elapsed();
 
         log.latency = format!("{:?}", elapsed);
 
         info!(&self.state.logger, "{}", log);
 
-        match res {
-            Ok(result) => {
-                let reply = ListTodosResponse {
-                    data: result.data.into_iter().map(|todo| todo.into()).collect(),
-                    total: result.total,
-                    offset: result.offset,
-                    limit: result.limit,
-                };
-
-                Ok(Response::new(reply))
-            }
-            Err(err) => {
-                error! {&self.state.logger, "Error: {}", err};
-                Err(Status::internal(err.to_string()))
-            }
-        }
+        Ok(Response::new(proto::todo::ListTodosResponse::from(res)))
     }
 
     async fn update(

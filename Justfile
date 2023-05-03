@@ -38,8 +38,8 @@ grpc-client-create-todo:
 grpc-client-delete-todo ID:
   grpcurl -proto ./proto/todo.proto -import-path ./proto/ -plaintext -d '{"id": "{{ID}}"}' localhost:50051 todo.Todo/Delete
 
-grpc-client-get-todo:
-  grpcurl -proto ./proto/todo.proto -import-path ./proto/ -plaintext -d '{"id": "1"}' localhost:50051 todo.Todo/Get
+grpc-client-get-todo ID:
+  grpcurl -proto ./proto/todo.proto -import-path ./proto/ -plaintext -d '{"id": "{{ID}}"}' localhost:50051 todo.Todo/Get
 
 grpc-client-list-todos *BODY:
   grpcurl -proto ./proto/todo.proto -import-path ./proto/ -plaintext {{BODY}} localhost:50051 todo.Todo/List
