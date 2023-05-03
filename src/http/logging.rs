@@ -1,3 +1,4 @@
+use chrono::{SecondsFormat, Utc};
 use std::future::{ready, Ready};
 use std::time::Instant;
 
@@ -39,7 +40,7 @@ impl Log {
         client_real_ip: String,
     ) -> Self {
         Self {
-            timestamp: chrono::Utc::now().to_rfc3339_opts(chrono::SecondsFormat::Secs, true),
+            timestamp: Utc::now().to_rfc3339_opts(SecondsFormat::Secs, true),
             method,
             path,
             query_params,
