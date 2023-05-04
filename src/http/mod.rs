@@ -65,12 +65,12 @@ where
     cfg.service(index::index)
         .service(
             web::scope("/api/v1")
-                .route("/todos", web::post().to(todo::create_todo::<T>))
-                .route("/todos", web::put().to(todo::create_batch::<T>))
-                .route("/todos/{id}", web::get().to(todo::get_todo::<T>))
-                .route("/todos/{id}", web::delete().to(todo::delete_todo::<T>))
-                .route("/todos", web::get().to(todo::list_todos::<T>))
-                .route("/todos/{id}", web::patch().to(todo::update_todo::<T>)),
+                .route("/todos", web::post().to(todo::Api::<T>::create_todo))
+                .route("/todos", web::put().to(todo::Api::<T>::create_batch))
+                .route("/todos/{id}", web::get().to(todo::Api::<T>::get_todo))
+                .route("/todos/{id}", web::delete().to(todo::Api::<T>::delete_todo))
+                .route("/todos", web::get().to(todo::Api::<T>::list_todos))
+                .route("/todos/{id}", web::patch().to(todo::Api::<T>::update_todo)),
         )
         .service(
             SwaggerUi::new("/docs/{_:.*}")
