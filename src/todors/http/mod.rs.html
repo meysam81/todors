@@ -182,12 +182,12 @@
     cfg.service(index::index)
         .service(
             web::scope(<span class="string">&quot;/api/v1&quot;</span>)
-                .route(<span class="string">&quot;/todos&quot;</span>, web::post().to(todo::create_todo::&lt;T&gt;))
-                .route(<span class="string">&quot;/todos&quot;</span>, web::put().to(todo::create_batch::&lt;T&gt;))
-                .route(<span class="string">&quot;/todos/{id}&quot;</span>, web::get().to(todo::get_todo::&lt;T&gt;))
-                .route(<span class="string">&quot;/todos/{id}&quot;</span>, web::delete().to(todo::delete_todo::&lt;T&gt;))
-                .route(<span class="string">&quot;/todos&quot;</span>, web::get().to(todo::list_todos::&lt;T&gt;))
-                .route(<span class="string">&quot;/todos/{id}&quot;</span>, web::patch().to(todo::update_todo::&lt;T&gt;)),
+                .route(<span class="string">&quot;/todos&quot;</span>, web::post().to(todo::Api::&lt;T&gt;::create_todo))
+                .route(<span class="string">&quot;/todos&quot;</span>, web::put().to(todo::Api::&lt;T&gt;::create_batch))
+                .route(<span class="string">&quot;/todos/{id}&quot;</span>, web::get().to(todo::Api::&lt;T&gt;::get_todo))
+                .route(<span class="string">&quot;/todos/{id}&quot;</span>, web::delete().to(todo::Api::&lt;T&gt;::delete_todo))
+                .route(<span class="string">&quot;/todos&quot;</span>, web::get().to(todo::Api::&lt;T&gt;::list_todos))
+                .route(<span class="string">&quot;/todos/{id}&quot;</span>, web::patch().to(todo::Api::&lt;T&gt;::update_todo)),
         )
         .service(
             SwaggerUi::new(<span class="string">&quot;/docs/{_:.*}&quot;</span>)
