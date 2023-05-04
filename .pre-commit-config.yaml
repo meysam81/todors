@@ -11,3 +11,4 @@ repos:
           - --no-deps
           - --fix
           - --allow-staged
+          - --allow-dirty
