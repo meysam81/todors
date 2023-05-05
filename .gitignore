@@ -28,3 +28,4 @@ vendor
 secrets
 benchmark
 cargo-test-*
+**/*.lcov
