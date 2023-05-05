@@ -26,8 +26,9 @@ jobs:
             target
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - name: Install Rust stable
-        run: |
-          rustup toolchain install stable
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: llvm-tools-preview
       - name: Install mold
         uses: rui314/setup-mold@v1
       - env:
@@ -49,5 +50,4 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: true
           files: target/coverage/*.lcov
-          flags: unittests
 # grcov . --binary-path ./target/debug/ -s . -t html --branch --ignore-not-existing --ignore "/*" -o ./target/debug/coverage/
