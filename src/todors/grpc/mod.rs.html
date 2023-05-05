@@ -364,7 +364,7 @@
 <span class="attr">#[tonic::async_trait]
 </span><span class="kw">impl </span>HealthCheck <span class="kw">for </span>TodoHealthCheck {
     <span class="kw">async fn </span>check(<span class="kw-2">&amp;</span><span class="self">self</span>, request: Request&lt;Ping&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;Response&lt;Pong&gt;, Status&gt; {
-        <span class="macro">println!</span>(<span class="string">&quot;Got a request: {:?}&quot;</span>, request);
+        <span class="macro">println!</span>(<span class="string">&quot;{:?}&quot;</span>, request);
 
         <span class="kw">let </span>reply = Pong {
             message: <span class="string">&quot;pong&quot;</span>.to_string(),
