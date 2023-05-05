@@ -27,3 +27,4 @@ rust-project.json
 vendor
 secrets
 benchmark
+cargo-test-*
