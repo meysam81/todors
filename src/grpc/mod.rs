@@ -81,7 +81,7 @@ struct TodoHealthCheck {}
 #[tonic::async_trait]
 impl HealthCheck for TodoHealthCheck {
     async fn check(&self, request: Request<Ping>) -> Result<Response<Pong>, Status> {
-        println!("Got a request: {:?}", request);
+        println!("{:?}", request);
 
         let reply = Pong {
             message: "pong".to_string(),
