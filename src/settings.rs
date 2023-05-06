@@ -30,10 +30,6 @@ fn default_dburl() -> String {
     let user_home = dirs::home_dir().unwrap();
     let path = user_home.join(".todors");
 
-    if let Err(e) = std::fs::create_dir_all(&path) {
-        eprintln!("Failed to create directory: {}", e);
-    }
-
     let path = path.join("db.sqlite");
     path.to_str().unwrap().to_string()
 }
@@ -52,4 +48,30 @@ fn default_pagination_hard_limit() -> u32 {
 
 fn default_create_batch_hard_limit() -> u32 {
     1000
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::env;
+
+    #[test]
+    fn db_url_will_take_default_if_env_is_not_provided() {
+        let old_db_url = env::var("DB_URL");
+        env::remove_var("DB_URL");
+        let settings = Settings::new().unwrap();
+        assert_eq!(settings.db_url, default_dburl());
+        if let Ok(db_url) = old_db_url {
+            env::set_var("DB_URL", db_url);
+        }
+    }
+
+    #[test]
+    fn db_url_is_overriden_from_env() {
+        let db_url = "sqlite://:memory:";
+        env::set_var("DB_URL", db_url);
+        let settings = Settings::new().unwrap();
+        assert_eq!(settings.db_url, db_url);
+        env::remove_var("DB_URL");
+    }
 }

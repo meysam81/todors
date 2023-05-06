@@ -6,6 +6,7 @@ pub async fn connect(conn: &str, max_conn: Option<u32>) -> Result<SqlitePool, sq
     let max_conn = max_conn.unwrap_or(5);
 
     if !conn.contains(":memory:") && !std::path::Path::new(conn).exists() {
+        std::fs::create_dir_all(std::path::Path::new(conn).parent().unwrap())?;
         std::fs::File::create(conn)?;
     }
 
