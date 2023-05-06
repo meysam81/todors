@@ -29,3 +29,4 @@ secrets
 benchmark
 cargo-test-*
 **/*.lcov
+coverage

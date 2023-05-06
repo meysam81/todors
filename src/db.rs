@@ -5,7 +5,7 @@ pub use sqlx::{query, query_as, Error, FromRow, Row};
 pub async fn connect(conn: &str, max_conn: Option<u32>) -> Result<SqlitePool, sqlx::Error> {
     let max_conn = max_conn.unwrap_or(5);
 
-    if !std::path::Path::new(conn).exists() {
+    if !conn.contains(":memory:") && !std::path::Path::new(conn).exists() {
         std::fs::File::create(conn)?;
     }
 

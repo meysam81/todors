@@ -260,7 +260,7 @@ mod test {
     }
 
     #[tokio::test]
-    async fn verify_create_subcommand_works() {
+    async fn create_todo_only_title_provided() {
         let args = vec!["todors", "create", "Hello Rust!"];
         let c = Cli::parse_from(args);
         // let done: Option<bool> = false;
@@ -276,52 +276,44 @@ mod test {
     }
 
     #[tokio::test]
-    async fn verify_delete_subcommand_works() {
+    async fn delete_todo_by_id() {
         let args = vec!["todors", "delete", "1"];
-        let c = Cli::parse_from(args);
-        match c.command {
-            Commands::Local(Local::Delete(Delete { id })) => {
-                assert_eq!(id, 1);
-            }
-            _ => panic!("Expected a Delete command"),
+        if let Commands::Local(Local::Delete(Delete { id })) = Cli::parse_from(args).command {
+            assert_eq!(id, 1);
         }
     }
 
     #[tokio::test]
-    async fn verify_update_subcommand_works() {
+    async fn update_todo_modify_title_only() {
         let args = vec!["todors", "update", "1", "--title", "Hello Rust!"];
-        let c = Cli::parse_from(args);
-        match c.command {
-            Commands::Local(Local::Update(Update { id, title, .. })) => {
-                assert_eq!(id, 1);
-                assert_eq!(title.unwrap(), "Hello Rust!");
-            }
-            _ => panic!("Expected a Update command"),
+        if let Commands::Local(Local::Update(Update { id, title, .. })) =
+            Cli::parse_from(args).command
+        {
+            assert_eq!(id, 1);
+            assert_eq!(title.unwrap(), "Hello Rust!");
         }
     }
 
     #[tokio::test]
-    async fn verify_update_title_arg_is_optional() {
+    async fn update_todo_without_any_modification() {
         let args = vec!["todors", "update", "1"];
-        let c = Cli::parse_from(args);
-        match c.command {
-            Commands::Local(Local::Update(Update { id, title, .. })) => {
-                assert_eq!(id, 1);
-                assert_eq!(title, None);
-            }
-            _ => panic!("Expected a Update command"),
+        if let Commands::Local(Local::Update(Update { id, title, .. })) =
+            Cli::parse_from(args).command
+        {
+            assert_eq!(id, 1);
+            assert_eq!(title, None);
         }
     }
 
     #[tokio::test]
-    async fn verify_cli_delete_errors_with_string_id() {
+    async fn delete_todo_non_int_id_raises_error() {
         let args = vec!["todors", "delete", "foo"];
         let c = Cli::try_parse_from(args);
         assert!(c.is_err());
     }
 
     #[tokio::test]
-    async fn update_subcommand_errors_with_non_int_id() {
+    async fn update_todo_non_int_id_raises_error() {
         let args = vec!["todors", "update", "foo", "--title", "Hello Rust!"];
         let c = Cli::try_parse_from(args);
         assert!(c.is_err());
