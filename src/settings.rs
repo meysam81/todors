@@ -35,7 +35,7 @@ fn default_dburl() -> String {
 }
 
 fn default_loglevel() -> String {
-    "info".to_string()
+    crate::consts::DEFAULT_LOG_LEVEL.to_string()
 }
 
 fn default_pagination_limit() -> u32 {
@@ -43,19 +43,21 @@ fn default_pagination_limit() -> u32 {
 }
 
 fn default_pagination_hard_limit() -> u32 {
-    1000
+    crate::consts::DEFAULT_PAGE_HARD_LIMIT
 }
 
 fn default_create_batch_hard_limit() -> u32 {
-    1000
+    crate::consts::DEFAULT_CREATE_BATCH_HARD_LIMIT
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use serial_test::serial;
     use std::env;
 
     #[test]
+    #[serial]
     fn db_url_will_take_default_if_env_is_not_provided() {
         let old_db_url = env::var("DB_URL");
         env::remove_var("DB_URL");
@@ -67,11 +69,17 @@ mod tests {
     }
 
     #[test]
+    #[serial]
     fn db_url_is_overriden_from_env() {
+        let old_db_url = env::var("DB_URL");
         let db_url = "sqlite://:memory:";
         env::set_var("DB_URL", db_url);
         let settings = Settings::new().unwrap();
         assert_eq!(settings.db_url, db_url);
-        env::remove_var("DB_URL");
+        if let Ok(db_url) = old_db_url {
+            env::set_var("DB_URL", db_url);
+        } else {
+            env::remove_var("DB_URL");
+        }
     }
 }

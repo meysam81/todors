@@ -45,7 +45,7 @@ where
         App::new()
             .app_data(state.clone())
             .configure(configure::<T>)
-            .wrap(logging::LogMiddleware::default())
+            .wrap(logging::LogMiddleware)
     })
     .bind(addr)
     .unwrap()

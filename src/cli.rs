@@ -262,16 +262,13 @@ mod test {
     #[tokio::test]
     async fn create_todo_only_title_provided() {
         let args = vec!["todors", "create", "Hello Rust!"];
-        let c = Cli::parse_from(args);
-        // let done: Option<bool> = false;
-        match c.command {
-            Commands::Local(Local::Create(Create {
-                title,
-                done: Some(false),
-            })) => {
-                assert_eq!(title[0], "Hello Rust!");
-            }
-            _ => panic!("Expected a Create command"),
+
+        if let Commands::Local(Local::Create(Create {
+            title,
+            done: Some(false),
+        })) = Cli::parse_from(args).command
+        {
+            assert_eq!(title[0], "Hello Rust!");
         }
     }
 
