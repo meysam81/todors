@@ -89,7 +89,7 @@ impl Controller for TodoController {
 
         Ok(TodoRead {
             id,
-            title: todo.title.clone(),
+            title: todo.title,
             done: todo.done,
         })
     }
@@ -233,5 +233,191 @@ impl Controller for TodoController {
         // I don't know of any other way to get the number of rows affected ATM
 
         Ok(())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::db::{connect, Pool};
+    use fake::{Dummy, Fake, Faker};
+
+    #[derive(Debug, Dummy, Clone)]
+    struct RandomTodo {
+        title: String,
+        done: bool,
+    }
+
+    impl From<RandomTodo> for TodoWrite {
+        fn from(todo: RandomTodo) -> Self {
+            Self {
+                title: todo.title,
+                done: todo.done,
+            }
+        }
+    }
+
+    impl From<RandomTodo> for TodoUpdate {
+        fn from(todo: RandomTodo) -> Self {
+            Self {
+                title: Some(todo.title),
+                done: Some(todo.done),
+            }
+        }
+    }
+
+    /// get a in-memory database
+    async fn get_pool() -> Pool {
+        connect("sqlite://:memory:", None).await.unwrap()
+    }
+
+    fn get_rand_todo() -> RandomTodo {
+        Faker.fake::<RandomTodo>()
+    }
+
+    async fn get_controller() -> TodoController {
+        let pool = get_pool().await;
+        TodoController::new(pool, None, None, None)
+    }
+
+    #[tokio::test]
+    async fn create_result_is_the_same_as_input() {
+        let controller = get_controller().await;
+
+        let todo = get_rand_todo();
+
+        let res = controller.create(todo.clone().into()).await.unwrap();
+
+        assert_eq!(res.title, todo.title);
+        assert_eq!(res.done, todo.done);
+    }
+
+    #[tokio::test]
+    async fn create_batch_result_is_the_same_as_input() {
+        let controller = get_controller().await;
+
+        let todos = vec![get_rand_todo(), get_rand_todo(), get_rand_todo()];
+
+        let res = controller
+            .create_batch(todos.clone().into_iter().map(|t| t.into()).collect())
+            .await
+            .unwrap();
+
+        assert_eq!(res.len(), todos.len());
+    }
+
+    #[tokio::test]
+    async fn create_batch_more_than_hard_limit_returns_error() {
+        let controller = TodoController::new(get_pool().await, None, None, Some(1));
+
+        let todos = vec![get_rand_todo(), get_rand_todo(), get_rand_todo()];
+
+        let res = controller
+            .create_batch(todos.clone().into_iter().map(|t| t.into()).collect())
+            .await;
+
+        assert!(res.is_err());
+    }
+
+    #[tokio::test]
+    async fn delete_returns_error_if_todo_not_found() {
+        let controller = get_controller().await;
+        let random_id = Faker.fake::<u32>();
+
+        let res = controller.delete(random_id).await;
+
+        assert!(res.is_err());
+    }
+
+    #[tokio::test]
+    async fn delete_returns_ok_if_todo_found() {
+        let controller = get_controller().await;
+
+        let todo = get_rand_todo();
+
+        let res = controller.create(todo.into()).await.unwrap();
+
+        let res = controller.delete(res.id).await;
+
+        assert!(res.is_ok());
+    }
+
+    #[tokio::test]
+    async fn get_returns_error_if_todo_not_found() {
+        let controller = get_controller().await;
+        let random_id = Faker.fake::<u32>();
+
+        let res = controller.get(random_id).await;
+
+        assert!(res.is_err());
+    }
+
+    #[tokio::test]
+    async fn get_returns_ok_if_todo_found() {
+        let controller = get_controller().await;
+
+        let todo = get_rand_todo();
+
+        let res = controller.create(todo.clone().into()).await.unwrap();
+
+        let res = controller.get(res.id).await.unwrap();
+
+        assert_eq!(res.title, todo.title);
+        assert_eq!(res.done, todo.done);
+    }
+
+    #[tokio::test]
+    async fn list_returns_empty_with_empty_db() {
+        let controller = get_controller().await;
+
+        let res = controller.list(ListRequest::default()).await.unwrap();
+
+        assert_eq!(res.data.len(), 0);
+    }
+
+    #[tokio::test]
+    async fn list_returns_all_todos() {
+        let controller = get_controller().await;
+
+        let todos = vec![get_rand_todo(), get_rand_todo(), get_rand_todo()];
+
+        controller
+            .create_batch(todos.clone().into_iter().map(|t| t.into()).collect())
+            .await
+            .unwrap();
+
+        let res = controller.list(ListRequest::default()).await.unwrap();
+
+        assert_eq!(res.data.len(), todos.len());
+    }
+
+    #[tokio::test]
+    async fn list_returns_limited_todos() {
+        let batch_hard_limit = 1;
+        let controller = TodoController::new(get_pool().await, None, Some(batch_hard_limit), None);
+
+        let todos = vec![get_rand_todo(), get_rand_todo(), get_rand_todo()];
+
+        controller
+            .create_batch(todos.clone().into_iter().map(|t| t.into()).collect())
+            .await
+            .unwrap();
+
+        let res = controller.list(ListRequest::default()).await.unwrap();
+
+        assert_eq!(res.data.len(), batch_hard_limit as usize);
+    }
+
+    #[tokio::test]
+    async fn update_todo() {
+        let controller = get_controller().await;
+
+        let todo = get_rand_todo();
+
+        let res = controller.create(todo.into()).await.unwrap();
+
+        let res = controller.update(res.id, get_rand_todo().into()).await;
+
+        assert!(res.is_ok());
     }
 }

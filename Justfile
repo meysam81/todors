@@ -22,8 +22,17 @@ serve-http:
 serve-grpc:
   cargo watch -w src -w proto -s sh -- sh -c "clear; cargo run --frozen -- serve grpc"
 
-test:
+test $CARGO_INCREMENTAL="0" $RUSTFLAGS="-Cinstrument-coverage" $LLVM_PROFILE_FILE="coverage/cargo-test-%p-%m.profraw":
+  mkdir -p coverage
   cargo t --frozen
+  grcov . --binary-path ./target/debug/deps/ -s . -t lcov --branch --ignore-not-existing --ignore '../*' --ignore "/*" -o coverage/coverage.lcov
+
+coverage-html:
+  mkdir -p coverage/html
+  grcov . --binary-path ./target/debug/deps/ -s . -t html --branch --ignore-not-existing --ignore '../*' --ignore "/*" -o coverage/
+
+serve-coverage-html:
+  python -m http.server -d coverage/html 9000
 
 clean:
   cargo clean
