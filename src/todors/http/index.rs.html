@@ -13,6 +13,22 @@
 <a href="#13" id="13">13</a>
 <a href="#14" id="14">14</a>
 <a href="#15" id="15">15</a>
+<a href="#16" id="16">16</a>
+<a href="#17" id="17">17</a>
+<a href="#18" id="18">18</a>
+<a href="#19" id="19">19</a>
+<a href="#20" id="20">20</a>
+<a href="#21" id="21">21</a>
+<a href="#22" id="22">22</a>
+<a href="#23" id="23">23</a>
+<a href="#24" id="24">24</a>
+<a href="#25" id="25">25</a>
+<a href="#26" id="26">26</a>
+<a href="#27" id="27">27</a>
+<a href="#28" id="28">28</a>
+<a href="#29" id="29">29</a>
+<a href="#30" id="30">30</a>
+<a href="#31" id="31">31</a>
 </pre><pre class="rust"><code><span class="kw">use </span>actix_web::{get, HttpResponse};
 
 <span class="attr">#[utoipa::path(
@@ -27,6 +43,22 @@
     HttpResponse::Ok()
         .content_type(<span class="string">&quot;text/plain&quot;</span>.as_bytes())
         .body(<span class="string">&quot;Hello from Todors written in Rust!&quot;</span>)
+}
+
+<span class="attr">#[cfg(test)]
+</span><span class="kw">mod </span>tests {
+    <span class="kw">use super</span>::<span class="kw-2">*</span>;
+    <span class="kw">use </span>actix_web::{test, App};
+
+    <span class="attr">#[actix_web::test]
+    </span><span class="kw">async fn </span>index_uri() {
+        <span class="kw">let </span>app = test::init_service(App::new().service(index)).<span class="kw">await</span>;
+
+        <span class="kw">let </span>req = test::TestRequest::get().uri(<span class="string">&quot;/&quot;</span>).to_request();
+        <span class="kw">let </span>resp = test::call_service(<span class="kw-2">&amp;</span>app, req).<span class="kw">await</span>;
+
+        <span class="macro">assert!</span>(resp.status().is_success());
+    }
 }
 </code></pre></div>
 </section></main><div id="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="todors" data-themes="" data-resource-suffix="" data-rustdoc-version="1.69.0 (84c898d65 2023-04-16)" data-search-js="search-8a59a8356673ec1f.js" data-settings-js="settings-f0c5c39777a9a2f6.js" data-settings-css="settings-0bcba95ff279c1db.css" ></div></body></html>

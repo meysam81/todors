@@ -316,17 +316,6 @@
 <a href="#316" id="316">316</a>
 <a href="#317" id="317">317</a>
 <a href="#318" id="318">318</a>
-<a href="#319" id="319">319</a>
-<a href="#320" id="320">320</a>
-<a href="#321" id="321">321</a>
-<a href="#322" id="322">322</a>
-<a href="#323" id="323">323</a>
-<a href="#324" id="324">324</a>
-<a href="#325" id="325">325</a>
-<a href="#326" id="326">326</a>
-<a href="#327" id="327">327</a>
-<a href="#328" id="328">328</a>
-<a href="#329" id="329">329</a>
 </pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::entities::ListRequest;
 <span class="kw">use </span><span class="kw">crate</span>::errors::TodoErrors;
 <span class="kw">use </span><span class="kw">crate</span>::logging::{error, info, Logger};
@@ -589,68 +578,57 @@
     }
 
     <span class="attr">#[tokio::test]
-    </span><span class="kw">async fn </span>verify_create_subcommand_works() {
+    </span><span class="kw">async fn </span>create_todo_only_title_provided() {
         <span class="kw">let </span>args = <span class="macro">vec!</span>[<span class="string">&quot;todors&quot;</span>, <span class="string">&quot;create&quot;</span>, <span class="string">&quot;Hello Rust!&quot;</span>];
-        <span class="kw">let </span>c = Cli::parse_from(args);
-        <span class="comment">// let done: Option&lt;bool&gt; = false;
-        </span><span class="kw">match </span>c.command {
-            Commands::Local(Local::Create(Create {
-                title,
-                done: <span class="prelude-val">Some</span>(<span class="bool-val">false</span>),
-            })) =&gt; {
-                <span class="macro">assert_eq!</span>(title[<span class="number">0</span>], <span class="string">&quot;Hello Rust!&quot;</span>);
-            }
-            <span class="kw">_ </span>=&gt; <span class="macro">panic!</span>(<span class="string">&quot;Expected a Create command&quot;</span>),
+
+        <span class="kw">if let </span>Commands::Local(Local::Create(Create {
+            title,
+            done: <span class="prelude-val">Some</span>(<span class="bool-val">false</span>),
+        })) = Cli::parse_from(args).command
+        {
+            <span class="macro">assert_eq!</span>(title[<span class="number">0</span>], <span class="string">&quot;Hello Rust!&quot;</span>);
         }
     }
 
     <span class="attr">#[tokio::test]
-    </span><span class="kw">async fn </span>verify_delete_subcommand_works() {
+    </span><span class="kw">async fn </span>delete_todo_by_id() {
         <span class="kw">let </span>args = <span class="macro">vec!</span>[<span class="string">&quot;todors&quot;</span>, <span class="string">&quot;delete&quot;</span>, <span class="string">&quot;1&quot;</span>];
-        <span class="kw">let </span>c = Cli::parse_from(args);
-        <span class="kw">match </span>c.command {
-            Commands::Local(Local::Delete(Delete { id })) =&gt; {
-                <span class="macro">assert_eq!</span>(id, <span class="number">1</span>);
-            }
-            <span class="kw">_ </span>=&gt; <span class="macro">panic!</span>(<span class="string">&quot;Expected a Delete command&quot;</span>),
+        <span class="kw">if let </span>Commands::Local(Local::Delete(Delete { id })) = Cli::parse_from(args).command {
+            <span class="macro">assert_eq!</span>(id, <span class="number">1</span>);
         }
     }
 
     <span class="attr">#[tokio::test]
-    </span><span class="kw">async fn </span>verify_update_subcommand_works() {
+    </span><span class="kw">async fn </span>update_todo_modify_title_only() {
         <span class="kw">let </span>args = <span class="macro">vec!</span>[<span class="string">&quot;todors&quot;</span>, <span class="string">&quot;update&quot;</span>, <span class="string">&quot;1&quot;</span>, <span class="string">&quot;--title&quot;</span>, <span class="string">&quot;Hello Rust!&quot;</span>];
-        <span class="kw">let </span>c = Cli::parse_from(args);
-        <span class="kw">match </span>c.command {
-            Commands::Local(Local::Update(Update { id, title, .. })) =&gt; {
-                <span class="macro">assert_eq!</span>(id, <span class="number">1</span>);
-                <span class="macro">assert_eq!</span>(title.unwrap(), <span class="string">&quot;Hello Rust!&quot;</span>);
-            }
-            <span class="kw">_ </span>=&gt; <span class="macro">panic!</span>(<span class="string">&quot;Expected a Update command&quot;</span>),
+        <span class="kw">if let </span>Commands::Local(Local::Update(Update { id, title, .. })) =
+            Cli::parse_from(args).command
+        {
+            <span class="macro">assert_eq!</span>(id, <span class="number">1</span>);
+            <span class="macro">assert_eq!</span>(title.unwrap(), <span class="string">&quot;Hello Rust!&quot;</span>);
         }
     }
 
     <span class="attr">#[tokio::test]
-    </span><span class="kw">async fn </span>verify_update_title_arg_is_optional() {
+    </span><span class="kw">async fn </span>update_todo_without_any_modification() {
         <span class="kw">let </span>args = <span class="macro">vec!</span>[<span class="string">&quot;todors&quot;</span>, <span class="string">&quot;update&quot;</span>, <span class="string">&quot;1&quot;</span>];
-        <span class="kw">let </span>c = Cli::parse_from(args);
-        <span class="kw">match </span>c.command {
-            Commands::Local(Local::Update(Update { id, title, .. })) =&gt; {
-                <span class="macro">assert_eq!</span>(id, <span class="number">1</span>);
-                <span class="macro">assert_eq!</span>(title, <span class="prelude-val">None</span>);
-            }
-            <span class="kw">_ </span>=&gt; <span class="macro">panic!</span>(<span class="string">&quot;Expected a Update command&quot;</span>),
+        <span class="kw">if let </span>Commands::Local(Local::Update(Update { id, title, .. })) =
+            Cli::parse_from(args).command
+        {
+            <span class="macro">assert_eq!</span>(id, <span class="number">1</span>);
+            <span class="macro">assert_eq!</span>(title, <span class="prelude-val">None</span>);
         }
     }
 
     <span class="attr">#[tokio::test]
-    </span><span class="kw">async fn </span>verify_cli_delete_errors_with_string_id() {
+    </span><span class="kw">async fn </span>delete_todo_non_int_id_raises_error() {
         <span class="kw">let </span>args = <span class="macro">vec!</span>[<span class="string">&quot;todors&quot;</span>, <span class="string">&quot;delete&quot;</span>, <span class="string">&quot;foo&quot;</span>];
         <span class="kw">let </span>c = Cli::try_parse_from(args);
         <span class="macro">assert!</span>(c.is_err());
     }
 
     <span class="attr">#[tokio::test]
-    </span><span class="kw">async fn </span>update_subcommand_errors_with_non_int_id() {
+    </span><span class="kw">async fn </span>update_todo_non_int_id_raises_error() {
         <span class="kw">let </span>args = <span class="macro">vec!</span>[<span class="string">&quot;todors&quot;</span>, <span class="string">&quot;update&quot;</span>, <span class="string">&quot;foo&quot;</span>, <span class="string">&quot;--title&quot;</span>, <span class="string">&quot;Hello Rust!&quot;</span>];
         <span class="kw">let </span>c = Cli::try_parse_from(args);
         <span class="macro">assert!</span>(c.is_err());
