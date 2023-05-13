@@ -18,11 +18,15 @@
 <a href="#18" id="18">18</a>
 <a href="#19" id="19">19</a>
 <a href="#20" id="20">20</a>
-</pre><pre class="rust"><code><span class="kw">use </span>actix_web_prometheus::{PrometheusMetrics, PrometheusMetricsBuilder};
+<a href="#21" id="21">21</a>
+<a href="#22" id="22">22</a>
+</pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::consts;
+
+<span class="kw">use </span>actix_web_prometheus::{PrometheusMetrics, PrometheusMetricsBuilder};
 
 <span class="kw">pub fn </span>build_metrics() -&gt; PrometheusMetrics {
-    PrometheusMetricsBuilder::new(<span class="string">&quot;api&quot;</span>)
-        .endpoint(<span class="string">&quot;/metrics&quot;</span>)
+    PrometheusMetricsBuilder::new(consts::DEFAULT_METRICS_NAMESPACE)
+        .endpoint(consts::DEFAULT_METRICS_URI)
         .build()
         .unwrap()
 }
