@@ -57,7 +57,7 @@ async fn main() -> Result<(), TodoErrors> {
             let r = http::build_server(web_state, addr, settings.num_workers).await;
 
             match r {
-                Ok(_) => info!(logger, "Server stopped"),
+                Ok(_) => debug!(logger, "Server stopped"),
                 Err(err) => error!(logger, "Server failed: {:?}", err),
             };
         }
@@ -74,7 +74,7 @@ async fn main() -> Result<(), TodoErrors> {
                 .await;
 
             match r {
-                Ok(_) => info!(logger, "Server stopped"),
+                Ok(_) => debug!(logger, "Server stopped"),
                 Err(err) => error!(logger, "Server failed: {:?}", err),
             };
         }
