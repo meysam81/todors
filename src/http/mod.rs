@@ -1,15 +1,20 @@
+use std::sync::Arc;
+
 use crate::logging::Logger;
 use crate::models;
 use crate::traits::Controller;
-use std::sync::Arc;
 
 pub use actix_web::dev::Server;
-
 use actix_web::web;
 pub use actix_web::{App, HttpServer};
 
 use utoipa::OpenApi;
 use utoipa_swagger_ui::{Config, SwaggerUi};
+
+mod index;
+mod logging;
+mod metrics;
+mod todo;
 
 pub struct AppState<T>
 where
@@ -28,10 +33,6 @@ where
     }
 }
 
-mod index;
-mod logging;
-mod todo;
-
 pub fn build_server<T>(state: web::Data<AppState<T>>, addr: String, num_workers: usize) -> Server
 where
     T: Controller<
@@ -41,8 +42,11 @@ where
         OptionalInput = models::TodoUpdate,
     >,
 {
+    let metrics = metrics::build_metrics();
+
     HttpServer::new(move || {
         App::new()
+            .wrap(metrics.clone())
             .app_data(state.clone())
             .configure(configure::<T>)
             .wrap(logging::LogMiddleware)
@@ -90,6 +94,7 @@ fn build_apidoc() -> utoipa::openapi::OpenApi {
             todo::get_todo,
             todo::list_todos,
             todo::update_todo,
+            metrics::metrics_api,
         ),
         components(
             schemas(models::TodoRead, models::TodoWrite, models::TodoUpdate),
