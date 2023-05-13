@@ -1,26 +1,37 @@
-use sqlx::sqlite::{SqlitePool, SqlitePoolOptions};
-pub use sqlx::sqlite::{SqlitePool as Pool, SqliteQueryResult as QueryResult};
+use crate::consts;
+
+pub use sqlx::sqlite::SqlitePool as Pool;
+use sqlx::sqlite::SqlitePoolOptions;
+pub use sqlx::sqlite::SqliteQueryResult as QueryResult;
 pub use sqlx::{query, query_as, Error, FromRow, Row};
 
-pub async fn connect(conn: &str, max_conn: Option<u32>) -> Result<SqlitePool, sqlx::Error> {
-    let max_conn = max_conn.unwrap_or(5);
+pub async fn connect(conn_str: &str, max_conn: Option<u32>) -> Result<Pool, sqlx::Error> {
+    let max_conn = max_conn.unwrap_or(consts::DEFAULT_DB_CONNECTION_POOL_SIZE);
 
-    if !conn.contains(":memory:") && !std::path::Path::new(conn).exists() {
-        std::fs::create_dir_all(std::path::Path::new(conn).parent().unwrap())?;
-        std::fs::File::create(conn)?;
-    }
+    let conn = match conn_str {
+        ":memory:" => {
+            SqlitePoolOptions::new()
+                .max_connections(max_conn)
+                .connect(conn_str)
+                .await?
+        }
+        conn if conn.starts_with("sqlite://") => {
+            let conn = conn.strip_prefix("sqlite://").unwrap();
+            if !std::path::Path::new(conn).exists() {
+                let parent_dir = std::path::Path::new(conn).parent().unwrap();
+                std::fs::create_dir_all(parent_dir).unwrap();
+                std::fs::File::create(conn).unwrap();
+            }
 
-    let c = SqlitePoolOptions::new()
-        .max_connections(max_conn)
-        .connect(conn)
-        .await?;
+            SqlitePoolOptions::new()
+                .max_connections(max_conn)
+                .connect(conn_str)
+                .await?
+        }
+        _ => unimplemented!("This connection string is not supported: `{}`", conn_str),
+    };
 
-    migrate(&c).await?;
+    sqlx::migrate!("./migrations").run(&conn).await?;
 
-    Ok(c)
-}
-
-async fn migrate(conn: &SqlitePool) -> Result<(), sqlx::Error> {
-    sqlx::migrate!("./migrations").run(conn).await?;
-    Ok(())
+    Ok(conn)
 }

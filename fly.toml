@@ -4,33 +4,33 @@ primary_region = "ams"
 kill_timeout = 120
 
 [build]
-  image = "meysam81/todors"
-  build-target = "all"
+image = "meysam81/todors"
+build-target = "all"
 
 [http_service]
-  internal_port = 8080
-  force_https = true
-  auto_stop_machines = false
-  auto_start_machines = true
-  [http_service.concurrency]
-    type = "requests"
-    soft_limit = 200
-    hard_limit = 10000
+internal_port = 8080
+force_https = true
+auto_stop_machines = false
+auto_start_machines = true
+[http_service.concurrency]
+type = "requests"
+soft_limit = 200
+hard_limit = 10000
 
 [checks]
-  [checks.http_check]
-    grace_period = "1s"
-    interval = "30s"
-    method = "get"
-    path = "/"
-    port = 8080
-    timeout = "3s"
-    type = "http"
+[checks.http_check]
+grace_period = "1s"
+interval = "30s"
+method = "get"
+path = "/"
+port = 8080
+timeout = "3s"
+type = "http"
 
 [mounts]
-source="todors"
-destination="/data"
+source = "todors"
+destination = "/data"
 
 [env]
-  LOG_LEVEL = "info"
-  DB_URL = "/data/todors.db"
+LOG_LEVEL = "info"
+DB_URL = "sqlite:///data/todors.db"
