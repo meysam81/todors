@@ -17,8 +17,9 @@ pub async fn connect(conn_str: &str, max_conn: Option<u32>) -> Result<Pool, sqlx
         }
         conn if conn.starts_with("sqlite://") => {
             let conn = conn.strip_prefix("sqlite://").unwrap();
-            if !std::path::Path::new(conn).exists() {
-                let parent_dir = std::path::Path::new(conn).parent().unwrap();
+            let conn_path = std::path::Path::new(conn);
+            if !conn_path.exists() {
+                let parent_dir = conn_path.parent().unwrap();
                 std::fs::create_dir_all(parent_dir).unwrap();
                 std::fs::File::create(conn).unwrap();
             }
