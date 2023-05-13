@@ -33,13 +33,13 @@ exclude = [
     "sonar-project.properties",
 ]
 license = "MIT"
-version = "0.10.2"
+version = "0.10.3"
 edition = "2021"
 rust-version = "1.68"
 
 [dependencies]
 actix-web = "4.3"
-actix-web-prometheus = "0.1.2"
+actix-web-prometheus = { version = "0.1.2", features = ["process"] }
 async-trait = "0.1.68"
 chrono = "0.4.24"
 clap = { version = "4.2.5", features = ["derive"] }
