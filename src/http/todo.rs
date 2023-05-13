@@ -204,8 +204,8 @@ pub fn get_todo() {}
         operation_id = "List TODOs",
         context_path = "/api/v1",
         params(
-            ("offset" = Option<u32>, Query, description = "Row offset", example = json!(1), nullable = true, minimum = 0, example = 0),
-            ("limit" = Option<u32>, Query, description = "Number of items per page", example = json!(10), nullable = true, minimum = 1, maximum = 1000, example = 100),
+            ("offset" = Option<u32>, Query, description = "Row offset", nullable = true, minimum = 0, example = 0),
+            ("limit" = Option<u32>, Query, description = "Number of items per page", nullable = true, minimum = 1, maximum = 1000, example = 10),
         ),
         responses(
             (status = 200, content_type = "application/json", example = json!([{"id": 1, "title": "Todo title", "description": "Todo description", "done": false}]), body = Vec<TodoRead>),
