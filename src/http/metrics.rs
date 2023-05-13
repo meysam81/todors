@@ -1,8 +1,10 @@
+use crate::consts;
+
 use actix_web_prometheus::{PrometheusMetrics, PrometheusMetricsBuilder};
 
 pub fn build_metrics() -> PrometheusMetrics {
-    PrometheusMetricsBuilder::new("api")
-        .endpoint("/metrics")
+    PrometheusMetricsBuilder::new(consts::DEFAULT_METRICS_NAMESPACE)
+        .endpoint(consts::DEFAULT_METRICS_URI)
         .build()
         .unwrap()
 }
