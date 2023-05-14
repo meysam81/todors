@@ -21,6 +21,7 @@ struct Log {
     client_ip: String,
     client_real_ip: String,
     request_headers: String,
+    response_headers: String,
     status_code: String,
     latency: String,
 }
@@ -107,6 +108,15 @@ where
 
             log.request_headers = res
                 .request()
+                .headers()
+                .iter()
+                .fold(String::new(), |acc, (key, value)| {
+                    format!("{}{}: {}\n", acc, key, value.to_str().unwrap())
+                })
+                .strip_suffix('\n')
+                .unwrap_or_default()
+                .to_string();
+            log.response_headers = res
                 .headers()
                 .iter()
                 .fold(String::new(), |acc, (key, value)| {
