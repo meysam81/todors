@@ -37,11 +37,13 @@
 <a href="#37" id="37">37</a>
 <a href="#38" id="38">38</a>
 <a href="#39" id="39">39</a>
+<a href="#40" id="40">40</a>
 </pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::apidoc::ToSchema;
 <span class="kw">use </span><span class="kw">crate</span>::db::FromRow;
 <span class="kw">use </span><span class="kw">crate</span>::serializers::{Deserialize, Serialize};
 
-<span class="kw">pub type </span>Id = u32;
+<span class="attr">#[cfg(feature = <span class="string">&quot;sqlite&quot;</span>)]
+</span><span class="kw">pub type </span>Id = u32;
 
 <span class="attr">#[derive(Debug, Serialize, FromRow, ToSchema)]
 </span><span class="kw">pub struct </span>TodoRead {
