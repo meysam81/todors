@@ -1,5 +1,4 @@
 use crate::entities;
-use crate::entities::ListRequest;
 use crate::errors::TodoErrors;
 use crate::logging::{error, info, Logger};
 use crate::serializers::{to_json, to_pretty_json};
@@ -77,7 +76,11 @@ where
             offset,
             limit,
             pretty,
-        }) => match state.controller.list(ListRequest { offset, limit }).await {
+        }) => match state
+            .controller
+            .list(entities::ListRequest { offset, limit })
+            .await
+        {
             Ok(todos) => {
                 let printer = if pretty { to_pretty_json } else { to_json };
                 let todos = printer(&todos).unwrap();
@@ -189,7 +192,7 @@ pub struct Create {
 #[derive(Args, Debug)]
 pub struct Delete {
     /// The ID of the TODO to delete
-    pub id: u32,
+    pub id: entities::Id,
 }
 
 #[derive(Args, Debug)]
@@ -209,7 +212,7 @@ pub struct List {
 #[derive(Args, Debug)]
 pub struct Update {
     /// The ID of the TODO to update
-    pub id: u32,
+    pub id: entities::Id,
     /// The new title of the TODO
     #[arg(short, long)]
     pub title: Option<String>,
@@ -226,7 +229,7 @@ pub struct Update {
 #[derive(Args, Debug)]
 pub struct Get {
     /// The ID of the TODO to get
-    pub id: u32,
+    pub id: entities::Id,
     /// Whether or not to print indented JSON
     #[arg(short, long)]
     #[arg(action = clap::ArgAction::SetTrue)]
