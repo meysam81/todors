@@ -9,12 +9,7 @@ pub async fn connect(conn_str: &str, max_conn: Option<u32>) -> Result<Pool, sqlx
     let max_conn = max_conn.unwrap_or(consts::DEFAULT_DB_CONNECTION_POOL_SIZE);
 
     let conn = match conn_str {
-        ":memory:" => {
-            SqlitePoolOptions::new()
-                .max_connections(max_conn)
-                .connect(conn_str)
-                .await?
-        }
+        ":memory:" => get_sqlite_conn(conn_str, max_conn).await?,
         conn if conn.starts_with("sqlite://") => {
             let conn = conn.strip_prefix("sqlite://").unwrap();
             let conn_path = std::path::Path::new(conn);
@@ -24,10 +19,7 @@ pub async fn connect(conn_str: &str, max_conn: Option<u32>) -> Result<Pool, sqlx
                 std::fs::File::create(conn).unwrap();
             }
 
-            SqlitePoolOptions::new()
-                .max_connections(max_conn)
-                .connect(conn_str)
-                .await?
+            get_sqlite_conn(conn, max_conn).await?
         }
         _ => unimplemented!("This connection string is not supported: `{}`", conn_str),
     };
@@ -35,4 +27,11 @@ pub async fn connect(conn_str: &str, max_conn: Option<u32>) -> Result<Pool, sqlx
     sqlx::migrate!("./migrations").run(&conn).await?;
 
     Ok(conn)
+}
+
+async fn get_sqlite_conn(conn_str: &str, max_conn: u32) -> Result<Pool, sqlx::Error> {
+    SqlitePoolOptions::new()
+        .max_connections(max_conn)
+        .connect(conn_str)
+        .await
 }
