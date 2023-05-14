@@ -142,7 +142,7 @@ impl Controller for TodoController {
 
         let total = query(
             r#"
-            SELECT COUNT(*) as total
+            SELECT COUNT(id) as total
             FROM todo
             "#,
         )
