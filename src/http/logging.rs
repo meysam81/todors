@@ -83,6 +83,7 @@ where
 
     forward_ready!(service);
 
+    #[inline]
     fn call(&self, req: ServiceRequest) -> Self::Future {
         let mut log = Log::new(
             req.method().to_string(),
