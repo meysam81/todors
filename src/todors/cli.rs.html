@@ -316,10 +316,12 @@
 <a href="#316" id="316">316</a>
 <a href="#317" id="317">317</a>
 <a href="#318" id="318">318</a>
-</pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::entities::ListRequest;
+<a href="#319" id="319">319</a>
+<a href="#320" id="320">320</a>
+<a href="#321" id="321">321</a>
+</pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::entities;
 <span class="kw">use </span><span class="kw">crate</span>::errors::TodoErrors;
 <span class="kw">use </span><span class="kw">crate</span>::logging::{error, info, Logger};
-<span class="kw">use </span><span class="kw">crate</span>::models;
 <span class="kw">use </span><span class="kw">crate</span>::serializers::{to_json, to_pretty_json};
 <span class="kw">use </span><span class="kw">crate</span>::traits::Controller;
 <span class="kw">use </span>clap::{Args, Command, Parser, Subcommand};
@@ -346,17 +348,17 @@
 <span class="kw">pub async fn </span>handle_local&lt;T&gt;(local: Local, state: CliState&lt;T&gt;)
 <span class="kw">where
     </span>T: Controller&lt;
-        Input = models::TodoWrite,
-        Output = models::TodoRead,
-        Id = models::Id,
-        OptionalInput = models::TodoUpdate,
+        Input = entities::TodoWrite,
+        Output = entities::TodoRead,
+        Id = entities::Id,
+        OptionalInput = entities::TodoUpdate,
     &gt;,
 {
     <span class="kw">match </span>local {
         Local::Create(Create { title, done }) =&gt; {
             <span class="kw">let </span>todos = title
                 .into_iter()
-                .map(|title| models::TodoWrite::new(title, done))
+                .map(|title| entities::TodoWrite::new(title, done))
                 .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
 
             <span class="kw">match </span>state.controller.create_batch(todos).<span class="kw">await </span>{
@@ -395,7 +397,11 @@
             offset,
             limit,
             pretty,
-        }) =&gt; <span class="kw">match </span>state.controller.list(ListRequest { offset, limit }).<span class="kw">await </span>{
+        }) =&gt; <span class="kw">match </span>state
+            .controller
+            .list(entities::ListRequest { offset, limit })
+            .<span class="kw">await
+        </span>{
             <span class="prelude-val">Ok</span>(todos) =&gt; {
                 <span class="kw">let </span>printer = <span class="kw">if </span>pretty { to_pretty_json } <span class="kw">else </span>{ to_json };
                 <span class="kw">let </span>todos = printer(<span class="kw-2">&amp;</span>todos).unwrap();
@@ -416,7 +422,7 @@
             } <span class="kw">else </span>{
                 done
             };
-            <span class="kw">let </span>todo = models::TodoUpdate::new(title, done);
+            <span class="kw">let </span>todo = entities::TodoUpdate::new(title, done);
             <span class="kw">match </span>state.controller.update(id, todo).<span class="kw">await </span>{
                 <span class="prelude-val">Ok</span>(<span class="kw">_</span>) =&gt; <span class="macro">info!</span>(state.logger, <span class="string">&quot;Successfully updated: {}&quot;</span>, id),
                 <span class="prelude-val">Err</span>(err) =&gt; {
@@ -507,7 +513,7 @@
 <span class="attr">#[derive(Args, Debug)]
 </span><span class="kw">pub struct </span>Delete {
     <span class="doccomment">/// The ID of the TODO to delete
-    </span><span class="kw">pub </span>id: u32,
+    </span><span class="kw">pub </span>id: entities::Id,
 }
 
 <span class="attr">#[derive(Args, Debug)]
@@ -527,7 +533,7 @@
 <span class="attr">#[derive(Args, Debug)]
 </span><span class="kw">pub struct </span>Update {
     <span class="doccomment">/// The ID of the TODO to update
-    </span><span class="kw">pub </span>id: u32,
+    </span><span class="kw">pub </span>id: entities::Id,
     <span class="doccomment">/// The new title of the TODO
     </span><span class="attr">#[arg(short, long)]
     </span><span class="kw">pub </span>title: <span class="prelude-ty">Option</span>&lt;String&gt;,
@@ -544,7 +550,7 @@
 <span class="attr">#[derive(Args, Debug)]
 </span><span class="kw">pub struct </span>Get {
     <span class="doccomment">/// The ID of the TODO to get
-    </span><span class="kw">pub </span>id: u32,
+    </span><span class="kw">pub </span>id: entities::Id,
     <span class="doccomment">/// Whether or not to print indented JSON
     </span><span class="attr">#[arg(short, long)]
     #[arg(action = clap::ArgAction::SetTrue)]

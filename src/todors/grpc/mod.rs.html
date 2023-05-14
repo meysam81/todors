@@ -293,9 +293,9 @@
 <span class="kw">use </span>proto::todo::todo_server::{Todo, TodoServer};
 <span class="kw">use </span>proto::todo::{ListTodosRequest, ListTodosResponse};
 
+<span class="kw">use </span><span class="kw">crate</span>::entities;
 <span class="kw">use </span><span class="kw">crate</span>::errors::TodoErrors;
 <span class="kw">use </span><span class="kw">crate</span>::logging::{info, Logger};
-<span class="kw">use crate</span>::{entities, models};
 
 <span class="kw">use </span><span class="self">self</span>::logging::Log;
 <span class="kw">use </span><span class="kw">crate</span>::traits::Controller;
@@ -303,10 +303,10 @@
 <span class="kw">pub fn </span>build_server&lt;T&gt;(num_workers: usize, state: AppState&lt;T&gt;) -&gt; Router
 <span class="kw">where
     </span>T: Controller&lt;
-        Input = models::TodoWrite,
-        Output = models::TodoRead,
-        Id = models::Id,
-        OptionalInput = models::TodoUpdate,
+        Input = entities::TodoWrite,
+        Output = entities::TodoRead,
+        Id = entities::Id,
+        OptionalInput = entities::TodoUpdate,
     &gt;,
 {
     Server::builder()
@@ -330,10 +330,10 @@
 <span class="kw">impl</span>&lt;T&gt; TodoService&lt;T&gt;
 <span class="kw">where
     </span>T: Controller&lt;
-        Input = models::TodoWrite,
-        Output = models::TodoRead,
-        Id = models::Id,
-        OptionalInput = models::TodoUpdate,
+        Input = entities::TodoWrite,
+        Output = entities::TodoRead,
+        Id = entities::Id,
+        OptionalInput = entities::TodoUpdate,
     &gt;,
 {
     <span class="kw">pub fn </span>new(state: AppState&lt;T&gt;) -&gt; <span class="self">Self </span>{
@@ -377,16 +377,16 @@
 <span class="kw">struct </span>TodoService&lt;T&gt;
 <span class="kw">where
     </span>T: Controller&lt;
-        Input = models::TodoWrite,
-        Output = models::TodoRead,
-        Id = models::Id,
-        OptionalInput = models::TodoUpdate,
+        Input = entities::TodoWrite,
+        Output = entities::TodoRead,
+        Id = entities::Id,
+        OptionalInput = entities::TodoUpdate,
     &gt;,
 {
     state: AppState&lt;T&gt;,
 }
 
-<span class="kw">impl </span>From&lt;proto::todo::CreateTodoRequest&gt; <span class="kw">for </span>models::TodoWrite {
+<span class="kw">impl </span>From&lt;proto::todo::CreateTodoRequest&gt; <span class="kw">for </span>entities::TodoWrite {
     <span class="kw">fn </span>from(request: proto::todo::CreateTodoRequest) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             title: request.title,
@@ -395,8 +395,8 @@
     }
 }
 
-<span class="kw">impl </span>From&lt;models::TodoRead&gt; <span class="kw">for </span>proto::todo::TodoRead {
-    <span class="kw">fn </span>from(todo: models::TodoRead) -&gt; <span class="self">Self </span>{
+<span class="kw">impl </span>From&lt;entities::TodoRead&gt; <span class="kw">for </span>proto::todo::TodoRead {
+    <span class="kw">fn </span>from(todo: entities::TodoRead) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             id: todo.id,
             title: todo.title,
@@ -422,8 +422,8 @@
     }
 }
 
-<span class="kw">impl </span>From&lt;entities::ListResponse&lt;models::TodoRead&gt;&gt; <span class="kw">for </span>ListTodosResponse {
-    <span class="kw">fn </span>from(response: entities::ListResponse&lt;models::TodoRead&gt;) -&gt; <span class="self">Self </span>{
+<span class="kw">impl </span>From&lt;entities::ListResponse&lt;entities::TodoRead&gt;&gt; <span class="kw">for </span>ListTodosResponse {
+    <span class="kw">fn </span>from(response: entities::ListResponse&lt;entities::TodoRead&gt;) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             data: response.data.into_iter().map(|x| x.into()).collect(),
             total: response.total,
@@ -433,7 +433,7 @@
     }
 }
 
-<span class="kw">impl </span>From&lt;proto::todo::UpdateTodoRequest&gt; <span class="kw">for </span>models::TodoUpdate {
+<span class="kw">impl </span>From&lt;proto::todo::UpdateTodoRequest&gt; <span class="kw">for </span>entities::TodoUpdate {
     <span class="kw">fn </span>from(request: proto::todo::UpdateTodoRequest) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             title: request.title,
@@ -446,10 +446,10 @@
 </span><span class="kw">impl</span>&lt;T&gt; Todo <span class="kw">for </span>TodoService&lt;T&gt;
 <span class="kw">where
     </span>T: Controller&lt;
-        Input = models::TodoWrite,
-        Output = models::TodoRead,
-        Id = models::Id,
-        OptionalInput = models::TodoUpdate,
+        Input = entities::TodoWrite,
+        Output = entities::TodoRead,
+        Id = entities::Id,
+        OptionalInput = entities::TodoUpdate,
     &gt;,
 {
     <span class="kw">async fn </span>create(
@@ -465,7 +465,7 @@
         <span class="kw">let </span>res = <span class="self">self
             </span>.state
             .controller
-            .create(models::TodoWrite::from(request))
+            .create(entities::TodoWrite::from(request))
             .<span class="kw">await</span><span class="question-mark">?</span>;
         <span class="kw">let </span>elapsed = start.elapsed();
 
@@ -553,7 +553,7 @@
         <span class="kw">let </span>_res = <span class="self">self
             </span>.state
             .controller
-            .update(request.id, models::TodoUpdate::from(request))
+            .update(request.id, entities::TodoUpdate::from(request))
             .<span class="kw">await</span><span class="question-mark">?</span>;
         <span class="kw">let </span>elapsed = start.elapsed();
 

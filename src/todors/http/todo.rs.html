@@ -232,11 +232,9 @@
 <a href="#232" id="232">232</a>
 <a href="#233" id="233">233</a>
 <a href="#234" id="234">234</a>
-<a href="#235" id="235">235</a>
-</pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::entities::ListRequest;
+</pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::entities;
 <span class="kw">use </span><span class="kw">crate</span>::errors::TodoErrors;
 <span class="kw">use </span><span class="kw">crate</span>::logging::{debug, error};
-<span class="kw">use </span><span class="kw">crate</span>::models;
 <span class="kw">use </span><span class="kw">crate</span>::traits::Controller;
 
 <span class="kw">use </span>actix_web::{web, HttpResponse};
@@ -244,8 +242,8 @@
 
 <span class="kw">use </span><span class="kw">super</span>::AppState;
 
-<span class="kw">impl </span>From&lt;web::Query&lt;ListRequest&gt;&gt; <span class="kw">for </span>ListRequest {
-    <span class="kw">fn </span>from(query: web::Query&lt;ListRequest&gt;) -&gt; <span class="self">Self </span>{
+<span class="kw">impl </span>From&lt;web::Query&lt;entities::ListRequest&gt;&gt; <span class="kw">for </span>entities::ListRequest {
+    <span class="kw">fn </span>from(query: web::Query&lt;entities::ListRequest&gt;) -&gt; <span class="self">Self </span>{
         query.into_inner()
     }
 }
@@ -253,10 +251,10 @@
 <span class="kw">pub struct </span>Api&lt;T&gt;
 <span class="kw">where
     </span>T: Controller&lt;
-        Input = models::TodoWrite,
-        Output = models::TodoRead,
-        Id = models::Id,
-        OptionalInput = models::TodoUpdate,
+        Input = entities::TodoWrite,
+        Output = entities::TodoRead,
+        Id = entities::Id,
+        OptionalInput = entities::TodoUpdate,
     &gt;,
 {
     _controller: T,
@@ -265,10 +263,10 @@
 <span class="kw">impl</span>&lt;T&gt; Api&lt;T&gt;
 <span class="kw">where
     </span>T: Controller&lt;
-        Input = models::TodoWrite,
-        Output = models::TodoRead,
-        Id = models::Id,
-        OptionalInput = models::TodoUpdate,
+        Input = entities::TodoWrite,
+        Output = entities::TodoRead,
+        Id = entities::Id,
+        OptionalInput = entities::TodoUpdate,
     &gt;,
 {
     <span class="kw">pub async fn </span>create_todo(
@@ -332,7 +330,7 @@
 
     <span class="kw">pub async fn </span>list_todos(
         state: web::Data&lt;AppState&lt;T&gt;&gt;,
-        pagination: web::Query&lt;ListRequest&gt;,
+        pagination: web::Query&lt;entities::ListRequest&gt;,
     ) -&gt; HttpResponse {
         <span class="macro">debug!</span>(state.logger, <span class="string">&quot;Listing todos with request: {:?}&quot;</span>, pagination);
         <span class="kw">match </span>state.controller.list(pagination.into()).<span class="kw">await </span>{
@@ -439,8 +437,8 @@
         operation_id = <span class="string">&quot;List TODOs&quot;</span>,
         context_path = <span class="string">&quot;/api/v1&quot;</span>,
         params(
-            (<span class="string">&quot;offset&quot; </span>= <span class="prelude-ty">Option</span>&lt;u32&gt;, Query, description = <span class="string">&quot;Row offset&quot;</span>, example = <span class="macro">json!</span>(<span class="number">1</span>), nullable = <span class="bool-val">true</span>, minimum = <span class="number">0</span>, example = <span class="number">0</span>),
-            (<span class="string">&quot;limit&quot; </span>= <span class="prelude-ty">Option</span>&lt;u32&gt;, Query, description = <span class="string">&quot;Number of items per page&quot;</span>, example = <span class="macro">json!</span>(<span class="number">10</span>), nullable = <span class="bool-val">true</span>, minimum = <span class="number">1</span>, maximum = <span class="number">1000</span>, example = <span class="number">100</span>),
+            (<span class="string">&quot;offset&quot; </span>= <span class="prelude-ty">Option</span>&lt;u32&gt;, Query, description = <span class="string">&quot;Row offset&quot;</span>, nullable = <span class="bool-val">true</span>, minimum = <span class="number">0</span>, example = <span class="number">0</span>),
+            (<span class="string">&quot;limit&quot; </span>= <span class="prelude-ty">Option</span>&lt;u32&gt;, Query, description = <span class="string">&quot;Number of items per page&quot;</span>, nullable = <span class="bool-val">true</span>, minimum = <span class="number">1</span>, maximum = <span class="number">1000</span>, example = <span class="number">10</span>),
         ),
         responses(
             (status = <span class="number">200</span>, content_type = <span class="string">&quot;application/json&quot;</span>, example = <span class="macro">json!</span>([{<span class="string">&quot;id&quot;</span>: <span class="number">1</span>, <span class="string">&quot;title&quot;</span>: <span class="string">&quot;Todo title&quot;</span>, <span class="string">&quot;description&quot;</span>: <span class="string">&quot;Todo description&quot;</span>, <span class="string">&quot;done&quot;</span>: <span class="bool-val">false</span>}]</span>), body = Vec&lt;TodoRead&gt;),
