@@ -1,13 +1,8 @@
 use chrono::{SecondsFormat, Utc};
-use std::future::{ready, Ready};
 use std::time::Instant;
 
+use super::middleware::*;
 use crate::serializers::{to_json, Serialize};
-use actix_web::{
-    dev::{forward_ready, Service, ServiceRequest, ServiceResponse, Transform},
-    Error as ActixError,
-};
-use futures_util::future::LocalBoxFuture;
 
 #[derive(Default)]
 pub struct LogMiddleware;

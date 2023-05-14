@@ -14,6 +14,7 @@ use utoipa_swagger_ui::{Config, SwaggerUi};
 mod index;
 mod logging;
 mod metrics;
+mod middleware;
 mod todo;
 
 pub struct AppState<T>
