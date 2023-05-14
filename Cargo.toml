@@ -37,6 +37,10 @@ version = "0.10.3"
 edition = "2021"
 rust-version = "1.68"
 
+[features]
+default = ["sqlite"]
+sqlite = ["sqlx/sqlite"]
+
 [dependencies]
 actix-web = "4.3"
 actix-web-prometheus = { version = "0.1.2", features = ["process"] }
