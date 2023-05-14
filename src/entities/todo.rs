@@ -2,6 +2,7 @@ use crate::apidoc::ToSchema;
 use crate::db::FromRow;
 use crate::serializers::{Deserialize, Serialize};
 
+#[cfg(feature = "sqlite")]
 pub type Id = u32;
 
 #[derive(Debug, Serialize, FromRow, ToSchema)]
