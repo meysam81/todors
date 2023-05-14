@@ -1,13 +1,11 @@
+#[cfg(feature = "sqlite")]
 mod sqlite;
 
 #[cfg(feature = "sqlite")]
 mod _sqlite {
-    use super::*;
+    use super::sqlite;
 
-    pub use self::sqlite::connect;
-    pub use sqlx::sqlite::SqlitePool as Pool;
-    pub use sqlx::sqlite::SqliteQueryResult as QueryResult;
-    pub use sqlx::{query, query_as, Error, FromRow, Row};
+    pub use self::sqlite::{connect, query, query_as, Error, FromRow, Pool, QueryResult, Row};
 }
 
 #[cfg(feature = "sqlite")]
