@@ -199,10 +199,10 @@ pub struct Delete {
 pub struct List {
     /// Start of the query
     #[arg(short, long)]
-    pub offset: Option<u32>,
+    pub offset: Option<entities::Id>,
     /// Number of results to return
     #[arg(short, long)]
-    pub limit: Option<u32>,
+    pub limit: Option<entities::Id>,
     /// Whether or not to print indented JSON
     #[arg(short, long)]
     #[arg(action = clap::ArgAction::SetTrue)]

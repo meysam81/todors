@@ -5,7 +5,7 @@ use sqlx::sqlite::SqlitePoolOptions;
 pub use sqlx::sqlite::SqliteQueryResult as QueryResult;
 pub use sqlx::{query, query_as, Error, FromRow, Row};
 
-pub async fn connect(conn_str: &str, max_conn: Option<u32>) -> Result<Pool, sqlx::Error> {
+pub async fn init_pool(conn_str: &str, max_conn: Option<u32>) -> Result<Pool, sqlx::Error> {
     let max_conn = max_conn.unwrap_or(consts::DEFAULT_DB_CONNECTION_POOL_SIZE);
 
     let conn = match conn_str {

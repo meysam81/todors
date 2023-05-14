@@ -37,6 +37,8 @@ impl Controller for TodoController {
     type OptionalInput = TodoUpdate;
     type Output = TodoRead;
 
+    #[inline]
+    #[cfg(feature = "sqlite")]
     async fn create(&self, todo: Self::Input) -> Result<Self::Output, TodoErrors> {
         let res = query(
             r#"
@@ -59,6 +61,32 @@ impl Controller for TodoController {
         })
     }
 
+    #[inline]
+    #[cfg(feature = "postgres")]
+    async fn create(&self, todo: Self::Input) -> Result<Self::Output, TodoErrors> {
+        let res = query(
+            r#"
+            INSERT INTO todo (title, done)
+            VALUES ($1, $2)
+            RETURNING id
+            "#,
+        )
+        .bind(&todo.title)
+        .bind(todo.done)
+        .execute(&self.pool)
+        .await?;
+
+        // let id = res.last_insert_rowid() as Id;
+
+        Ok(TodoRead {
+            id: 1,
+            title: todo.title,
+            done: todo.done,
+        })
+    }
+
+    #[inline]
+    #[cfg(feature = "sqlite")]
     async fn create_batch(&self, todos: Vec<Self::Input>) -> Result<Vec<Self::Id>, TodoErrors> {
         if todos.len() > self.create_batch_hard_limit as usize {
             return Err(TodoErrors::BatchTooLarge {
@@ -91,6 +119,41 @@ impl Controller for TodoController {
         Ok(ids)
     }
 
+    #[inline]
+    #[cfg(feature = "postgres")]
+    async fn create_batch(&self, todos: Vec<Self::Input>) -> Result<Vec<Self::Id>, TodoErrors> {
+        use std::vec;
+
+        if todos.len() > self.create_batch_hard_limit as usize {
+            return Err(TodoErrors::BatchTooLarge {
+                max_size: self.create_batch_hard_limit,
+            });
+        }
+
+        let mut tx = self.pool.begin().await?;
+
+        // let mut ids = Vec::with_capacity(todos.len());
+
+        for todo in todos {
+            let res = query(
+                r#"
+                INSERT INTO todo (title, done)
+                VALUES ($1, $2)
+                RETURNING id
+                "#,
+            )
+            .bind(&todo.title)
+            .bind(todo.done)
+            .execute(&mut tx)
+            .await?;
+        }
+
+        tx.commit().await?;
+
+        Ok(vec![])
+    }
+
+    #[inline]
     async fn delete(&self, id: Self::Id) -> Result<(), TodoErrors> {
         let r = query("DELETE FROM todo WHERE id = ?")
             .bind(id)
@@ -103,6 +166,7 @@ impl Controller for TodoController {
         }
     }
 
+    #[inline]
     async fn get(&self, id: Self::Id) -> Result<Self::Output, TodoErrors> {
         let todo = query_as::<_, TodoRead>(
             r#"
@@ -121,6 +185,7 @@ impl Controller for TodoController {
         }
     }
 
+    #[inline]
     async fn list(&self, req: ListRequest) -> Result<ListResponse<Self::Output>, TodoErrors> {
         let limit = cmp::min(
             req.limit.unwrap_or(self.pagination_limit),
@@ -148,7 +213,7 @@ impl Controller for TodoController {
         )
         .fetch_one(&self.pool)
         .await?
-        .get::<u32, _>("total");
+        .get::<Id, _>("total");
 
         let queried_count = todos.len() as u32;
 
@@ -160,6 +225,7 @@ impl Controller for TodoController {
         })
     }
 
+    #[inline]
     async fn update(&self, id: Self::Id, todo: Self::OptionalInput) -> Result<(), TodoErrors> {
         let mut tx = self.pool.begin().await?;
 
