@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
+use crate::entities;
 use crate::logging::Logger;
-use crate::models;
 use crate::traits::Controller;
 
 pub use actix_web::dev::Server;
@@ -36,10 +36,10 @@ where
 pub fn build_server<T>(state: web::Data<AppState<T>>, addr: String, num_workers: usize) -> Server
 where
     T: Controller<
-        Input = models::TodoWrite,
-        Output = models::TodoRead,
-        Id = models::Id,
-        OptionalInput = models::TodoUpdate,
+        Input = entities::TodoWrite,
+        Output = entities::TodoRead,
+        Id = entities::Id,
+        OptionalInput = entities::TodoUpdate,
     >,
 {
     let metrics = metrics::build_metrics();
@@ -60,10 +60,10 @@ where
 fn configure<T>(cfg: &mut web::ServiceConfig)
 where
     T: Controller<
-            Input = models::TodoWrite,
-            Output = models::TodoRead,
-            Id = models::Id,
-            OptionalInput = models::TodoUpdate,
+            Input = entities::TodoWrite,
+            Output = entities::TodoRead,
+            Id = entities::Id,
+            OptionalInput = entities::TodoUpdate,
         > + 'static,
 {
     cfg.service(index::index)
@@ -97,7 +97,7 @@ fn build_apidoc() -> utoipa::openapi::OpenApi {
             metrics::metrics_api,
         ),
         components(
-            schemas(models::TodoRead, models::TodoWrite, models::TodoUpdate),
+            schemas(entities::TodoRead, entities::TodoWrite, entities::TodoUpdate),
         ),
         tags(
             (name = "todo", description = "Todo management endpoints."),

@@ -1,7 +1,6 @@
-use crate::entities::ListRequest;
+use crate::entities;
 use crate::errors::TodoErrors;
 use crate::logging::{debug, error};
-use crate::models;
 use crate::traits::Controller;
 
 use actix_web::{web, HttpResponse};
@@ -9,8 +8,8 @@ pub use actix_web::{App, HttpServer};
 
 use super::AppState;
 
-impl From<web::Query<ListRequest>> for ListRequest {
-    fn from(query: web::Query<ListRequest>) -> Self {
+impl From<web::Query<entities::ListRequest>> for entities::ListRequest {
+    fn from(query: web::Query<entities::ListRequest>) -> Self {
         query.into_inner()
     }
 }
@@ -18,10 +17,10 @@ impl From<web::Query<ListRequest>> for ListRequest {
 pub struct Api<T>
 where
     T: Controller<
-        Input = models::TodoWrite,
-        Output = models::TodoRead,
-        Id = models::Id,
-        OptionalInput = models::TodoUpdate,
+        Input = entities::TodoWrite,
+        Output = entities::TodoRead,
+        Id = entities::Id,
+        OptionalInput = entities::TodoUpdate,
     >,
 {
     _controller: T,
@@ -30,10 +29,10 @@ where
 impl<T> Api<T>
 where
     T: Controller<
-        Input = models::TodoWrite,
-        Output = models::TodoRead,
-        Id = models::Id,
-        OptionalInput = models::TodoUpdate,
+        Input = entities::TodoWrite,
+        Output = entities::TodoRead,
+        Id = entities::Id,
+        OptionalInput = entities::TodoUpdate,
     >,
 {
     pub async fn create_todo(
@@ -97,7 +96,7 @@ where
 
     pub async fn list_todos(
         state: web::Data<AppState<T>>,
-        pagination: web::Query<ListRequest>,
+        pagination: web::Query<entities::ListRequest>,
     ) -> HttpResponse {
         debug!(state.logger, "Listing todos with request: {:?}", pagination);
         match state.controller.list(pagination.into()).await {

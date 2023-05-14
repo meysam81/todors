@@ -1,46 +1,9 @@
-use crate::apidoc::ToSchema;
-use crate::db::{query, query_as, FromRow, Pool, Row};
+use crate::db::{query, query_as, Pool, Row};
+use crate::entities::{Id, TodoRead, TodoUpdate, TodoWrite};
 use crate::entities::{ListRequest, ListResponse};
 use crate::errors::TodoErrors;
-use crate::serializers::{Deserialize, Serialize};
 use crate::traits::{async_trait, Controller};
 use std::cmp;
-
-pub type Id = u32;
-
-#[derive(Debug, Serialize, FromRow, ToSchema)]
-pub struct TodoRead {
-    pub id: u32,
-    pub title: String,
-    pub done: bool,
-}
-
-#[derive(Debug, Deserialize, ToSchema)]
-pub struct TodoWrite {
-    pub title: String,
-    pub done: bool,
-}
-
-impl TodoWrite {
-    pub fn new(title: String, done: Option<bool>) -> Self {
-        Self {
-            title,
-            done: done.unwrap_or_default(),
-        }
-    }
-}
-
-#[derive(Debug, Deserialize, ToSchema)]
-pub struct TodoUpdate {
-    pub title: Option<String>,
-    pub done: Option<bool>,
-}
-
-impl TodoUpdate {
-    pub fn new(title: Option<String>, done: Option<bool>) -> Self {
-        Self { title, done }
-    }
-}
 
 pub struct TodoController {
     pool: Pool,
@@ -67,7 +30,7 @@ impl TodoController {
 
 #[async_trait]
 impl Controller for TodoController {
-    type Id = super::Id;
+    type Id = Id;
     type Input = TodoWrite;
     type OptionalInput = TodoUpdate;
     type Output = TodoRead;

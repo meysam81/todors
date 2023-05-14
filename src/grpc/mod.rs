@@ -10,9 +10,9 @@ use proto::healthcheck::{Ping, Pong};
 use proto::todo::todo_server::{Todo, TodoServer};
 use proto::todo::{ListTodosRequest, ListTodosResponse};
 
+use crate::entities;
 use crate::errors::TodoErrors;
 use crate::logging::{info, Logger};
-use crate::{entities, models};
 
 use self::logging::Log;
 use crate::traits::Controller;
@@ -20,10 +20,10 @@ use crate::traits::Controller;
 pub fn build_server<T>(num_workers: usize, state: AppState<T>) -> Router
 where
     T: Controller<
-        Input = models::TodoWrite,
-        Output = models::TodoRead,
-        Id = models::Id,
-        OptionalInput = models::TodoUpdate,
+        Input = entities::TodoWrite,
+        Output = entities::TodoRead,
+        Id = entities::Id,
+        OptionalInput = entities::TodoUpdate,
     >,
 {
     Server::builder()
@@ -47,10 +47,10 @@ mod proto {
 impl<T> TodoService<T>
 where
     T: Controller<
-        Input = models::TodoWrite,
-        Output = models::TodoRead,
-        Id = models::Id,
-        OptionalInput = models::TodoUpdate,
+        Input = entities::TodoWrite,
+        Output = entities::TodoRead,
+        Id = entities::Id,
+        OptionalInput = entities::TodoUpdate,
     >,
 {
     pub fn new(state: AppState<T>) -> Self {
@@ -94,16 +94,16 @@ impl HealthCheck for TodoHealthCheck {
 struct TodoService<T>
 where
     T: Controller<
-        Input = models::TodoWrite,
-        Output = models::TodoRead,
-        Id = models::Id,
-        OptionalInput = models::TodoUpdate,
+        Input = entities::TodoWrite,
+        Output = entities::TodoRead,
+        Id = entities::Id,
+        OptionalInput = entities::TodoUpdate,
     >,
 {
     state: AppState<T>,
 }
 
-impl From<proto::todo::CreateTodoRequest> for models::TodoWrite {
+impl From<proto::todo::CreateTodoRequest> for entities::TodoWrite {
     fn from(request: proto::todo::CreateTodoRequest) -> Self {
         Self {
             title: request.title,
@@ -112,8 +112,8 @@ impl From<proto::todo::CreateTodoRequest> for models::TodoWrite {
     }
 }
 
-impl From<models::TodoRead> for proto::todo::TodoRead {
-    fn from(todo: models::TodoRead) -> Self {
+impl From<entities::TodoRead> for proto::todo::TodoRead {
+    fn from(todo: entities::TodoRead) -> Self {
         Self {
             id: todo.id,
             title: todo.title,
@@ -139,8 +139,8 @@ impl From<TodoErrors> for Status {
     }
 }
 
-impl From<entities::ListResponse<models::TodoRead>> for ListTodosResponse {
-    fn from(response: entities::ListResponse<models::TodoRead>) -> Self {
+impl From<entities::ListResponse<entities::TodoRead>> for ListTodosResponse {
+    fn from(response: entities::ListResponse<entities::TodoRead>) -> Self {
         Self {
             data: response.data.into_iter().map(|x| x.into()).collect(),
             total: response.total,
@@ -150,7 +150,7 @@ impl From<entities::ListResponse<models::TodoRead>> for ListTodosResponse {
     }
 }
 
-impl From<proto::todo::UpdateTodoRequest> for models::TodoUpdate {
+impl From<proto::todo::UpdateTodoRequest> for entities::TodoUpdate {
     fn from(request: proto::todo::UpdateTodoRequest) -> Self {
         Self {
             title: request.title,
@@ -163,10 +163,10 @@ impl From<proto::todo::UpdateTodoRequest> for models::TodoUpdate {
 impl<T> Todo for TodoService<T>
 where
     T: Controller<
-        Input = models::TodoWrite,
-        Output = models::TodoRead,
-        Id = models::Id,
-        OptionalInput = models::TodoUpdate,
+        Input = entities::TodoWrite,
+        Output = entities::TodoRead,
+        Id = entities::Id,
+        OptionalInput = entities::TodoUpdate,
     >,
 {
     async fn create(
@@ -182,7 +182,7 @@ where
         let res = self
             .state
             .controller
-            .create(models::TodoWrite::from(request))
+            .create(entities::TodoWrite::from(request))
             .await?;
         let elapsed = start.elapsed();
 
@@ -270,7 +270,7 @@ where
         let _res = self
             .state
             .controller
-            .update(request.id, models::TodoUpdate::from(request))
+            .update(request.id, entities::TodoUpdate::from(request))
             .await?;
         let elapsed = start.elapsed();
 
