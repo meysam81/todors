@@ -24,8 +24,6 @@ pub async fn init_pool(conn_str: &str, max_conn: Option<u32>) -> Result<Pool, sq
         _ => unimplemented!("This connection string is not supported: `{}`", conn_str),
     };
 
-    sqlx::migrate!("./migrations").run(&conn).await?;
-
     Ok(conn)
 }
 
@@ -34,4 +32,8 @@ async fn get_sqlite_conn(conn_str: &str, max_conn: u32) -> Result<Pool, sqlx::Er
         .max_connections(max_conn)
         .connect(conn_str)
         .await
+}
+
+pub async fn apply_migrations(conn: &Pool) -> Result<(), sqlx::migrate::MigrateError> {
+    sqlx::migrate!("./migrations/sqlite/").run(conn).await
 }

@@ -31,7 +31,9 @@ fn default_dburl() -> String {
     let path = user_home.join(".todors");
 
     let path = path.join("db.sqlite");
-    path.to_str().unwrap().to_string()
+    let path = path.to_str().unwrap().to_string();
+
+    format!("sqlite://{}", path)
 }
 
 fn default_loglevel() -> String {
