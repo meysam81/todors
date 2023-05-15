@@ -1,5 +1,23 @@
 {
   "db": "SQLite",
+  "22bc9e22736ea55a1c60ced5a9888476201713f14b9bc3a43edb2f5ca74bc64c": {
+    "describe": {
+      "columns": [
+        {
+          "name": "total!: u32",
+          "ordinal": 0,
+          "type_info": "Int"
+        }
+      ],
+      "nullable": [
+        false
+      ],
+      "parameters": {
+        "Right": 0
+      }
+    },
+    "query": "\n            SELECT COUNT(id) as \"total!: u32\"\n            FROM todo\n            "
+  },
   "822e7678448b39c99fcf2dd3e3a2f1511f49cb9ad73d44bf7213c01a87595995": {
     "describe": {
       "columns": [],
@@ -19,24 +37,6 @@
       }
     },
     "query": "\n                UPDATE todo\n                SET title = $1\n                WHERE id = $2\n                "
-  },
-  "bd96a24511d971c3bad998ab282bec8823469154283d0d17e975e73179fc470d": {
-    "describe": {
-      "columns": [
-        {
-          "name": "total!",
-          "ordinal": 0,
-          "type_info": "Int"
-        }
-      ],
-      "nullable": [
-        false
-      ],
-      "parameters": {
-        "Right": 0
-      }
-    },
-    "query": "\n            SELECT COUNT(id) as \"total!\"\n            FROM todo\n            "
   },
   "ffd7311dec5fab0047346920403b91d16af847665c2df3ae2ff3a7766b578676": {
     "describe": {

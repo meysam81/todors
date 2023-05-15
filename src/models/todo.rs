@@ -1,5 +1,5 @@
 use crate::consts;
-use crate::db::{query, query_as, Pool, Row};
+use crate::db::{query, query_as, Pool};
 use crate::entities::{Id, TodoRead, TodoUpdate, TodoWrite};
 use crate::entities::{ListRequest, ListResponse};
 use crate::errors::TodoErrors;
@@ -38,7 +38,6 @@ impl Controller for TodoController {
     type Output = TodoRead;
 
     #[inline]
-    #[cfg(feature = "sqlite")]
     async fn create(&self, todo: Self::Input) -> Result<Self::Output, TodoErrors> {
         let res = query(
             r#"
@@ -62,31 +61,6 @@ impl Controller for TodoController {
     }
 
     #[inline]
-    #[cfg(feature = "postgres")]
-    async fn create(&self, todo: Self::Input) -> Result<Self::Output, TodoErrors> {
-        let res = query(
-            r#"
-            INSERT INTO todo (title, done)
-            VALUES ($1, $2)
-            RETURNING id
-            "#,
-        )
-        .bind(&todo.title)
-        .bind(todo.done)
-        .execute(&self.pool)
-        .await?;
-
-        // let id = res.last_insert_rowid() as Id;
-
-        Ok(TodoRead {
-            id: 1,
-            title: todo.title,
-            done: todo.done,
-        })
-    }
-
-    #[inline]
-    #[cfg(feature = "sqlite")]
     async fn create_batch(&self, todos: Vec<Self::Input>) -> Result<Vec<Self::Id>, TodoErrors> {
         if todos.len() > self.create_batch_hard_limit as usize {
             return Err(TodoErrors::BatchTooLarge {
@@ -117,40 +91,6 @@ impl Controller for TodoController {
         tx.commit().await?;
 
         Ok(ids)
-    }
-
-    #[inline]
-    #[cfg(feature = "postgres")]
-    async fn create_batch(&self, todos: Vec<Self::Input>) -> Result<Vec<Self::Id>, TodoErrors> {
-        use std::vec;
-
-        if todos.len() > self.create_batch_hard_limit as usize {
-            return Err(TodoErrors::BatchTooLarge {
-                max_size: self.create_batch_hard_limit,
-            });
-        }
-
-        let mut tx = self.pool.begin().await?;
-
-        // let mut ids = Vec::with_capacity(todos.len());
-
-        for todo in todos {
-            let res = query(
-                r#"
-                INSERT INTO todo (title, done)
-                VALUES ($1, $2)
-                RETURNING id
-                "#,
-            )
-            .bind(&todo.title)
-            .bind(todo.done)
-            .execute(&mut tx)
-            .await?;
-        }
-
-        tx.commit().await?;
-
-        Ok(vec![])
     }
 
     #[inline]
@@ -191,37 +131,39 @@ impl Controller for TodoController {
             req.limit.unwrap_or(self.pagination_limit),
             self.pagination_hard_limit,
         );
-        let todos = query_as::<_, TodoRead>(
+        let offset = req.offset.unwrap_or(0);
+
+        let todos = query_as!(
+            TodoRead,
             r#"
-            SELECT id, title, done
+            SELECT id AS "id!: u32", title, done
             FROM todo
             ORDER BY id
-            LIMIT ?
-            OFFSET ?
+            LIMIT $1
+            OFFSET $2
             "#,
+            limit,
+            offset,
         )
-        .bind(limit)
-        .bind(req.offset.unwrap_or(0))
         .fetch_all(&self.pool)
         .await?;
 
-        let total = query(
+        let count_query = query!(
             r#"
-            SELECT COUNT(id) as total
+            SELECT COUNT(id) as "total!: u32"
             FROM todo
             "#,
         )
         .fetch_one(&self.pool)
-        .await?
-        .get::<Id, _>("total");
+        .await?;
 
         let queried_count = todos.len() as u32;
 
         Ok(ListResponse {
             data: todos,
-            total,
+            total: count_query.total,
             limit: cmp::min(req.limit.unwrap_or(self.pagination_limit), queried_count),
-            offset: req.offset.unwrap_or(0),
+            offset,
         })
     }
 
@@ -230,29 +172,29 @@ impl Controller for TodoController {
         let mut tx = self.pool.begin().await?;
 
         if let Some(title) = &todo.title {
-            query(
+            query!(
                 r#"
                 UPDATE todo
-                SET title = ?
-                WHERE id = ?
+                SET title = $1
+                WHERE id = $2
                 "#,
+                title,
+                id
             )
-            .bind(title)
-            .bind(id)
             .execute(&mut tx)
             .await?;
         }
 
         if let Some(done) = &todo.done {
-            query(
+            query!(
                 r#"
                 UPDATE todo
-                SET done = ?
-                WHERE id = ?
+                SET done = $1
+                WHERE id = $2
                 "#,
+                done,
+                id
             )
-            .bind(done)
-            .bind(id)
             .execute(&mut tx)
             .await?;
         }
