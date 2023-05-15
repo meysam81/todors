@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["todo"],"struct":["ListRequest","ListResponse"]};
+window.SIDEBAR_ITEMS = {"mod":["todo"]};

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["sqlite"]};
+window.SIDEBAR_ITEMS = {"fn":["connect"],"mod":["sqlite"]};

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["sqlite"]};
+window.SIDEBAR_ITEMS = {"struct":["Record","TodoController"]};

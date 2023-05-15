@@ -83,6 +83,8 @@
 <a href="#83" id="83">83</a>
 <a href="#84" id="84">84</a>
 <a href="#85" id="85">85</a>
+<a href="#86" id="86">86</a>
+<a href="#87" id="87">87</a>
 </pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::serializers::Deserialize;
 <span class="kw">use </span>config::{Config, Environment};
 
@@ -116,7 +118,9 @@
     <span class="kw">let </span>path = user_home.join(<span class="string">&quot;.todors&quot;</span>);
 
     <span class="kw">let </span>path = path.join(<span class="string">&quot;db.sqlite&quot;</span>);
-    path.to_str().unwrap().to_string()
+    <span class="kw">let </span>path = path.to_str().unwrap().to_string();
+
+    <span class="macro">format!</span>(<span class="string">&quot;sqlite://{}&quot;</span>, path)
 }
 
 <span class="kw">fn </span>default_loglevel() -&gt; String {

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["TodoRead","TodoUpdate","TodoWrite"],"type":["Id"]};
+window.SIDEBAR_ITEMS = {"struct":["ListRequest","ListResponse","TodoRead","TodoUpdate","TodoWrite"],"type":["Id"]};
