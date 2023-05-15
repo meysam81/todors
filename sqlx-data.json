@@ -1,0 +1,71 @@
+{
+  "db": "SQLite",
+  "822e7678448b39c99fcf2dd3e3a2f1511f49cb9ad73d44bf7213c01a87595995": {
+    "describe": {
+      "columns": [],
+      "nullable": [],
+      "parameters": {
+        "Right": 2
+      }
+    },
+    "query": "\n                UPDATE todo\n                SET done = $1\n                WHERE id = $2\n                "
+  },
+  "9b63bff1005e5bc8f7e86e636713c8c859ff664367d2ccf78f10f15eafb05129": {
+    "describe": {
+      "columns": [],
+      "nullable": [],
+      "parameters": {
+        "Right": 2
+      }
+    },
+    "query": "\n                UPDATE todo\n                SET title = $1\n                WHERE id = $2\n                "
+  },
+  "bd96a24511d971c3bad998ab282bec8823469154283d0d17e975e73179fc470d": {
+    "describe": {
+      "columns": [
+        {
+          "name": "total!",
+          "ordinal": 0,
+          "type_info": "Int"
+        }
+      ],
+      "nullable": [
+        false
+      ],
+      "parameters": {
+        "Right": 0
+      }
+    },
+    "query": "\n            SELECT COUNT(id) as \"total!\"\n            FROM todo\n            "
+  },
+  "ffd7311dec5fab0047346920403b91d16af847665c2df3ae2ff3a7766b578676": {
+    "describe": {
+      "columns": [
+        {
+          "name": "id!: u32",
+          "ordinal": 0,
+          "type_info": "Int64"
+        },
+        {
+          "name": "title",
+          "ordinal": 1,
+          "type_info": "Text"
+        },
+        {
+          "name": "done",
+          "ordinal": 2,
+          "type_info": "Bool"
+        }
+      ],
+      "nullable": [
+        false,
+        false,
+        false
+      ],
+      "parameters": {
+        "Right": 2
+      }
+    },
+    "query": "\n            SELECT id AS \"id!: u32\", title, done\n            FROM todo\n            ORDER BY id\n            LIMIT $1\n            OFFSET $2\n            "
+  }
+}
