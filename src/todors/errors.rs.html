@@ -20,6 +20,9 @@
 <a href="#20" id="20">20</a>
 <a href="#21" id="21">21</a>
 <a href="#22" id="22">22</a>
+<a href="#23" id="23">23</a>
+<a href="#24" id="24">24</a>
+<a href="#25" id="25">25</a>
 </pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::db::Error <span class="kw">as </span>DbError;
 <span class="kw">use </span><span class="kw">crate</span>::serializers::Error <span class="kw">as </span>SerializerError;
 <span class="kw">use </span>std::io::Error <span class="kw">as </span>IoError;
@@ -41,6 +44,9 @@
 
     <span class="attr">#[error(<span class="string">&quot;batch too large, max batch size is {max_size}&quot;</span>)]
     </span>BatchTooLarge { max_size: u32 },
+
+    <span class="attr">#[error(<span class="string">&quot;internal error&quot;</span>)]
+    </span>InternalError,
 }
 </code></pre></div>
 </section></main><div id="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="todors" data-themes="" data-resource-suffix="" data-rustdoc-version="1.69.0 (84c898d65 2023-04-16)" data-search-js="search-8a59a8356673ec1f.js" data-settings-js="settings-f0c5c39777a9a2f6.js" data-settings-css="settings-0bcba95ff279c1db.css" ></div></body></html>

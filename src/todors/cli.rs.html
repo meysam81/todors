@@ -364,7 +364,7 @@
             <span class="kw">match </span>state.controller.create_batch(todos).<span class="kw">await </span>{
                 <span class="prelude-val">Ok</span>(todo) =&gt; {
                     <span class="kw">let </span>todo = to_json(<span class="kw-2">&amp;</span>todo).unwrap();
-                    <span class="macro">println!</span>(<span class="string">&quot;Inserted ids: {}&quot;</span>, todo);
+                    <span class="macro">println!</span>(<span class="string">&quot;{}&quot;</span>, todo);
                 }
                 <span class="prelude-val">Err</span>(TodoErrors::BatchTooLarge { max_size }) =&gt; {
                     <span class="macro">error!</span>(

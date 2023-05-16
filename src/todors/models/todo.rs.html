@@ -394,6 +394,18 @@
 <a href="#394" id="394">394</a>
 <a href="#395" id="395">395</a>
 <a href="#396" id="396">396</a>
+<a href="#397" id="397">397</a>
+<a href="#398" id="398">398</a>
+<a href="#399" id="399">399</a>
+<a href="#400" id="400">400</a>
+<a href="#401" id="401">401</a>
+<a href="#402" id="402">402</a>
+<a href="#403" id="403">403</a>
+<a href="#404" id="404">404</a>
+<a href="#405" id="405">405</a>
+<a href="#406" id="406">406</a>
+<a href="#407" id="407">407</a>
+<a href="#408" id="408">408</a>
 </pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::consts;
 <span class="kw">use </span><span class="kw">crate</span>::db::{query, query_as, Pool};
 <span class="kw">use </span><span class="kw">crate</span>::entities::{Id, TodoRead, TodoUpdate, TodoWrite};
@@ -435,29 +447,28 @@
 
     <span class="attr">#[inline]
     </span><span class="kw">async fn </span>create(<span class="kw-2">&amp;</span><span class="self">self</span>, todo: <span class="self">Self</span>::Input) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>::Output, TodoErrors&gt; {
-        <span class="kw">let </span>res = query(
+        <span class="kw">let </span>res = <span class="macro">query_as!</span>(
+            TodoRead,
             <span class="string">r#&quot;
             INSERT INTO todo (title, done)
-            VALUES (?, ?)
-            RETURNING id
+            VALUES ($1, $2)
+            RETURNING id AS &quot;id!: u32&quot;, title AS &quot;title!&quot;, done AS &quot;done!&quot;
             &quot;#</span>,
+            todo.title,
+            todo.done,
         )
-        .bind(<span class="kw-2">&amp;</span>todo.title)
-        .bind(todo.done)
-        .execute(<span class="kw-2">&amp;</span><span class="self">self</span>.pool)
+        .fetch_one(<span class="kw-2">&amp;</span><span class="self">self</span>.pool)
         .<span class="kw">await</span><span class="question-mark">?</span>;
 
-        <span class="kw">let </span>id = res.last_insert_rowid() <span class="kw">as </span>Id;
-
         <span class="prelude-val">Ok</span>(TodoRead {
-            id,
-            title: todo.title,
-            done: todo.done,
+            id: res.id,
+            title: res.title,
+            done: res.done,
         })
     }
 
     <span class="attr">#[inline]
-    </span><span class="kw">async fn </span>create_batch(<span class="kw-2">&amp;</span><span class="self">self</span>, todos: Vec&lt;<span class="self">Self</span>::Input&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;<span class="self">Self</span>::Id&gt;, TodoErrors&gt; {
+    </span><span class="kw">async fn </span>create_batch(<span class="kw-2">&amp;</span><span class="self">self</span>, todos: Vec&lt;<span class="self">Self</span>::Input&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;<span class="self">Self</span>::Output&gt;, TodoErrors&gt; {
         <span class="kw">if </span>todos.len() &gt; <span class="self">self</span>.create_batch_hard_limit <span class="kw">as </span>usize {
             <span class="kw">return </span><span class="prelude-val">Err</span>(TodoErrors::BatchTooLarge {
                 max_size: <span class="self">self</span>.create_batch_hard_limit,
@@ -466,52 +477,65 @@
 
         <span class="kw">let </span><span class="kw-2">mut </span>tx = <span class="self">self</span>.pool.begin().<span class="kw">await</span><span class="question-mark">?</span>;
 
-        <span class="kw">let </span><span class="kw-2">mut </span>ids = Vec::with_capacity(todos.len());
+        <span class="kw">let </span><span class="kw-2">mut </span>result = Vec::with_capacity(todos.len());
 
         <span class="kw">for </span>todo <span class="kw">in </span>todos {
-            <span class="kw">let </span>res = query(
+            <span class="kw">let </span>res = <span class="macro">query_as!</span>(
+                TodoRead,
                 <span class="string">r#&quot;
                 INSERT INTO todo (title, done)
-                VALUES (?, ?)
-                RETURNING id
+                VALUES ($1, $2)
+                RETURNING id AS &quot;id!: u32&quot;, title AS &quot;title!&quot;, done AS &quot;done!&quot;
                 &quot;#</span>,
+                todo.title,
+                todo.done,
             )
-            .bind(<span class="kw-2">&amp;</span>todo.title)
-            .bind(todo.done)
-            .execute(<span class="kw-2">&amp;mut </span>tx)
+            .fetch_one(<span class="kw-2">&amp;mut </span>tx)
             .<span class="kw">await</span><span class="question-mark">?</span>;
 
-            ids.push(res.last_insert_rowid() <span class="kw">as </span>Id);
+            result.push(TodoRead {
+                id: res.id,
+                title: res.title,
+                done: res.done,
+            });
         }
 
         tx.commit().<span class="kw">await</span><span class="question-mark">?</span>;
 
-        <span class="prelude-val">Ok</span>(ids)
+        <span class="prelude-val">Ok</span>(result)
     }
 
     <span class="attr">#[inline]
     </span><span class="kw">async fn </span>delete(<span class="kw-2">&amp;</span><span class="self">self</span>, id: <span class="self">Self</span>::Id) -&gt; <span class="prelude-ty">Result</span>&lt;(), TodoErrors&gt; {
-        <span class="kw">let </span>r = query(<span class="string">&quot;DELETE FROM todo WHERE id = ?&quot;</span>)
-            .bind(id)
-            .execute(<span class="kw-2">&amp;</span><span class="self">self</span>.pool)
-            .<span class="kw">await</span><span class="question-mark">?</span>;
+        <span class="kw">let </span>res = <span class="macro">query!</span>(
+            <span class="string">r#&quot;
+            DELETE FROM todo
+            WHERE id = $1
+            RETURNING id AS &quot;id!: u32&quot;
+            &quot;#</span>,
+            id,
+        )
+        .fetch_one(<span class="kw-2">&amp;</span><span class="self">self</span>.pool)
+        .<span class="kw">await</span>;
 
-        <span class="kw">match </span>r.rows_affected() {
-            <span class="number">0 </span>=&gt; <span class="prelude-val">Err</span>(TodoErrors::TodoNotFound),
+        <span class="kw">match </span>res {
+            <span class="prelude-val">Err</span>(<span class="kw">crate</span>::db::Error::RowNotFound) =&gt; <span class="prelude-val">Err</span>(TodoErrors::TodoNotFound),
+            <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="prelude-val">Err</span>(TodoErrors::InternalError),
             <span class="kw">_ </span>=&gt; <span class="prelude-val">Ok</span>(()),
         }
     }
 
     <span class="attr">#[inline]
     </span><span class="kw">async fn </span>get(<span class="kw-2">&amp;</span><span class="self">self</span>, id: <span class="self">Self</span>::Id) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>::Output, TodoErrors&gt; {
-        <span class="kw">let </span>todo = query_as::&lt;<span class="kw">_</span>, TodoRead&gt;(
+        <span class="kw">let </span>todo = <span class="macro">query_as!</span>(
+            TodoRead,
             <span class="string">r#&quot;
-            SELECT id, title, done
+            SELECT id AS &quot;id!: u32&quot;, title, done
             FROM todo
-            WHERE id = ?
+            WHERE id = $1
             &quot;#</span>,
+            id,
         )
-        .bind(id)
         .fetch_one(<span class="kw-2">&amp;</span><span class="self">self</span>.pool)
         .<span class="kw">await</span>;
 
