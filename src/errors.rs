@@ -19,4 +19,7 @@ pub enum TodoErrors {
 
     #[error("batch too large, max batch size is {max_size}")]
     BatchTooLarge { max_size: u32 },
+
+    #[error("internal error")]
+    InternalError,
 }

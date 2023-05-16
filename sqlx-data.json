@@ -18,6 +18,36 @@
     },
     "query": "\n            SELECT COUNT(id) as \"total!: u32\"\n            FROM todo\n            "
   },
+  "3f8ac578682630799d097c3c819361f8565ab8299a7810447217f3a3b54f191a": {
+    "describe": {
+      "columns": [
+        {
+          "name": "id!: u32",
+          "ordinal": 0,
+          "type_info": "Int64"
+        },
+        {
+          "name": "title!",
+          "ordinal": 1,
+          "type_info": "Text"
+        },
+        {
+          "name": "done!",
+          "ordinal": 2,
+          "type_info": "Bool"
+        }
+      ],
+      "nullable": [
+        false,
+        true,
+        true
+      ],
+      "parameters": {
+        "Right": 2
+      }
+    },
+    "query": "\n            INSERT INTO todo (title, done)\n            VALUES ($1, $2)\n            RETURNING id AS \"id!: u32\", title AS \"title!\", done AS \"done!\"\n            "
+  },
   "822e7678448b39c99fcf2dd3e3a2f1511f49cb9ad73d44bf7213c01a87595995": {
     "describe": {
       "columns": [],
@@ -37,6 +67,84 @@
       }
     },
     "query": "\n                UPDATE todo\n                SET title = $1\n                WHERE id = $2\n                "
+  },
+  "d50bf802f9834b6df278070c1a653106ac60f05a1a2973fe98fcc6ebb3457162": {
+    "describe": {
+      "columns": [
+        {
+          "name": "id!: u32",
+          "ordinal": 0,
+          "type_info": "Int64"
+        },
+        {
+          "name": "title!",
+          "ordinal": 1,
+          "type_info": "Text"
+        },
+        {
+          "name": "done!",
+          "ordinal": 2,
+          "type_info": "Bool"
+        }
+      ],
+      "nullable": [
+        false,
+        true,
+        true
+      ],
+      "parameters": {
+        "Right": 2
+      }
+    },
+    "query": "\n                INSERT INTO todo (title, done)\n                VALUES ($1, $2)\n                RETURNING id AS \"id!: u32\", title AS \"title!\", done AS \"done!\"\n                "
+  },
+  "f14e27a1c85fdc51f8dcfa80e06fed97b33d2661ed0d634be2436792e785d433": {
+    "describe": {
+      "columns": [
+        {
+          "name": "id!: u32",
+          "ordinal": 0,
+          "type_info": "Int64"
+        }
+      ],
+      "nullable": [
+        false
+      ],
+      "parameters": {
+        "Right": 1
+      }
+    },
+    "query": "\n            DELETE FROM todo\n            WHERE id = $1\n            RETURNING id AS \"id!: u32\"\n            "
+  },
+  "fc742bf0cdfc414f053467772231d6f0de39c11353846a76c86f9a4d8a58d922": {
+    "describe": {
+      "columns": [
+        {
+          "name": "id!: u32",
+          "ordinal": 0,
+          "type_info": "Int64"
+        },
+        {
+          "name": "title",
+          "ordinal": 1,
+          "type_info": "Text"
+        },
+        {
+          "name": "done",
+          "ordinal": 2,
+          "type_info": "Bool"
+        }
+      ],
+      "nullable": [
+        false,
+        false,
+        false
+      ],
+      "parameters": {
+        "Right": 1
+      }
+    },
+    "query": "\n            SELECT id AS \"id!: u32\", title, done\n            FROM todo\n            WHERE id = $1\n            "
   },
   "ffd7311dec5fab0047346920403b91d16af847665c2df3ae2ff3a7766b578676": {
     "describe": {

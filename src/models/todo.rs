@@ -39,29 +39,28 @@ impl Controller for TodoController {
 
     #[inline]
     async fn create(&self, todo: Self::Input) -> Result<Self::Output, TodoErrors> {
-        let res = query(
+        let res = query_as!(
+            TodoRead,
             r#"
             INSERT INTO todo (title, done)
-            VALUES (?, ?)
-            RETURNING id
+            VALUES ($1, $2)
+            RETURNING id AS "id!: u32", title AS "title!", done AS "done!"
             "#,
+            todo.title,
+            todo.done,
         )
-        .bind(&todo.title)
-        .bind(todo.done)
-        .execute(&self.pool)
+        .fetch_one(&self.pool)
         .await?;
 
-        let id = res.last_insert_rowid() as Id;
-
         Ok(TodoRead {
-            id,
-            title: todo.title,
-            done: todo.done,
+            id: res.id,
+            title: res.title,
+            done: res.done,
         })
     }
 
     #[inline]
-    async fn create_batch(&self, todos: Vec<Self::Input>) -> Result<Vec<Self::Id>, TodoErrors> {
+    async fn create_batch(&self, todos: Vec<Self::Input>) -> Result<Vec<Self::Output>, TodoErrors> {
         if todos.len() > self.create_batch_hard_limit as usize {
             return Err(TodoErrors::BatchTooLarge {
                 max_size: self.create_batch_hard_limit,
@@ -70,52 +69,65 @@ impl Controller for TodoController {
 
         let mut tx = self.pool.begin().await?;
 
-        let mut ids = Vec::with_capacity(todos.len());
+        let mut result = Vec::with_capacity(todos.len());
 
         for todo in todos {
-            let res = query(
+            let res = query_as!(
+                TodoRead,
                 r#"
                 INSERT INTO todo (title, done)
-                VALUES (?, ?)
-                RETURNING id
+                VALUES ($1, $2)
+                RETURNING id AS "id!: u32", title AS "title!", done AS "done!"
                 "#,
+                todo.title,
+                todo.done,
             )
-            .bind(&todo.title)
-            .bind(todo.done)
-            .execute(&mut tx)
+            .fetch_one(&mut tx)
             .await?;
 
-            ids.push(res.last_insert_rowid() as Id);
+            result.push(TodoRead {
+                id: res.id,
+                title: res.title,
+                done: res.done,
+            });
         }
 
         tx.commit().await?;
 
-        Ok(ids)
+        Ok(result)
     }
 
     #[inline]
     async fn delete(&self, id: Self::Id) -> Result<(), TodoErrors> {
-        let r = query("DELETE FROM todo WHERE id = ?")
-            .bind(id)
-            .execute(&self.pool)
-            .await?;
+        let res = query!(
+            r#"
+            DELETE FROM todo
+            WHERE id = $1
+            RETURNING id AS "id!: u32"
+            "#,
+            id,
+        )
+        .fetch_one(&self.pool)
+        .await;
 
-        match r.rows_affected() {
-            0 => Err(TodoErrors::TodoNotFound),
+        match res {
+            Err(crate::db::Error::RowNotFound) => Err(TodoErrors::TodoNotFound),
+            Err(_) => Err(TodoErrors::InternalError),
             _ => Ok(()),
         }
     }
 
     #[inline]
     async fn get(&self, id: Self::Id) -> Result<Self::Output, TodoErrors> {
-        let todo = query_as::<_, TodoRead>(
+        let todo = query_as!(
+            TodoRead,
             r#"
-            SELECT id, title, done
+            SELECT id AS "id!: u32", title, done
             FROM todo
-            WHERE id = ?
+            WHERE id = $1
             "#,
+            id,
         )
-        .bind(id)
         .fetch_one(&self.pool)
         .await;
 

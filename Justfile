@@ -55,3 +55,6 @@ grpc-client-list-todos *BODY:
 
 grpc-client-update-todo ID:
   grpcurl -proto ./proto/todo.proto -import-path ./proto/ -plaintext -d "{\"id\": \"{{ID}}\", \"title\": \"Hello Rust! $$\"}" localhost:50051 todo.Todo/Update
+
+sqlx-prepare:
+  cargo sqlx prepare --database-url "sqlite://$HOME/.todors/db.sqlite"

@@ -43,7 +43,7 @@ where
             match state.controller.create_batch(todos).await {
                 Ok(todo) => {
                     let todo = to_json(&todo).unwrap();
-                    println!("Inserted ids: {}", todo);
+                    println!("{}", todo);
                 }
                 Err(TodoErrors::BatchTooLarge { max_size }) => {
                     error!(

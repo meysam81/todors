@@ -30,3 +30,4 @@ benchmark
 cargo-test-*
 **/*.lcov
 coverage
+.envrc
