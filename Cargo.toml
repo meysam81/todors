@@ -12,14 +12,15 @@ categories = [
     "web-programming::http-server",
 ]
 include = [
-    ".cargo",
-    "migrations",
-    "proto",
-    "src",
     "build.rs",
+    ".cargo",
     "Cargo.toml",
     "LICENSE",
+    "migrations",
+    "proto",
     "README.md",
+    "sqlx-data.json",
+    "src",
 ]
 exclude = [
     "Cargo.lock",
