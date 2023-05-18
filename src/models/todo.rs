@@ -39,14 +39,14 @@ impl Controller for TodoController {
 
     #[inline]
     async fn create(&self, todo: Self::Input) -> Result<Self::Output, TodoErrors> {
-        let res = query_as!(
-            TodoRead,
+        let title = todo.title.clone();
+        let res = query!(
             r#"
             INSERT INTO todo (title, done)
             VALUES ($1, $2)
-            RETURNING id AS "id!: u32", title AS "title!", done AS "done!"
+            RETURNING id AS "id!: u32"
             "#,
-            todo.title,
+            title,
             todo.done,
         )
         .fetch_one(&self.pool)
@@ -54,8 +54,8 @@ impl Controller for TodoController {
 
         Ok(TodoRead {
             id: res.id,
-            title: res.title,
-            done: res.done,
+            title: todo.title,
+            done: todo.done,
         })
     }
 
@@ -72,14 +72,14 @@ impl Controller for TodoController {
         let mut result = Vec::with_capacity(todos.len());
 
         for todo in todos {
-            let res = query_as!(
-                TodoRead,
+            let title = todo.title.clone();
+            let res = query!(
                 r#"
                 INSERT INTO todo (title, done)
                 VALUES ($1, $2)
-                RETURNING id AS "id!: u32", title AS "title!", done AS "done!"
+                RETURNING id AS "id!: u32"
                 "#,
-                todo.title,
+                title,
                 todo.done,
             )
             .fetch_one(&mut tx)
@@ -87,8 +87,8 @@ impl Controller for TodoController {
 
             result.push(TodoRead {
                 id: res.id,
-                title: res.title,
-                done: res.done,
+                title: todo.title,
+                done: todo.done,
             });
         }
 
@@ -182,9 +182,10 @@ impl Controller for TodoController {
     #[inline]
     async fn update(&self, id: Self::Id, todo: Self::OptionalInput) -> Result<(), TodoErrors> {
         let mut tx = self.pool.begin().await?;
+        let mut updated = false;
 
         if let Some(title) = &todo.title {
-            query!(
+            let r = query!(
                 r#"
                 UPDATE todo
                 SET title = $1
@@ -194,11 +195,16 @@ impl Controller for TodoController {
                 id
             )
             .execute(&mut tx)
-            .await?;
+            .await;
+
+            match r {
+                Ok(r) => updated = r.rows_affected() != 0,
+                Err(_) => return Err(TodoErrors::TitleAlreadyExists),
+            }
         }
 
         if let Some(done) = &todo.done {
-            query!(
+            let r = query!(
                 r#"
                 UPDATE todo
                 SET done = $1
@@ -209,15 +215,17 @@ impl Controller for TodoController {
             )
             .execute(&mut tx)
             .await?;
+
+            // there is a unique constraint on `title`, but not on `done`
+            updated = updated || r.rows_affected() != 0;
         }
 
         tx.commit().await?;
 
-        // NOTE: `changes()` will always return zero if called after the tx
-        // it will also return always one if called within the the tx
-        // I don't know of any other way to get the number of rows affected ATM
-
-        Ok(())
+        match updated {
+            true => Ok(()),
+            false => Err(TodoErrors::TodoNotFound),
+        }
     }
 }
 

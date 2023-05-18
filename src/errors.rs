@@ -22,4 +22,7 @@ pub enum TodoErrors {
 
     #[error("internal error")]
     InternalError,
+
+    #[error("title already exists")]
+    TitleAlreadyExists,
 }

@@ -122,6 +122,9 @@ where
                 .content_type("text/plain")
                 .body("TODO updated"),
             Err(TodoErrors::TodoNotFound) => HttpResponse::NotFound().finish(),
+            Err(TodoErrors::TitleAlreadyExists) => HttpResponse::Conflict()
+                .content_type("text/plain")
+                .body("TODO with the same title already exists"),
             Err(err) => {
                 error!(state.logger, "Failed to update todo: {:?}", err);
                 HttpResponse::InternalServerError().finish()
@@ -154,7 +157,7 @@ fn create_todo() {}
     context_path = "/api/v1",
     request_body(content = Vec<TodoWrite>, example = json!([{"title": "Call Jack", "done": false}, {"title": "Buy milk", "done": false}, {"title": "Go to gym", "done": false}])),
     responses(
-        (status = 201, content_type = "application/json", example = json!([1, 2, 3]), body = Vec<u32>),
+        (status = 201, content_type = "application/json", example = json!([{"id": 1, "title": "Call Jack", "done": false}, {"id": 2, "title": "Buy milk", "done": false}, {"id": 1, "title": "Go to gym", "done": false}]), body = Vec<TodoRead>),
         (status = 409, description = "a TODO with the same title exists", content_type = "text/plain", example = json!("Todo already exists"), body = String),
         (status = 500, description = "Internal server error", content_type = "text/plain", example = json!("Internal server error"), body = String),
     ),

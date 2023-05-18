@@ -1,5 +1,6 @@
 use crate::consts;
 
+pub use sqlx::sqlite::SqliteError as DriverError;
 pub use sqlx::sqlite::SqlitePool as Pool;
 use sqlx::sqlite::SqlitePoolOptions;
 pub use sqlx::sqlite::SqliteQueryResult as QueryResult;

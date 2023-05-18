@@ -18,36 +18,6 @@
     },
     "query": "\n            SELECT COUNT(id) as \"total!: u32\"\n            FROM todo\n            "
   },
-  "3f8ac578682630799d097c3c819361f8565ab8299a7810447217f3a3b54f191a": {
-    "describe": {
-      "columns": [
-        {
-          "name": "id!: u32",
-          "ordinal": 0,
-          "type_info": "Int64"
-        },
-        {
-          "name": "title!",
-          "ordinal": 1,
-          "type_info": "Text"
-        },
-        {
-          "name": "done!",
-          "ordinal": 2,
-          "type_info": "Bool"
-        }
-      ],
-      "nullable": [
-        false,
-        true,
-        true
-      ],
-      "parameters": {
-        "Right": 2
-      }
-    },
-    "query": "\n            INSERT INTO todo (title, done)\n            VALUES ($1, $2)\n            RETURNING id AS \"id!: u32\", title AS \"title!\", done AS \"done!\"\n            "
-  },
   "822e7678448b39c99fcf2dd3e3a2f1511f49cb9ad73d44bf7213c01a87595995": {
     "describe": {
       "columns": [],
@@ -68,35 +38,41 @@
     },
     "query": "\n                UPDATE todo\n                SET title = $1\n                WHERE id = $2\n                "
   },
-  "d50bf802f9834b6df278070c1a653106ac60f05a1a2973fe98fcc6ebb3457162": {
+  "df209c51617186521ab296a307ea23875e4397fe20f869548d4c5e443f9d415b": {
     "describe": {
       "columns": [
         {
           "name": "id!: u32",
           "ordinal": 0,
           "type_info": "Int64"
-        },
-        {
-          "name": "title!",
-          "ordinal": 1,
-          "type_info": "Text"
-        },
-        {
-          "name": "done!",
-          "ordinal": 2,
-          "type_info": "Bool"
         }
       ],
       "nullable": [
-        false,
-        true,
-        true
+        false
       ],
       "parameters": {
         "Right": 2
       }
     },
-    "query": "\n                INSERT INTO todo (title, done)\n                VALUES ($1, $2)\n                RETURNING id AS \"id!: u32\", title AS \"title!\", done AS \"done!\"\n                "
+    "query": "\n                INSERT INTO todo (title, done)\n                VALUES ($1, $2)\n                RETURNING id AS \"id!: u32\"\n                "
+  },
+  "e62d3644e652e37d559b2a663c81342b2af52bc194f9e4f9794f53be1286431e": {
+    "describe": {
+      "columns": [
+        {
+          "name": "id!: u32",
+          "ordinal": 0,
+          "type_info": "Int64"
+        }
+      ],
+      "nullable": [
+        false
+      ],
+      "parameters": {
+        "Right": 2
+      }
+    },
+    "query": "\n            INSERT INTO todo (title, done)\n            VALUES ($1, $2)\n            RETURNING id AS \"id!: u32\"\n            "
   },
   "f14e27a1c85fdc51f8dcfa80e06fed97b33d2661ed0d634be2436792e785d433": {
     "describe": {

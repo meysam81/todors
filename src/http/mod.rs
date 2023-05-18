@@ -87,6 +87,7 @@ where
 fn build_apidoc() -> utoipa::openapi::OpenApi {
     #[derive(OpenApi)]
     #[openapi(
+        info(description = "TODO app HTTP REST API."),
         paths(
             index::index,
             todo::create_todo,
