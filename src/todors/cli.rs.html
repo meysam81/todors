@@ -314,34 +314,27 @@
 <a href="#314" id="314">314</a>
 <a href="#315" id="315">315</a>
 <a href="#316" id="316">316</a>
-<a href="#317" id="317">317</a>
-<a href="#318" id="318">318</a>
-<a href="#319" id="319">319</a>
-<a href="#320" id="320">320</a>
-<a href="#321" id="321">321</a>
 </pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::entities;
 <span class="kw">use </span><span class="kw">crate</span>::errors::TodoErrors;
-<span class="kw">use </span><span class="kw">crate</span>::logging::{error, info, Logger};
 <span class="kw">use </span><span class="kw">crate</span>::serializers::{to_json, to_pretty_json};
 <span class="kw">use </span><span class="kw">crate</span>::traits::Controller;
 <span class="kw">use </span>clap::{Args, Command, Parser, Subcommand};
 <span class="kw">use </span>clap_complete::{generate, Generator, Shell};
-<span class="kw">use </span>std::{io, sync::Arc};
+<span class="kw">use </span>std::io;
 
 <span class="kw">pub struct </span>CliState&lt;T&gt;
 <span class="kw">where
     </span>T: Controller,
 {
     controller: T,
-    logger: Arc&lt;Logger&gt;,
 }
 
 <span class="kw">impl</span>&lt;T&gt; CliState&lt;T&gt;
 <span class="kw">where
     </span>T: Controller,
 {
-    <span class="kw">pub fn </span>new(controller: T, logger: Arc&lt;Logger&gt;) -&gt; <span class="self">Self </span>{
-        <span class="self">Self </span>{ controller, logger }
+    <span class="kw">pub fn </span>new(controller: T) -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{ controller }
     }
 }
 
@@ -367,20 +360,17 @@
                     <span class="macro">println!</span>(<span class="string">&quot;{}&quot;</span>, todo);
                 }
                 <span class="prelude-val">Err</span>(TodoErrors::BatchTooLarge { max_size }) =&gt; {
-                    <span class="macro">error!</span>(
-                        state.logger,
-                        <span class="string">&quot;Batch too large, max batch size is {}&quot;</span>, max_size
-                    );
+                    <span class="macro">eprintln!</span>(<span class="string">&quot;Batch too large, max batch size is {}&quot;</span>, max_size);
                 }
                 <span class="prelude-val">Err</span>(err) =&gt; {
-                    <span class="macro">error!</span>(state.logger, <span class="string">&quot;Failed to create todo: {:?}&quot;</span>, err);
+                    <span class="macro">eprintln!</span>(<span class="string">&quot;Failed to create todo: {:?}&quot;</span>, err);
                 }
             }
         }
         Local::Delete(Delete { id }) =&gt; <span class="kw">match </span>state.controller.delete(id).<span class="kw">await </span>{
-            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) =&gt; <span class="macro">info!</span>(state.logger, <span class="string">&quot;Successfully deleted: {}&quot;</span>, id),
+            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) =&gt; <span class="macro">println!</span>(<span class="string">&quot;Successfully deleted: {}&quot;</span>, id),
             <span class="prelude-val">Err</span>(err) =&gt; {
-                <span class="macro">error!</span>(state.logger, <span class="string">&quot;Failed to delete todo: {:?}&quot;</span>, err);
+                <span class="macro">eprintln!</span>(<span class="string">&quot;Failed to delete todo: {:?}&quot;</span>, err);
             }
         },
         Local::Get(Get { id, pretty }) =&gt; <span class="kw">match </span>state.controller.get(id).<span class="kw">await </span>{
@@ -390,7 +380,7 @@
                 <span class="macro">println!</span>(<span class="string">&quot;{}&quot;</span>, todo)
             }
             <span class="prelude-val">Err</span>(err) =&gt; {
-                <span class="macro">error!</span>(state.logger, <span class="string">&quot;Failed to get todo: {:?}&quot;</span>, err);
+                <span class="macro">eprintln!</span>(<span class="string">&quot;Failed to get todo: {:?}&quot;</span>, err);
             }
         },
         Local::List(List {
@@ -408,7 +398,7 @@
                 <span class="macro">println!</span>(<span class="string">&quot;{}&quot;</span>, todos)
             }
             <span class="prelude-val">Err</span>(err) =&gt; {
-                <span class="macro">error!</span>(state.logger, <span class="string">&quot;Failed to list todos: {:?}&quot;</span>, err);
+                <span class="macro">eprintln!</span>(<span class="string">&quot;Failed to list todos: {:?}&quot;</span>, err);
             }
         },
         Local::Update(Update {
@@ -424,9 +414,9 @@
             };
             <span class="kw">let </span>todo = entities::TodoUpdate::new(title, done);
             <span class="kw">match </span>state.controller.update(id, todo).<span class="kw">await </span>{
-                <span class="prelude-val">Ok</span>(<span class="kw">_</span>) =&gt; <span class="macro">info!</span>(state.logger, <span class="string">&quot;Successfully updated: {}&quot;</span>, id),
+                <span class="prelude-val">Ok</span>(<span class="kw">_</span>) =&gt; <span class="macro">println!</span>(<span class="string">&quot;Successfully updated: {}&quot;</span>, id),
                 <span class="prelude-val">Err</span>(err) =&gt; {
-                    <span class="macro">error!</span>(state.logger, <span class="string">&quot;Failed to update todo: {:?}&quot;</span>, err);
+                    <span class="macro">eprintln!</span>(<span class="string">&quot;Failed to update todo: {:?}&quot;</span>, err);
                 }
             }
         }

@@ -128,7 +128,7 @@
 
     <span class="kw">match </span>cli.command {
         Commands::Local(local) =&gt; {
-            <span class="kw">let </span>cli_state = cli::CliState::new(todo_controller, logger);
+            <span class="kw">let </span>cli_state = cli::CliState::new(todo_controller);
             handle_local(local, cli_state).<span class="kw">await</span>;
         }
         Commands::Serve(cli::Serve::Http(cli::HttpServerAddr { host, port })) =&gt; {
