@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"derive":["FromRow"],"enum":["Error"],"fn":["apply_migrations","get_sqlite_conn","init_pool","query","query_as"],"macro":["query","query_as"],"mod":["query"],"struct":["QueryResult"],"trait":["FromRow","Row"],"type":["Pool"]};
+window.SIDEBAR_ITEMS = {"derive":["FromRow"],"enum":["Error"],"fn":["apply_migrations","get_sqlite_conn","init_pool","query","query_as"],"macro":["query","query_as"],"mod":["query"],"struct":["DriverError","QueryResult"],"trait":["FromRow","Row"],"type":["Pool"]};

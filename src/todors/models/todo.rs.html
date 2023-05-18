@@ -406,6 +406,14 @@
 <a href="#406" id="406">406</a>
 <a href="#407" id="407">407</a>
 <a href="#408" id="408">408</a>
+<a href="#409" id="409">409</a>
+<a href="#410" id="410">410</a>
+<a href="#411" id="411">411</a>
+<a href="#412" id="412">412</a>
+<a href="#413" id="413">413</a>
+<a href="#414" id="414">414</a>
+<a href="#415" id="415">415</a>
+<a href="#416" id="416">416</a>
 </pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::consts;
 <span class="kw">use </span><span class="kw">crate</span>::db::{query, query_as, Pool};
 <span class="kw">use </span><span class="kw">crate</span>::entities::{Id, TodoRead, TodoUpdate, TodoWrite};
@@ -447,14 +455,14 @@
 
     <span class="attr">#[inline]
     </span><span class="kw">async fn </span>create(<span class="kw-2">&amp;</span><span class="self">self</span>, todo: <span class="self">Self</span>::Input) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>::Output, TodoErrors&gt; {
-        <span class="kw">let </span>res = <span class="macro">query_as!</span>(
-            TodoRead,
+        <span class="kw">let </span>title = todo.title.clone();
+        <span class="kw">let </span>res = <span class="macro">query!</span>(
             <span class="string">r#&quot;
             INSERT INTO todo (title, done)
             VALUES ($1, $2)
-            RETURNING id AS &quot;id!: u32&quot;, title AS &quot;title!&quot;, done AS &quot;done!&quot;
+            RETURNING id AS &quot;id!: u32&quot;
             &quot;#</span>,
-            todo.title,
+            title,
             todo.done,
         )
         .fetch_one(<span class="kw-2">&amp;</span><span class="self">self</span>.pool)
@@ -462,8 +470,8 @@
 
         <span class="prelude-val">Ok</span>(TodoRead {
             id: res.id,
-            title: res.title,
-            done: res.done,
+            title: todo.title,
+            done: todo.done,
         })
     }
 
@@ -480,14 +488,14 @@
         <span class="kw">let </span><span class="kw-2">mut </span>result = Vec::with_capacity(todos.len());
 
         <span class="kw">for </span>todo <span class="kw">in </span>todos {
-            <span class="kw">let </span>res = <span class="macro">query_as!</span>(
-                TodoRead,
+            <span class="kw">let </span>title = todo.title.clone();
+            <span class="kw">let </span>res = <span class="macro">query!</span>(
                 <span class="string">r#&quot;
                 INSERT INTO todo (title, done)
                 VALUES ($1, $2)
-                RETURNING id AS &quot;id!: u32&quot;, title AS &quot;title!&quot;, done AS &quot;done!&quot;
+                RETURNING id AS &quot;id!: u32&quot;
                 &quot;#</span>,
-                todo.title,
+                title,
                 todo.done,
             )
             .fetch_one(<span class="kw-2">&amp;mut </span>tx)
@@ -495,8 +503,8 @@
 
             result.push(TodoRead {
                 id: res.id,
-                title: res.title,
-                done: res.done,
+                title: todo.title,
+                done: todo.done,
             });
         }
 
@@ -590,9 +598,10 @@
     <span class="attr">#[inline]
     </span><span class="kw">async fn </span>update(<span class="kw-2">&amp;</span><span class="self">self</span>, id: <span class="self">Self</span>::Id, todo: <span class="self">Self</span>::OptionalInput) -&gt; <span class="prelude-ty">Result</span>&lt;(), TodoErrors&gt; {
         <span class="kw">let </span><span class="kw-2">mut </span>tx = <span class="self">self</span>.pool.begin().<span class="kw">await</span><span class="question-mark">?</span>;
+        <span class="kw">let </span><span class="kw-2">mut </span>updated = <span class="bool-val">false</span>;
 
         <span class="kw">if let </span><span class="prelude-val">Some</span>(title) = <span class="kw-2">&amp;</span>todo.title {
-            <span class="macro">query!</span>(
+            <span class="kw">let </span>r = <span class="macro">query!</span>(
                 <span class="string">r#&quot;
                 UPDATE todo
                 SET title = $1
@@ -602,11 +611,16 @@
                 id
             )
             .execute(<span class="kw-2">&amp;mut </span>tx)
-            .<span class="kw">await</span><span class="question-mark">?</span>;
+            .<span class="kw">await</span>;
+
+            <span class="kw">match </span>r {
+                <span class="prelude-val">Ok</span>(r) =&gt; updated = r.rows_affected() != <span class="number">0</span>,
+                <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="kw">return </span><span class="prelude-val">Err</span>(TodoErrors::TitleAlreadyExists),
+            }
         }
 
         <span class="kw">if let </span><span class="prelude-val">Some</span>(done) = <span class="kw-2">&amp;</span>todo.done {
-            <span class="macro">query!</span>(
+            <span class="kw">let </span>r = <span class="macro">query!</span>(
                 <span class="string">r#&quot;
                 UPDATE todo
                 SET done = $1
@@ -617,15 +631,17 @@
             )
             .execute(<span class="kw-2">&amp;mut </span>tx)
             .<span class="kw">await</span><span class="question-mark">?</span>;
+
+            <span class="comment">// there is a unique constraint on `title`, but not on `done`
+            </span>updated = updated || r.rows_affected() != <span class="number">0</span>;
         }
 
         tx.commit().<span class="kw">await</span><span class="question-mark">?</span>;
 
-        <span class="comment">// NOTE: `changes()` will always return zero if called after the tx
-        // it will also return always one if called within the the tx
-        // I don&#39;t know of any other way to get the number of rows affected ATM
-
-        </span><span class="prelude-val">Ok</span>(())
+        <span class="kw">match </span>updated {
+            <span class="bool-val">true </span>=&gt; <span class="prelude-val">Ok</span>(()),
+            <span class="bool-val">false </span>=&gt; <span class="prelude-val">Err</span>(TodoErrors::TodoNotFound),
+        }
     }
 }
 

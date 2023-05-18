@@ -37,8 +37,10 @@
 <a href="#37" id="37">37</a>
 <a href="#38" id="38">38</a>
 <a href="#39" id="39">39</a>
+<a href="#40" id="40">40</a>
 </pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::consts;
 
+<span class="kw">pub use </span>sqlx::sqlite::SqliteError <span class="kw">as </span>DriverError;
 <span class="kw">pub use </span>sqlx::sqlite::SqlitePool <span class="kw">as </span>Pool;
 <span class="kw">use </span>sqlx::sqlite::SqlitePoolOptions;
 <span class="kw">pub use </span>sqlx::sqlite::SqliteQueryResult <span class="kw">as </span>QueryResult;

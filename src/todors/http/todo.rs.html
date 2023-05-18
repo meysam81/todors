@@ -232,6 +232,9 @@
 <a href="#232" id="232">232</a>
 <a href="#233" id="233">233</a>
 <a href="#234" id="234">234</a>
+<a href="#235" id="235">235</a>
+<a href="#236" id="236">236</a>
+<a href="#237" id="237">237</a>
 </pre><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::entities;
 <span class="kw">use </span><span class="kw">crate</span>::errors::TodoErrors;
 <span class="kw">use </span><span class="kw">crate</span>::logging::{debug, error};
@@ -356,6 +359,9 @@
                 .content_type(<span class="string">&quot;text/plain&quot;</span>)
                 .body(<span class="string">&quot;TODO updated&quot;</span>),
             <span class="prelude-val">Err</span>(TodoErrors::TodoNotFound) =&gt; HttpResponse::NotFound().finish(),
+            <span class="prelude-val">Err</span>(TodoErrors::TitleAlreadyExists) =&gt; HttpResponse::Conflict()
+                .content_type(<span class="string">&quot;text/plain&quot;</span>)
+                .body(<span class="string">&quot;TODO with the same title already exists&quot;</span>),
             <span class="prelude-val">Err</span>(err) =&gt; {
                 <span class="macro">error!</span>(state.logger, <span class="string">&quot;Failed to update todo: {:?}&quot;</span>, err);
                 HttpResponse::InternalServerError().finish()
@@ -388,7 +394,7 @@
     context_path = <span class="string">&quot;/api/v1&quot;</span>,
     request_body(content = Vec&lt;TodoWrite&gt;, example = <span class="macro">json!</span>([{<span class="string">&quot;title&quot;</span>: <span class="string">&quot;Call Jack&quot;</span>, <span class="string">&quot;done&quot;</span>: <span class="bool-val">false</span>}, {<span class="string">&quot;title&quot;</span>: <span class="string">&quot;Buy milk&quot;</span>, <span class="string">&quot;done&quot;</span>: <span class="bool-val">false</span>}, {<span class="string">&quot;title&quot;</span>: <span class="string">&quot;Go to gym&quot;</span>, <span class="string">&quot;done&quot;</span>: <span class="bool-val">false</span>}]</span>)),
     responses(
-        (status = <span class="number">201</span>, content_type = <span class="string">&quot;application/json&quot;</span>, example = <span class="macro">json!</span>([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]), body = Vec&lt;u32&gt;),
+        (status = <span class="number">201</span>, content_type = <span class="string">&quot;application/json&quot;</span>, example = <span class="macro">json!</span>([{<span class="string">&quot;id&quot;</span>: <span class="number">1</span>, <span class="string">&quot;title&quot;</span>: <span class="string">&quot;Call Jack&quot;</span>, <span class="string">&quot;done&quot;</span>: <span class="bool-val">false</span>}, {<span class="string">&quot;id&quot;</span>: <span class="number">2</span>, <span class="string">&quot;title&quot;</span>: <span class="string">&quot;Buy milk&quot;</span>, <span class="string">&quot;done&quot;</span>: <span class="bool-val">false</span>}, {<span class="string">&quot;id&quot;</span>: <span class="number">1</span>, <span class="string">&quot;title&quot;</span>: <span class="string">&quot;Go to gym&quot;</span>, <span class="string">&quot;done&quot;</span>: <span class="bool-val">false</span>}]), body = Vec&lt;TodoRead&gt;),
         (status = <span class="number">409</span>, description = <span class="string">&quot;a TODO with the same title exists&quot;</span>, content_type = <span class="string">&quot;text/plain&quot;</span>, example = <span class="macro">json!</span>(<span class="string">&quot;Todo already exists&quot;</span>), body = String),
         (status = <span class="number">500</span>, description = <span class="string">&quot;Internal server error&quot;</span>, content_type = <span class="string">&quot;text/plain&quot;</span>, example = <span class="macro">json!</span>(<span class="string">&quot;Internal server error&quot;</span>), body = String),
     ),
