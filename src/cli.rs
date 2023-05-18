@@ -1,26 +1,24 @@
 use crate::entities;
 use crate::errors::TodoErrors;
-use crate::logging::{error, info, Logger};
 use crate::serializers::{to_json, to_pretty_json};
 use crate::traits::Controller;
 use clap::{Args, Command, Parser, Subcommand};
 use clap_complete::{generate, Generator, Shell};
-use std::{io, sync::Arc};
+use std::io;
 
 pub struct CliState<T>
 where
     T: Controller,
 {
     controller: T,
-    logger: Arc<Logger>,
 }
 
 impl<T> CliState<T>
 where
     T: Controller,
 {
-    pub fn new(controller: T, logger: Arc<Logger>) -> Self {
-        Self { controller, logger }
+    pub fn new(controller: T) -> Self {
+        Self { controller }
     }
 }
 
@@ -46,20 +44,17 @@ where
                     println!("{}", todo);
                 }
                 Err(TodoErrors::BatchTooLarge { max_size }) => {
-                    error!(
-                        state.logger,
-                        "Batch too large, max batch size is {}", max_size
-                    );
+                    eprintln!("Batch too large, max batch size is {}", max_size);
                 }
                 Err(err) => {
-                    error!(state.logger, "Failed to create todo: {:?}", err);
+                    eprintln!("Failed to create todo: {:?}", err);
                 }
             }
         }
         Local::Delete(Delete { id }) => match state.controller.delete(id).await {
-            Ok(_) => info!(state.logger, "Successfully deleted: {}", id),
+            Ok(_) => println!("Successfully deleted: {}", id),
             Err(err) => {
-                error!(state.logger, "Failed to delete todo: {:?}", err);
+                eprintln!("Failed to delete todo: {:?}", err);
             }
         },
         Local::Get(Get { id, pretty }) => match state.controller.get(id).await {
@@ -69,7 +64,7 @@ where
                 println!("{}", todo)
             }
             Err(err) => {
-                error!(state.logger, "Failed to get todo: {:?}", err);
+                eprintln!("Failed to get todo: {:?}", err);
             }
         },
         Local::List(List {
@@ -87,7 +82,7 @@ where
                 println!("{}", todos)
             }
             Err(err) => {
-                error!(state.logger, "Failed to list todos: {:?}", err);
+                eprintln!("Failed to list todos: {:?}", err);
             }
         },
         Local::Update(Update {
@@ -103,9 +98,9 @@ where
             };
             let todo = entities::TodoUpdate::new(title, done);
             match state.controller.update(id, todo).await {
-                Ok(_) => info!(state.logger, "Successfully updated: {}", id),
+                Ok(_) => println!("Successfully updated: {}", id),
                 Err(err) => {
-                    error!(state.logger, "Failed to update todo: {:?}", err);
+                    eprintln!("Failed to update todo: {:?}", err);
                 }
             }
         }

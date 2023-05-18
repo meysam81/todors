@@ -44,7 +44,7 @@ async fn main() -> Result<(), TodoErrors> {
 
     match cli.command {
         Commands::Local(local) => {
-            let cli_state = cli::CliState::new(todo_controller, logger);
+            let cli_state = cli::CliState::new(todo_controller);
             handle_local(local, cli_state).await;
         }
         Commands::Serve(cli::Serve::Http(cli::HttpServerAddr { host, port })) => {
