@@ -61,4 +61,4 @@ sqlx-prepare:
 
 maturin-develop:
   clear
-  maturin develop --frozen
+  maturin develop -F python --frozen

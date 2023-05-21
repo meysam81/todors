@@ -13,6 +13,7 @@
 //! todors.list_todos("sqlite:///tmp/todors.db")
 //! ```
 
+#![cfg(feature = "python")]
 #![allow(dead_code, unused_variables, unused_imports)]
 
 use crate::traits::Controller;
