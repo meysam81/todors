@@ -1,4 +1,5 @@
 use crate::consts;
+use crate::errors;
 
 pub use sqlx::sqlite::SqliteError as DriverError;
 pub use sqlx::sqlite::SqlitePool as Pool;
@@ -35,6 +36,15 @@ async fn get_sqlite_conn(conn_str: &str, max_conn: u32) -> Result<Pool, sqlx::Er
         .await
 }
 
-pub async fn apply_migrations(conn: &Pool) -> Result<(), sqlx::migrate::MigrateError> {
-    sqlx::migrate!("./migrations/sqlite/").run(conn).await
+pub async fn apply_migrations(conn: &Pool) -> Result<(), errors::TodoErrors> {
+    match sqlx::migrate!("./migrations/sqlite/").run(conn).await {
+        Ok(_) => Ok(()),
+        Err(err) => Err(err.into()),
+    }
+}
+
+impl std::convert::From<sqlx::migrate::MigrateError> for errors::TodoErrors {
+    fn from(err: sqlx::migrate::MigrateError) -> Self {
+        errors::TodoErrors::DatabaseError(err.into())
+    }
 }
