@@ -47,7 +47,7 @@ actix-web = "4.3"
 actix-web-prometheus = { version = "0.1.2", features = ["process"] }
 async-trait = "0.1.68"
 chrono = "0.4.24"
-clap = { version = "4.2.5", features = ["derive"] }
+clap = { version = "4.3.0", features = ["derive"] }
 clap_complete = "4.2.0"
 config = "0.13.3"
 dirs = "5.0.1"
