@@ -1427,9 +1427,9 @@ dependencies = [
 
 [[package]]
 name = "just"
-version = "1.13.0"
+version = "1.14.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1988b5c252da0c41a7b9d18ad1a35bfadd20d6a7d27a5f4fb15ebd99f1142732"
+checksum = "3ad25fe62999a7972b8cfac6608e1a18ad9245c353e1e8b9e6c7c9fa0f6a4e4d"
 dependencies = [
  "ansi_term",
  "atty",
