@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["main"],"mod":["apidoc","cli","consts","db","entities","errors","grpc","http","logging","models","serializers","settings","traits"],"static":["LOC","RS"]};
+window.SIDEBAR_ITEMS = {"fn":["main"],"mod":["apidoc","cli","consts","db","entities","errors","grpc","http","logging","models","serializers","settings","traits"]};

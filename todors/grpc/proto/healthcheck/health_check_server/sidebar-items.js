@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["CheckSvc","HealthCheckServer","_Inner"],"trait":["HealthCheck"]};
+window.SIDEBAR_ITEMS = {"struct":["HealthCheckServer","_Inner"],"trait":["HealthCheck"]};

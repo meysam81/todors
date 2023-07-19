@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["build_apidoc","build_apidoc_config","build_server","configure"],"mod":["index","logging","metrics","middleware","todo"],"struct":["ApiDoc","App","AppState","HttpServer","Server"]};
+window.SIDEBAR_ITEMS = {"fn":["build_apidoc","build_apidoc_config","build_server","configure"],"mod":["index","logging","metrics","middleware","todo"],"struct":["App","AppState","HttpServer","Server"]};

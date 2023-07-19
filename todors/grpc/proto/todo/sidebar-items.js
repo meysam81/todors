@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"constant":["STRUCT_NAME"],"enum":["Status"],"fn":["Inner","ScalarWrapper"],"mod":["todo_client","todo_server"],"struct":["Confirmation","CreateTodoRequest","DeleteTodoRequest","GetTodoRequest","ListTodosRequest","ListTodosResponse","ScalarWrapper","TodoRead","UpdateTodoRequest"]};
+window.SIDEBAR_ITEMS = {"enum":["Status"],"mod":["todo_client","todo_server"],"struct":["Confirmation","CreateTodoRequest","DeleteTodoRequest","GetTodoRequest","ListTodosRequest","ListTodosResponse","TodoRead","UpdateTodoRequest"]};

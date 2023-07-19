@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["Record","TodoController"]};
+window.SIDEBAR_ITEMS = {"struct":["TodoController"]};

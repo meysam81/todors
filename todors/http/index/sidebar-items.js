@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["index"],"struct":["index"]};
+window.SIDEBAR_ITEMS = {"struct":["index"]};
