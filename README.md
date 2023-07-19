@@ -6,6 +6,7 @@ TODO app, mainly for a practical learning experience of Rust
 [![Code Size](https://img.shields.io/github/languages/code-size/meysam81/todors)](https://github.com/meysam81/todors)
 [![codecov](https://codecov.io/gh/meysam81/todors/branch/main/graph/badge.svg?token=LILKTIMNSJ)](https://codecov.io/gh/meysam81/todors)
 [![Repo Size](https://img.shields.io/github/repo-size/meysam81/todors)](https://github.com/meysam81/todors)
+[![Docs](https://img.shields.io/badge/docs-rs/todors?logo=docs.rs&label=docs.rs)](https://crates.io/crates/todors)
 [![Language Count](https://img.shields.io/github/languages/count/meysam81/todors)](https://github.com/meysam81/todors)
 [![Commit Intervals](https://img.shields.io/github/commit-activity/m/meysam81/todors)](https://github.com/meysam81/todors/commits)
 [![Last Release](https://img.shields.io/github/release-date/meysam81/todors?label=last%20release)](https://github.com/meysam81/todors/releases)
