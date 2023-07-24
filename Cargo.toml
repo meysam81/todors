@@ -52,7 +52,7 @@ clap_complete = "4.3.2"
 config = "0.13.3"
 dirs = "5.0.1"
 futures-util = { version = "0.3.28", default-features = false }
-num_cpus = "1.15.0"
+num_cpus = "1.16.0"
 prost = "0.11.9"
 serde = "1.0.160"
 serde_json = "1.0.96"
