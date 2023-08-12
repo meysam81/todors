@@ -49,9 +49,10 @@ jobs:
                   old_cach_ids.append(cache['id'])
 
           if old_cach_ids:
-              print(','.join(map(str, old_cach_ids)))
+              print(' '.join(map(str, old_cach_ids)))
           """
 
+          pip install -U pip dateutil
           ids=$(python -c "$parse_script" "$1")
 
           echo "ids=${ids}" >> $GITHUB_OUTPUT
