@@ -40,10 +40,20 @@ jobs:
           import datetime
           from dateutil.parser import parse
 
+          if len(sys.argv) != 2:
+              print("Only one argument is expected", file=sys.stderr)
+              exit(0)
+          
+          try:
+              action_caches = json.loads(sys.argv[1])
+          except:
+              print(f"Failed parsing the json: {sys.argv[1]}", file=sys.stderr)
+              exit(0)
+
           old_cach_ids = []
 
           threshold = datetime.datetime.utcnow() - datetime.timedelta(days=${{ env.THRESHOLD_IN_DAYS }})
-          for cache in json.loads(sys.argv[1]):
+          for cache in json.loads(action_caches):
               cache_date = parse(cache['${{ env.TARGET_DATE_FIELD }}'], ignoretz=True)
               if cache_date < threshold:
                   old_cach_ids.append(cache['id'])
