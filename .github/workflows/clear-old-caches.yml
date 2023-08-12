@@ -63,7 +63,7 @@ jobs:
           """
 
           pip install -U pip python-dateutil
-          ids=$(python -c "$parse_script" "$1")
+          ids=$(python -c "$parse_script" "$all_caches")
 
           echo "ids=${ids}" >> $GITHUB_OUTPUT
       - name: Delete old caches
