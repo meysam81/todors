@@ -41,13 +41,13 @@ jobs:
           from dateutil.parser import parse
 
           if len(sys.argv) != 2:
-              print("Only one argument is expected", file=sys.stderr)
+              print('Only one argument is expected', file=sys.stderr)
               exit(0)
           
           try:
               action_caches = json.loads(sys.argv[1])
           except:
-              print(f"Failed parsing the json: {sys.argv[1]}", file=sys.stderr)
+              print(f'Failed parsing the json: {sys.argv[1]}', file=sys.stderr)
               exit(0)
 
           old_cach_ids = []
