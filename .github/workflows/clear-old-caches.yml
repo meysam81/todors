@@ -14,6 +14,7 @@ name: clear-old-caches
 on:
   schedule:
     - cron: '0 0 * * *'
+  workflow_dispatch:
 
 env:
   THRESHOLD_IN_DAYS: 30
