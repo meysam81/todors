@@ -15,10 +15,19 @@ on:
   schedule:
     - cron: '0 0 * * *'
   workflow_dispatch:
+    inputs:
+      threshold_in_days:
+        description: 'Threshold in days'
+        required: false
+        default: 30
+      target_date_field:
+        description: 'Target date field {created_at, last_accessed_at}}'
+        required: false
+        default: created_at
 
 env:
-  THRESHOLD_IN_DAYS: 30
-  TARGET_DATE_FIELD: created_at
+  THRESHOLD_IN_DAYS: ${{ (( github.event.inputs.threshold_in_days != '' )) && github.event.inputs.threshold_in_days || 30 }}
+  TARGET_DATE_FIELD: ${{ (( github.event.inputs.target_date_field != '' )) && github.event.inputs.target_date_field || created_at }}
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 permissions:
