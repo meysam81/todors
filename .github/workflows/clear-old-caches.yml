@@ -32,7 +32,7 @@ jobs:
       - name: Get all caches for this repo
         id: old-caches
         run: |
-          all_caches=$(gh api /repos/${{ github.repository }}/actions/caches | jq '.actions_caches')
+          all_caches=$(gh api /repos/${{ github.repository }}/actions/caches | jq -r '.actions_caches')
           
           parse_script="""
           import sys
@@ -53,7 +53,7 @@ jobs:
           old_cach_ids = []
 
           threshold = datetime.datetime.utcnow() - datetime.timedelta(days=${{ env.THRESHOLD_IN_DAYS }})
-          for cache in json.loads(action_caches):
+          for cache in action_caches:
               cache_date = parse(cache['${{ env.TARGET_DATE_FIELD }}'], ignoretz=True)
               if cache_date < threshold:
                   old_cach_ids.append(cache['id'])
