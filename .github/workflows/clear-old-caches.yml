@@ -32,7 +32,7 @@ jobs:
       - name: Get all caches for this repo
         id: old-caches
         run: |
-          all_caches=$(gh api /repos/${{ github.repository }}/actions/caches | jq -r '.actions_caches')
+          all_caches=$(gh api /repos/${{ github.repository }}/actions/caches | jq '.actions_caches')
           
           parse_script="""
           import sys
