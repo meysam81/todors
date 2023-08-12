@@ -26,8 +26,8 @@ on:
         default: created_at
 
 env:
-  THRESHOLD_IN_DAYS: ${{ (( github.event.inputs.threshold_in_days != '' )) && github.event.inputs.threshold_in_days || echo "30" }}
-  TARGET_DATE_FIELD: ${{ (( github.event.inputs.target_date_field != '' )) && github.event.inputs.target_date_field || echo "created_at" }}
+  THRESHOLD_IN_DAYS: 30
+  TARGET_DATE_FIELD: created_at
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 permissions:
@@ -61,9 +61,9 @@ jobs:
 
           old_cach_ids = []
 
-          threshold = datetime.datetime.utcnow() - datetime.timedelta(days=${{ env.THRESHOLD_IN_DAYS }})
+          threshold = datetime.datetime.utcnow() - datetime.timedelta(days=${{ github.event.inputs.threshold_in_days || env.THRESHOLD_IN_DAYS }})
           for cache in action_caches:
-              cache_date = parse(cache['${{ env.TARGET_DATE_FIELD }}'], ignoretz=True)
+              cache_date = parse(cache['${{ github.event.inputs.target_date_field || env.TARGET_DATE_FIELD }}'], ignoretz=True)
               if cache_date < threshold:
                   old_cach_ids.append(cache['id'])
 
