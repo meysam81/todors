@@ -52,7 +52,7 @@ jobs:
               print(','.join(map(str, old_cach_ids)))
           """
 
-          pip install -U pip dateutil
+          pip install -U pip python-dateutil
           ids=$(python -c "$parse_script" "$1")
 
           echo "ids=${ids}" >> $GITHUB_OUTPUT
