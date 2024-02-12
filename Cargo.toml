@@ -82,7 +82,7 @@ serial_test = { version = "2.0.0", default-features = false }
 
 [build-dependencies]
 prost-build = { version = "0.11.9", default-features = false }
-tonic-build = "0.9"
+tonic-build = "0.11"
 
 [profile.release]
 lto = "fat"
