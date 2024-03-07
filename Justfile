@@ -58,3 +58,7 @@ grpc-client-update-todo ID:
 
 sqlx-prepare:
   cargo sqlx prepare --database-url "sqlite://$HOME/.todors/db.sqlite"
+
+maturin-develop:
+  clear
+  maturin develop -F python --frozen
