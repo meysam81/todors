@@ -1,4 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/cli.rs`."><title>cli.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-fa3bb1812debf86c.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="todors" data-themes="" data-resource-suffix="" data-rustdoc-version="1.74.0 (79e9716c9 2023-11-13)" data-channel="1.74.0" data-search-js="search-8be46b629f5f14a8.js" data-settings-js="settings-74424d7eec62a23e.js" ><script src="../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-c5bd66d33317d69f.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../todors/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/cli.rs`."><title>cli.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="todors" data-themes="" data-resource-suffix="" data-rustdoc-version="1.77.1 (7cf61ebde 2024-03-27)" data-channel="1.77.1" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
+            <h2>Files</h2></div></nav><div class="sidebar-resizer"></div>
+    <main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../todors/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -357,30 +359,30 @@
             <span class="kw">match </span>state.controller.create_batch(todos).<span class="kw">await </span>{
                 <span class="prelude-val">Ok</span>(todo) =&gt; {
                     <span class="kw">let </span>todo = to_json(<span class="kw-2">&amp;</span>todo).unwrap();
-                    <span class="macro">println!</span>(<span class="string">&quot;{}&quot;</span>, todo);
+                    <span class="macro">println!</span>(<span class="string">"{}"</span>, todo);
                 }
                 <span class="prelude-val">Err</span>(TodoErrors::BatchTooLarge { max_size }) =&gt; {
-                    <span class="macro">eprintln!</span>(<span class="string">&quot;Batch too large, max batch size is {}&quot;</span>, max_size);
+                    <span class="macro">eprintln!</span>(<span class="string">"Batch too large, max batch size is {}"</span>, max_size);
                 }
                 <span class="prelude-val">Err</span>(err) =&gt; {
-                    <span class="macro">eprintln!</span>(<span class="string">&quot;Failed to create todo: {:?}&quot;</span>, err);
+                    <span class="macro">eprintln!</span>(<span class="string">"Failed to create todo: {:?}"</span>, err);
                 }
             }
         }
         Local::Delete(Delete { id }) =&gt; <span class="kw">match </span>state.controller.delete(id).<span class="kw">await </span>{
-            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) =&gt; <span class="macro">println!</span>(<span class="string">&quot;Successfully deleted: {}&quot;</span>, id),
+            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) =&gt; <span class="macro">println!</span>(<span class="string">"Successfully deleted: {}"</span>, id),
             <span class="prelude-val">Err</span>(err) =&gt; {
-                <span class="macro">eprintln!</span>(<span class="string">&quot;Failed to delete todo: {:?}&quot;</span>, err);
+                <span class="macro">eprintln!</span>(<span class="string">"Failed to delete todo: {:?}"</span>, err);
             }
         },
         Local::Get(Get { id, pretty }) =&gt; <span class="kw">match </span>state.controller.get(id).<span class="kw">await </span>{
             <span class="prelude-val">Ok</span>(todo) =&gt; {
                 <span class="kw">let </span>printer = <span class="kw">if </span>pretty { to_pretty_json } <span class="kw">else </span>{ to_json };
                 <span class="kw">let </span>todo = printer(<span class="kw-2">&amp;</span>todo).unwrap();
-                <span class="macro">println!</span>(<span class="string">&quot;{}&quot;</span>, todo)
+                <span class="macro">println!</span>(<span class="string">"{}"</span>, todo)
             }
             <span class="prelude-val">Err</span>(err) =&gt; {
-                <span class="macro">eprintln!</span>(<span class="string">&quot;Failed to get todo: {:?}&quot;</span>, err);
+                <span class="macro">eprintln!</span>(<span class="string">"Failed to get todo: {:?}"</span>, err);
             }
         },
         Local::List(List {
@@ -395,10 +397,10 @@
             <span class="prelude-val">Ok</span>(todos) =&gt; {
                 <span class="kw">let </span>printer = <span class="kw">if </span>pretty { to_pretty_json } <span class="kw">else </span>{ to_json };
                 <span class="kw">let </span>todos = printer(<span class="kw-2">&amp;</span>todos).unwrap();
-                <span class="macro">println!</span>(<span class="string">&quot;{}&quot;</span>, todos)
+                <span class="macro">println!</span>(<span class="string">"{}"</span>, todos)
             }
             <span class="prelude-val">Err</span>(err) =&gt; {
-                <span class="macro">eprintln!</span>(<span class="string">&quot;Failed to list todos: {:?}&quot;</span>, err);
+                <span class="macro">eprintln!</span>(<span class="string">"Failed to list todos: {:?}"</span>, err);
             }
         },
         Local::Update(Update {
@@ -414,9 +416,9 @@
             };
             <span class="kw">let </span>todo = entities::TodoUpdate::new(title, done);
             <span class="kw">match </span>state.controller.update(id, todo).<span class="kw">await </span>{
-                <span class="prelude-val">Ok</span>(<span class="kw">_</span>) =&gt; <span class="macro">println!</span>(<span class="string">&quot;Successfully updated: {}&quot;</span>, id),
+                <span class="prelude-val">Ok</span>(<span class="kw">_</span>) =&gt; <span class="macro">println!</span>(<span class="string">"Successfully updated: {}"</span>, id),
                 <span class="prelude-val">Err</span>(err) =&gt; {
-                    <span class="macro">eprintln!</span>(<span class="string">&quot;Failed to update todo: {:?}&quot;</span>, err);
+                    <span class="macro">eprintln!</span>(<span class="string">"Failed to update todo: {:?}"</span>, err);
                 }
             }
         }
@@ -471,8 +473,8 @@
     <span class="attr">#[arg(short, long, default_value_t = <span class="number">8080</span>)]
     #[arg(value_parser = <span class="macro">clap::value_parser!</span>(u16).range(<span class="number">1</span>..))]
     </span><span class="kw">pub </span>port: u16,
-    <span class="attr">#[arg(short = <span class="string">&#39;H&#39;</span>)]
-    #[arg(long, default_value = <span class="string">&quot;127.0.0.1&quot;</span>)]
+    <span class="attr">#[arg(short = <span class="string">'H'</span>)]
+    #[arg(long, default_value = <span class="string">"127.0.0.1"</span>)]
     #[arg(value_parser = <span class="macro">clap::value_parser!</span>(std::net::IpAddr))]
     </span><span class="kw">pub </span>host: std::net::IpAddr,
 }
@@ -482,8 +484,8 @@
     <span class="attr">#[arg(short, long, default_value_t = <span class="number">50051</span>)]
     #[arg(value_parser = <span class="macro">clap::value_parser!</span>(u16).range(<span class="number">1</span>..))]
     </span><span class="kw">pub </span>port: u16,
-    <span class="attr">#[arg(short = <span class="string">&#39;H&#39;</span>)]
-    #[arg(long, default_value = <span class="string">&quot;127.0.0.1&quot;</span>)]
+    <span class="attr">#[arg(short = <span class="string">'H'</span>)]
+    #[arg(long, default_value = <span class="string">"127.0.0.1"</span>)]
     #[arg(value_parser = <span class="macro">clap::value_parser!</span>(std::net::IpAddr))]
     </span><span class="kw">pub </span>host: std::net::IpAddr,
 }
@@ -495,7 +497,7 @@
     </span><span class="kw">pub </span>title: Vec&lt;String&gt;,
     <span class="doccomment">/// Whether or not the provided TODOs are done
     </span><span class="attr">#[arg(short, long)]
-    #[arg(default_value = <span class="string">&quot;false&quot;</span>)]
+    #[arg(default_value = <span class="string">"false"</span>)]
     #[arg(action = clap::ArgAction::SetTrue)]
     </span><span class="kw">pub </span>done: <span class="prelude-ty">Option</span>&lt;bool&gt;,
 }
@@ -528,11 +530,11 @@
     </span><span class="attr">#[arg(short, long)]
     </span><span class="kw">pub </span>title: <span class="prelude-ty">Option</span>&lt;String&gt;,
     <span class="attr">#[arg(short, long)]
-    #[arg(group = <span class="string">&quot;finished&quot;</span>)]
+    #[arg(group = <span class="string">"finished"</span>)]
     #[arg(action = clap::ArgAction::SetTrue)]
     </span><span class="kw">pub </span>done: <span class="prelude-ty">Option</span>&lt;bool&gt;,
     <span class="attr">#[arg(short, long)]
-    #[arg(group = <span class="string">&quot;finished&quot;</span>)]
+    #[arg(group = <span class="string">"finished"</span>)]
     #[arg(action = clap::ArgAction::SetTrue)]
     </span><span class="kw">pub </span>undone: <span class="prelude-ty">Option</span>&lt;bool&gt;,
 }
@@ -575,20 +577,20 @@
 
     <span class="attr">#[tokio::test]
     </span><span class="kw">async fn </span>create_todo_only_title_provided() {
-        <span class="kw">let </span>args = <span class="macro">vec!</span>[<span class="string">&quot;todors&quot;</span>, <span class="string">&quot;create&quot;</span>, <span class="string">&quot;Hello Rust!&quot;</span>];
+        <span class="kw">let </span>args = <span class="macro">vec!</span>[<span class="string">"todors"</span>, <span class="string">"create"</span>, <span class="string">"Hello Rust!"</span>];
 
         <span class="kw">if let </span>Commands::Local(Local::Create(Create {
             title,
             done: <span class="prelude-val">Some</span>(<span class="bool-val">false</span>),
         })) = Cli::parse_from(args).command
         {
-            <span class="macro">assert_eq!</span>(title[<span class="number">0</span>], <span class="string">&quot;Hello Rust!&quot;</span>);
+            <span class="macro">assert_eq!</span>(title[<span class="number">0</span>], <span class="string">"Hello Rust!"</span>);
         }
     }
 
     <span class="attr">#[tokio::test]
     </span><span class="kw">async fn </span>delete_todo_by_id() {
-        <span class="kw">let </span>args = <span class="macro">vec!</span>[<span class="string">&quot;todors&quot;</span>, <span class="string">&quot;delete&quot;</span>, <span class="string">&quot;1&quot;</span>];
+        <span class="kw">let </span>args = <span class="macro">vec!</span>[<span class="string">"todors"</span>, <span class="string">"delete"</span>, <span class="string">"1"</span>];
         <span class="kw">if let </span>Commands::Local(Local::Delete(Delete { id })) = Cli::parse_from(args).command {
             <span class="macro">assert_eq!</span>(id, <span class="number">1</span>);
         }
@@ -596,18 +598,18 @@
 
     <span class="attr">#[tokio::test]
     </span><span class="kw">async fn </span>update_todo_modify_title_only() {
-        <span class="kw">let </span>args = <span class="macro">vec!</span>[<span class="string">&quot;todors&quot;</span>, <span class="string">&quot;update&quot;</span>, <span class="string">&quot;1&quot;</span>, <span class="string">&quot;--title&quot;</span>, <span class="string">&quot;Hello Rust!&quot;</span>];
+        <span class="kw">let </span>args = <span class="macro">vec!</span>[<span class="string">"todors"</span>, <span class="string">"update"</span>, <span class="string">"1"</span>, <span class="string">"--title"</span>, <span class="string">"Hello Rust!"</span>];
         <span class="kw">if let </span>Commands::Local(Local::Update(Update { id, title, .. })) =
             Cli::parse_from(args).command
         {
             <span class="macro">assert_eq!</span>(id, <span class="number">1</span>);
-            <span class="macro">assert_eq!</span>(title.unwrap(), <span class="string">&quot;Hello Rust!&quot;</span>);
+            <span class="macro">assert_eq!</span>(title.unwrap(), <span class="string">"Hello Rust!"</span>);
         }
     }
 
     <span class="attr">#[tokio::test]
     </span><span class="kw">async fn </span>update_todo_without_any_modification() {
-        <span class="kw">let </span>args = <span class="macro">vec!</span>[<span class="string">&quot;todors&quot;</span>, <span class="string">&quot;update&quot;</span>, <span class="string">&quot;1&quot;</span>];
+        <span class="kw">let </span>args = <span class="macro">vec!</span>[<span class="string">"todors"</span>, <span class="string">"update"</span>, <span class="string">"1"</span>];
         <span class="kw">if let </span>Commands::Local(Local::Update(Update { id, title, .. })) =
             Cli::parse_from(args).command
         {
@@ -618,14 +620,14 @@
 
     <span class="attr">#[tokio::test]
     </span><span class="kw">async fn </span>delete_todo_non_int_id_raises_error() {
-        <span class="kw">let </span>args = <span class="macro">vec!</span>[<span class="string">&quot;todors&quot;</span>, <span class="string">&quot;delete&quot;</span>, <span class="string">&quot;foo&quot;</span>];
+        <span class="kw">let </span>args = <span class="macro">vec!</span>[<span class="string">"todors"</span>, <span class="string">"delete"</span>, <span class="string">"foo"</span>];
         <span class="kw">let </span>c = Cli::try_parse_from(args);
         <span class="macro">assert!</span>(c.is_err());
     }
 
     <span class="attr">#[tokio::test]
     </span><span class="kw">async fn </span>update_todo_non_int_id_raises_error() {
-        <span class="kw">let </span>args = <span class="macro">vec!</span>[<span class="string">&quot;todors&quot;</span>, <span class="string">&quot;update&quot;</span>, <span class="string">&quot;foo&quot;</span>, <span class="string">&quot;--title&quot;</span>, <span class="string">&quot;Hello Rust!&quot;</span>];
+        <span class="kw">let </span>args = <span class="macro">vec!</span>[<span class="string">"todors"</span>, <span class="string">"update"</span>, <span class="string">"foo"</span>, <span class="string">"--title"</span>, <span class="string">"Hello Rust!"</span>];
         <span class="kw">let </span>c = Cli::try_parse_from(args);
         <span class="macro">assert!</span>(c.is_err());
     }

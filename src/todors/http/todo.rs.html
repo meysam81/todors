@@ -1,4 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/http/todo.rs`."><title>todo.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-fa3bb1812debf86c.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="todors" data-themes="" data-resource-suffix="" data-rustdoc-version="1.74.0 (79e9716c9 2023-11-13)" data-channel="1.74.0" data-search-js="search-8be46b629f5f14a8.js" data-settings-js="settings-74424d7eec62a23e.js" ><script src="../../../static.files/storage-fec3eaa3851e447d.js"></script><script defer src="../../../static.files/src-script-3280b574d94e47b4.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-c5bd66d33317d69f.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-5d8b3c7633ad77ba.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../../todors/index.html"><img class="rust-logo" src="../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `src/http/todo.rs`."><title>todo.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="todors" data-themes="" data-resource-suffix="" data-rustdoc-version="1.77.1 (7cf61ebde 2024-03-27)" data-channel="1.77.1" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
+            <h2>Files</h2></div></nav><div class="sidebar-resizer"></div>
+    <main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../../todors/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -234,14 +236,12 @@
 <a href="#234" id="234">234</a>
 <a href="#235" id="235">235</a>
 <a href="#236" id="236">236</a>
-<a href="#237" id="237">237</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::entities;
 <span class="kw">use </span><span class="kw">crate</span>::errors::TodoErrors;
 <span class="kw">use </span><span class="kw">crate</span>::logging::{debug, error};
 <span class="kw">use </span><span class="kw">crate</span>::traits::Controller;
 
 <span class="kw">use </span>actix_web::{web, HttpResponse};
-<span class="kw">pub use </span>actix_web::{App, HttpServer};
 
 <span class="kw">use </span><span class="kw">super</span>::AppState;
 
@@ -279,10 +279,10 @@
         <span class="kw">match </span>state.controller.create(todo.into_inner()).<span class="kw">await </span>{
             <span class="prelude-val">Ok</span>(todo) =&gt; HttpResponse::Created().json(todo),
             <span class="prelude-val">Err</span>(TodoErrors::DatabaseError(err)) =&gt; HttpResponse::Conflict()
-                .content_type(<span class="string">&quot;text/plain&quot;</span>)
+                .content_type(<span class="string">"text/plain"</span>)
                 .body(err.to_string()),
             <span class="prelude-val">Err</span>(err) =&gt; {
-                <span class="macro">error!</span>(state.logger, <span class="string">&quot;Failed to create todo: {:?}&quot;</span>, err);
+                <span class="macro">error!</span>(state.logger, <span class="string">"Failed to create todo: {:?}"</span>, err);
                 HttpResponse::InternalServerError().finish()
             }
         }
@@ -295,13 +295,13 @@
         <span class="kw">match </span>state.controller.create_batch(todos.into_inner()).<span class="kw">await </span>{
             <span class="prelude-val">Ok</span>(ids) =&gt; HttpResponse::Created().json(ids),
             <span class="prelude-val">Err</span>(TodoErrors::BatchTooLarge { max_size }) =&gt; HttpResponse::PayloadTooLarge()
-                .content_type(<span class="string">&quot;text/plain&quot;</span>)
-                .body(<span class="macro">format!</span>(<span class="string">&quot;Batch too large, max batch size is {}&quot;</span>, max_size)),
+                .content_type(<span class="string">"text/plain"</span>)
+                .body(<span class="macro">format!</span>(<span class="string">"Batch too large, max batch size is {}"</span>, max_size)),
             <span class="prelude-val">Err</span>(TodoErrors::DatabaseError(err)) =&gt; HttpResponse::Conflict()
-                .content_type(<span class="string">&quot;text/plain&quot;</span>)
+                .content_type(<span class="string">"text/plain"</span>)
                 .body(err.to_string()),
             <span class="prelude-val">Err</span>(err) =&gt; {
-                <span class="macro">error!</span>(state.logger, <span class="string">&quot;Failed to create todo: {:?}&quot;</span>, err);
+                <span class="macro">error!</span>(state.logger, <span class="string">"Failed to create todo: {:?}"</span>, err);
                 HttpResponse::InternalServerError().finish()
             }
         }
@@ -312,7 +312,7 @@
             <span class="prelude-val">Ok</span>(<span class="kw">_</span>) =&gt; HttpResponse::NoContent().finish(),
             <span class="prelude-val">Err</span>(TodoErrors::TodoNotFound) =&gt; HttpResponse::NotFound().finish(),
             <span class="prelude-val">Err</span>(err) =&gt; {
-                <span class="macro">error!</span>(state.logger, <span class="string">&quot;Failed to delete todo: {:?}&quot;</span>, err);
+                <span class="macro">error!</span>(state.logger, <span class="string">"Failed to delete todo: {:?}"</span>, err);
                 HttpResponse::InternalServerError().finish()
             }
         }
@@ -322,10 +322,10 @@
         <span class="kw">match </span>state.controller.get(id.into_inner()).<span class="kw">await </span>{
             <span class="prelude-val">Ok</span>(todo) =&gt; HttpResponse::Ok().json(todo),
             <span class="prelude-val">Err</span>(TodoErrors::TodoNotFound) =&gt; HttpResponse::NotFound()
-                .content_type(<span class="string">&quot;text/plain&quot;</span>)
-                .body(<span class="string">&quot;TODO not found&quot;</span>),
+                .content_type(<span class="string">"text/plain"</span>)
+                .body(<span class="string">"TODO not found"</span>),
             <span class="prelude-val">Err</span>(err) =&gt; {
-                <span class="macro">error!</span>(state.logger, <span class="string">&quot;Failed to get todo: {:?}&quot;</span>, err);
+                <span class="macro">error!</span>(state.logger, <span class="string">"Failed to get todo: {:?}"</span>, err);
                 HttpResponse::InternalServerError().finish()
             }
         }
@@ -335,11 +335,11 @@
         state: web::Data&lt;AppState&lt;T&gt;&gt;,
         pagination: web::Query&lt;entities::ListRequest&gt;,
     ) -&gt; HttpResponse {
-        <span class="macro">debug!</span>(state.logger, <span class="string">&quot;Listing todos with request: {:?}&quot;</span>, pagination);
+        <span class="macro">debug!</span>(state.logger, <span class="string">"Listing todos with request: {:?}"</span>, pagination);
         <span class="kw">match </span>state.controller.list(pagination.into()).<span class="kw">await </span>{
             <span class="prelude-val">Ok</span>(todos) =&gt; HttpResponse::Ok().json(todos),
             <span class="prelude-val">Err</span>(err) =&gt; {
-                <span class="macro">error!</span>(state.logger, <span class="string">&quot;Failed to list todos: {:?}&quot;</span>, err);
+                <span class="macro">error!</span>(state.logger, <span class="string">"Failed to list todos: {:?}"</span>, err);
                 HttpResponse::InternalServerError().finish()
             }
         }
@@ -356,14 +356,14 @@
             .<span class="kw">await
         </span>{
             <span class="prelude-val">Ok</span>(<span class="kw">_</span>) =&gt; HttpResponse::Accepted()
-                .content_type(<span class="string">&quot;text/plain&quot;</span>)
-                .body(<span class="string">&quot;TODO updated&quot;</span>),
+                .content_type(<span class="string">"text/plain"</span>)
+                .body(<span class="string">"TODO updated"</span>),
             <span class="prelude-val">Err</span>(TodoErrors::TodoNotFound) =&gt; HttpResponse::NotFound().finish(),
             <span class="prelude-val">Err</span>(TodoErrors::TitleAlreadyExists) =&gt; HttpResponse::Conflict()
-                .content_type(<span class="string">&quot;text/plain&quot;</span>)
-                .body(<span class="string">&quot;TODO with the same title already exists&quot;</span>),
+                .content_type(<span class="string">"text/plain"</span>)
+                .body(<span class="string">"TODO with the same title already exists"</span>),
             <span class="prelude-val">Err</span>(err) =&gt; {
-                <span class="macro">error!</span>(state.logger, <span class="string">&quot;Failed to update todo: {:?}&quot;</span>, err);
+                <span class="macro">error!</span>(state.logger, <span class="string">"Failed to update todo: {:?}"</span>, err);
                 HttpResponse::InternalServerError().finish()
             }
         }
@@ -373,30 +373,30 @@
 <span class="attr">#[allow(dead_code)]
 #[utoipa::path(
     post,
-    path = <span class="string">&quot;/todos&quot;</span>,
-    operation_id = <span class="string">&quot;Create a new TODO&quot;</span>,
-    context_path = <span class="string">&quot;/api/v1&quot;</span>,
+    path = <span class="string">"/todos"</span>,
+    operation_id = <span class="string">"Create a new TODO"</span>,
+    context_path = <span class="string">"/api/v1"</span>,
     request_body = TodoWrite,
     responses(
-        (status = <span class="number">201</span>, content_type = <span class="string">&quot;application/json&quot;</span>, example = <span class="macro">json!</span>({<span class="string">&quot;id&quot;</span>: <span class="number">1</span>, <span class="string">&quot;title&quot;</span>: <span class="string">&quot;Todo title&quot;</span>, <span class="string">&quot;description&quot;</span>: <span class="string">&quot;Todo description&quot;</span>, <span class="string">&quot;done&quot;</span>: <span class="bool-val">false</span>}), body = TodoRead),
-        (status = <span class="number">409</span>, description = <span class="string">&quot;a TODO with the same title exists&quot;</span>, content_type = <span class="string">&quot;text/plain&quot;</span>, example = <span class="macro">json!</span>(<span class="string">&quot;Invalid input&quot;</span>), body = String),
-        (status = <span class="number">500</span>, description = <span class="string">&quot;Internal server error&quot;</span>, content_type = <span class="string">&quot;text/plain&quot;</span>, example = <span class="macro">json!</span>(<span class="string">&quot;Internal server error&quot;</span>), body = String),
+        (status = <span class="number">201</span>, content_type = <span class="string">"application/json"</span>, example = <span class="macro">json!</span>({<span class="string">"id"</span>: <span class="number">1</span>, <span class="string">"title"</span>: <span class="string">"Todo title"</span>, <span class="string">"description"</span>: <span class="string">"Todo description"</span>, <span class="string">"done"</span>: <span class="bool-val">false</span>}), body = TodoRead),
+        (status = <span class="number">409</span>, description = <span class="string">"a TODO with the same title exists"</span>, content_type = <span class="string">"text/plain"</span>, example = <span class="macro">json!</span>(<span class="string">"Invalid input"</span>), body = String),
+        (status = <span class="number">500</span>, description = <span class="string">"Internal server error"</span>, content_type = <span class="string">"text/plain"</span>, example = <span class="macro">json!</span>(<span class="string">"Internal server error"</span>), body = String),
     ),
-    tag = <span class="string">&quot;todo&quot;</span>,
+    tag = <span class="string">"todo"</span>,
 )]
 </span><span class="kw">fn </span>create_todo() {}
 
 <span class="attr">#[allow(dead_code)]
 #[utoipa::path(
     put,
-    path = <span class="string">&quot;/todos&quot;</span>,
-    operation_id = <span class="string">&quot;Create a batch of TODOs&quot;</span>,
-    context_path = <span class="string">&quot;/api/v1&quot;</span>,
-    request_body(content = Vec&lt;TodoWrite&gt;, example = <span class="macro">json!</span>([{<span class="string">&quot;title&quot;</span>: <span class="string">&quot;Call Jack&quot;</span>, <span class="string">&quot;done&quot;</span>: <span class="bool-val">false</span>}, {<span class="string">&quot;title&quot;</span>: <span class="string">&quot;Buy milk&quot;</span>, <span class="string">&quot;done&quot;</span>: <span class="bool-val">false</span>}, {<span class="string">&quot;title&quot;</span>: <span class="string">&quot;Go to gym&quot;</span>, <span class="string">&quot;done&quot;</span>: <span class="bool-val">false</span>}]</span>)),
+    path = <span class="string">"/todos"</span>,
+    operation_id = <span class="string">"Create a batch of TODOs"</span>,
+    context_path = <span class="string">"/api/v1"</span>,
+    request_body(content = Vec&lt;TodoWrite&gt;, example = <span class="macro">json!</span>([{<span class="string">"title"</span>: <span class="string">"Call Jack"</span>, <span class="string">"done"</span>: <span class="bool-val">false</span>}, {<span class="string">"title"</span>: <span class="string">"Buy milk"</span>, <span class="string">"done"</span>: <span class="bool-val">false</span>}, {<span class="string">"title"</span>: <span class="string">"Go to gym"</span>, <span class="string">"done"</span>: <span class="bool-val">false</span>}]</span>)),
     responses(
-        (status = <span class="number">201</span>, content_type = <span class="string">&quot;application/json&quot;</span>, example = <span class="macro">json!</span>([{<span class="string">&quot;id&quot;</span>: <span class="number">1</span>, <span class="string">&quot;title&quot;</span>: <span class="string">&quot;Call Jack&quot;</span>, <span class="string">&quot;done&quot;</span>: <span class="bool-val">false</span>}, {<span class="string">&quot;id&quot;</span>: <span class="number">2</span>, <span class="string">&quot;title&quot;</span>: <span class="string">&quot;Buy milk&quot;</span>, <span class="string">&quot;done&quot;</span>: <span class="bool-val">false</span>}, {<span class="string">&quot;id&quot;</span>: <span class="number">1</span>, <span class="string">&quot;title&quot;</span>: <span class="string">&quot;Go to gym&quot;</span>, <span class="string">&quot;done&quot;</span>: <span class="bool-val">false</span>}]), body = Vec&lt;TodoRead&gt;),
-        (status = <span class="number">409</span>, description = <span class="string">&quot;a TODO with the same title exists&quot;</span>, content_type = <span class="string">&quot;text/plain&quot;</span>, example = <span class="macro">json!</span>(<span class="string">&quot;Todo already exists&quot;</span>), body = String),
-        (status = <span class="number">500</span>, description = <span class="string">&quot;Internal server error&quot;</span>, content_type = <span class="string">&quot;text/plain&quot;</span>, example = <span class="macro">json!</span>(<span class="string">&quot;Internal server error&quot;</span>), body = String),
+        (status = <span class="number">201</span>, content_type = <span class="string">"application/json"</span>, example = <span class="macro">json!</span>([{<span class="string">"id"</span>: <span class="number">1</span>, <span class="string">"title"</span>: <span class="string">"Call Jack"</span>, <span class="string">"done"</span>: <span class="bool-val">false</span>}, {<span class="string">"id"</span>: <span class="number">2</span>, <span class="string">"title"</span>: <span class="string">"Buy milk"</span>, <span class="string">"done"</span>: <span class="bool-val">false</span>}, {<span class="string">"id"</span>: <span class="number">1</span>, <span class="string">"title"</span>: <span class="string">"Go to gym"</span>, <span class="string">"done"</span>: <span class="bool-val">false</span>}]), body = Vec&lt;TodoRead&gt;),
+        (status = <span class="number">409</span>, description = <span class="string">"a TODO with the same title exists"</span>, content_type = <span class="string">"text/plain"</span>, example = <span class="macro">json!</span>(<span class="string">"Todo already exists"</span>), body = String),
+        (status = <span class="number">500</span>, description = <span class="string">"Internal server error"</span>, content_type = <span class="string">"text/plain"</span>, example = <span class="macro">json!</span>(<span class="string">"Internal server error"</span>), body = String),
     ),
 )]
 <span class="kw">pub fn </span>create_batch() {}
@@ -404,72 +404,72 @@
 <span class="attr">#[allow(dead_code)]
 #[utoipa::path(
     delete,
-    path = <span class="string">&quot;/todos/{id}&quot;</span>,
-    operation_id = <span class="string">&quot;Delete a TODO by id&quot;</span>,
-    context_path = <span class="string">&quot;/api/v1&quot;</span>,
+    path = <span class="string">"/todos/{id}"</span>,
+    operation_id = <span class="string">"Delete a TODO by id"</span>,
+    context_path = <span class="string">"/api/v1"</span>,
     params(
-        (<span class="string">&quot;id&quot; </span>= u32, description = <span class="string">&quot;Todo identifier&quot;</span>, example = <span class="macro">json!</span>(<span class="number">1</span>), nullable = <span class="bool-val">false</span>, minimum = <span class="number">1</span>),
+        (<span class="string">"id" </span>= u32, description = <span class="string">"Todo identifier"</span>, example = <span class="macro">json!</span>(<span class="number">1</span>), nullable = <span class="bool-val">false</span>, minimum = <span class="number">1</span>),
     ),
     responses(
-        (status = <span class="number">204</span>, description = <span class="string">&quot;TODO deleted&quot;</span>, content_type = <span class="string">&quot;text/plain&quot;</span>, example = <span class="macro">json!</span>(<span class="string">&quot;TODO deleted&quot;</span>), body = String),
-        (status = <span class="number">404</span>, description = <span class="string">&quot;TODO not found&quot;</span>, content_type = <span class="string">&quot;text/plain&quot;</span>, example = <span class="macro">json!</span>(<span class="string">&quot;TODO not found&quot;</span>), body = String),
-        (status = <span class="number">500</span>, description = <span class="string">&quot;Internal server error&quot;</span>, content_type = <span class="string">&quot;text/plain&quot;</span>, example = <span class="macro">json!</span>(<span class="string">&quot;Internal server error&quot;</span>), body = String),
+        (status = <span class="number">204</span>, description = <span class="string">"TODO deleted"</span>, content_type = <span class="string">"text/plain"</span>, example = <span class="macro">json!</span>(<span class="string">"TODO deleted"</span>), body = String),
+        (status = <span class="number">404</span>, description = <span class="string">"TODO not found"</span>, content_type = <span class="string">"text/plain"</span>, example = <span class="macro">json!</span>(<span class="string">"TODO not found"</span>), body = String),
+        (status = <span class="number">500</span>, description = <span class="string">"Internal server error"</span>, content_type = <span class="string">"text/plain"</span>, example = <span class="macro">json!</span>(<span class="string">"Internal server error"</span>), body = String),
     ),
-    tag = <span class="string">&quot;todo&quot;</span>,
+    tag = <span class="string">"todo"</span>,
 )]
 </span><span class="kw">pub fn </span>delete_todo() {}
 
 <span class="attr">#[allow(dead_code)]
 #[utoipa::path(
         get,
-        path = <span class="string">&quot;/todos/{id}&quot;</span>,
-        operation_id = <span class="string">&quot;Get a TODO by id&quot;</span>,
-        context_path = <span class="string">&quot;/api/v1&quot;</span>,
+        path = <span class="string">"/todos/{id}"</span>,
+        operation_id = <span class="string">"Get a TODO by id"</span>,
+        context_path = <span class="string">"/api/v1"</span>,
         params(
-            (<span class="string">&quot;id&quot; </span>= u32, description = <span class="string">&quot;Todo identifier&quot;</span>, example = <span class="macro">json!</span>(<span class="number">1</span>), nullable = <span class="bool-val">false</span>, minimum = <span class="number">1</span>),
+            (<span class="string">"id" </span>= u32, description = <span class="string">"Todo identifier"</span>, example = <span class="macro">json!</span>(<span class="number">1</span>), nullable = <span class="bool-val">false</span>, minimum = <span class="number">1</span>),
         ),
         responses(
-            (status = <span class="number">200</span>, content_type = <span class="string">&quot;application/json&quot;</span>, example = <span class="macro">json!</span>({<span class="string">&quot;id&quot;</span>: <span class="number">1</span>, <span class="string">&quot;title&quot;</span>: <span class="string">&quot;Todo title&quot;</span>, <span class="string">&quot;description&quot;</span>: <span class="string">&quot;Todo description&quot;</span>, <span class="string">&quot;done&quot;</span>: <span class="bool-val">false</span>}), body = TodoRead),
-            (status = <span class="number">404</span>, description = <span class="string">&quot;TODO not found&quot;</span>, content_type = <span class="string">&quot;text/plain&quot;</span>, example = <span class="macro">json!</span>(<span class="string">&quot;TODO not found&quot;</span>), body = String),
+            (status = <span class="number">200</span>, content_type = <span class="string">"application/json"</span>, example = <span class="macro">json!</span>({<span class="string">"id"</span>: <span class="number">1</span>, <span class="string">"title"</span>: <span class="string">"Todo title"</span>, <span class="string">"description"</span>: <span class="string">"Todo description"</span>, <span class="string">"done"</span>: <span class="bool-val">false</span>}), body = TodoRead),
+            (status = <span class="number">404</span>, description = <span class="string">"TODO not found"</span>, content_type = <span class="string">"text/plain"</span>, example = <span class="macro">json!</span>(<span class="string">"TODO not found"</span>), body = String),
         ),
-        tag = <span class="string">&quot;todo&quot;</span>,
+        tag = <span class="string">"todo"</span>,
     )]
 </span><span class="kw">pub fn </span>get_todo() {}
 
 <span class="attr">#[allow(dead_code)]
 #[utoipa::path(
         get,
-        path = <span class="string">&quot;/todos&quot;</span>,
-        operation_id = <span class="string">&quot;List TODOs&quot;</span>,
-        context_path = <span class="string">&quot;/api/v1&quot;</span>,
+        path = <span class="string">"/todos"</span>,
+        operation_id = <span class="string">"List TODOs"</span>,
+        context_path = <span class="string">"/api/v1"</span>,
         params(
-            (<span class="string">&quot;offset&quot; </span>= <span class="prelude-ty">Option</span>&lt;u32&gt;, Query, description = <span class="string">&quot;Row offset&quot;</span>, nullable = <span class="bool-val">true</span>, minimum = <span class="number">0</span>, example = <span class="number">0</span>),
-            (<span class="string">&quot;limit&quot; </span>= <span class="prelude-ty">Option</span>&lt;u32&gt;, Query, description = <span class="string">&quot;Number of items per page&quot;</span>, nullable = <span class="bool-val">true</span>, minimum = <span class="number">1</span>, maximum = <span class="number">1000</span>, example = <span class="number">10</span>),
+            (<span class="string">"offset" </span>= <span class="prelude-ty">Option</span>&lt;u32&gt;, Query, description = <span class="string">"Row offset"</span>, nullable = <span class="bool-val">true</span>, minimum = <span class="number">0</span>, example = <span class="number">0</span>),
+            (<span class="string">"limit" </span>= <span class="prelude-ty">Option</span>&lt;u32&gt;, Query, description = <span class="string">"Number of items per page"</span>, nullable = <span class="bool-val">true</span>, minimum = <span class="number">1</span>, maximum = <span class="number">1000</span>, example = <span class="number">10</span>),
         ),
         responses(
-            (status = <span class="number">200</span>, content_type = <span class="string">&quot;application/json&quot;</span>, example = <span class="macro">json!</span>([{<span class="string">&quot;id&quot;</span>: <span class="number">1</span>, <span class="string">&quot;title&quot;</span>: <span class="string">&quot;Todo title&quot;</span>, <span class="string">&quot;description&quot;</span>: <span class="string">&quot;Todo description&quot;</span>, <span class="string">&quot;done&quot;</span>: <span class="bool-val">false</span>}]</span>), body = Vec&lt;TodoRead&gt;),
-            (status = <span class="number">500</span>, description = <span class="string">&quot;Internal server error&quot;</span>, content_type = <span class="string">&quot;text/plain&quot;</span>, example = <span class="macro">json!</span>(<span class="string">&quot;Internal server error&quot;</span>), body = String),
+            (status = <span class="number">200</span>, content_type = <span class="string">"application/json"</span>, example = <span class="macro">json!</span>([{<span class="string">"id"</span>: <span class="number">1</span>, <span class="string">"title"</span>: <span class="string">"Todo title"</span>, <span class="string">"description"</span>: <span class="string">"Todo description"</span>, <span class="string">"done"</span>: <span class="bool-val">false</span>}]</span>), body = Vec&lt;TodoRead&gt;),
+            (status = <span class="number">500</span>, description = <span class="string">"Internal server error"</span>, content_type = <span class="string">"text/plain"</span>, example = <span class="macro">json!</span>(<span class="string">"Internal server error"</span>), body = String),
         ),
-        tag = <span class="string">&quot;todo&quot;</span>,
+        tag = <span class="string">"todo"</span>,
     )]
 <span class="kw">pub fn </span>list_todos() {}
 
 <span class="attr">#[allow(dead_code)]
 #[utoipa::path(
         patch,
-        path = <span class="string">&quot;/todos/{id}&quot;</span>,
-        operation_id = <span class="string">&quot;Update a TODO by id&quot;</span>,
+        path = <span class="string">"/todos/{id}"</span>,
+        operation_id = <span class="string">"Update a TODO by id"</span>,
         request_body = TodoUpdate,
-        context_path = <span class="string">&quot;/api/v1&quot;</span>,
+        context_path = <span class="string">"/api/v1"</span>,
         params(
-            (<span class="string">&quot;id&quot; </span>= u32, description = <span class="string">&quot;Todo identifier&quot;</span>, example = <span class="macro">json!</span>(<span class="number">1</span>), nullable = <span class="bool-val">false</span>, minimum = <span class="number">1</span>),
+            (<span class="string">"id" </span>= u32, description = <span class="string">"Todo identifier"</span>, example = <span class="macro">json!</span>(<span class="number">1</span>), nullable = <span class="bool-val">false</span>, minimum = <span class="number">1</span>),
         ),
         responses(
-            (status = <span class="number">202</span>, description = <span class="string">&quot;TODO updated&quot;</span>, content_type = <span class="string">&quot;text/plain&quot;</span>, example = <span class="macro">json!</span>(<span class="string">&quot;TODO updated&quot;</span>), body = String),
-            (status = <span class="number">404</span>, description = <span class="string">&quot;TODO not found&quot;</span>, content_type = <span class="string">&quot;text/plain&quot;</span>, example = <span class="macro">json!</span>(<span class="string">&quot;TODO not found&quot;</span>), body = String),
-            (status = <span class="number">500</span>, description = <span class="string">&quot;Internal server error&quot;</span>, content_type = <span class="string">&quot;text/plain&quot;</span>, example = <span class="macro">json!</span>(<span class="string">&quot;Internal server error&quot;</span>), body = String),
+            (status = <span class="number">202</span>, description = <span class="string">"TODO updated"</span>, content_type = <span class="string">"text/plain"</span>, example = <span class="macro">json!</span>(<span class="string">"TODO updated"</span>), body = String),
+            (status = <span class="number">404</span>, description = <span class="string">"TODO not found"</span>, content_type = <span class="string">"text/plain"</span>, example = <span class="macro">json!</span>(<span class="string">"TODO not found"</span>), body = String),
+            (status = <span class="number">500</span>, description = <span class="string">"Internal server error"</span>, content_type = <span class="string">"text/plain"</span>, example = <span class="macro">json!</span>(<span class="string">"Internal server error"</span>), body = String),
         ),
-        tag = <span class="string">&quot;todo&quot;</span>,
+        tag = <span class="string">"todo"</span>,
     )]
 </span><span class="kw">pub fn </span>update_todo() {}
 </code></pre></div></section></main></body></html>
