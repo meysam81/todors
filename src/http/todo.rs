@@ -4,7 +4,6 @@ use crate::logging::{debug, error};
 use crate::traits::Controller;
 
 use actix_web::{web, HttpResponse};
-pub use actix_web::{App, HttpServer};
 
 use super::AppState;
 

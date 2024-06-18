@@ -1,6 +1,6 @@
 use slog::Drain;
 pub use slog::Logger;
-pub use slog::{debug, error, info, trace, warn};
+pub use slog::{debug, error, info, trace};
 
 pub fn init(log_level: &str) -> Logger {
     let decorator = slog_term::TermDecorator::new().build();
@@ -8,8 +8,8 @@ pub fn init(log_level: &str) -> Logger {
     let drain = slog_async::Async::new(drain).build().fuse();
     let level = get_log_level(log_level);
     let drain = slog::LevelFilter::new(drain, level).fuse();
-    let logger = Logger::root(drain.fuse(), slog::o!());
-    logger
+
+    Logger::root(drain.fuse(), slog::o!())
 }
 
 fn get_log_level(log_level: &str) -> slog::Level {

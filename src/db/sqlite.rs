@@ -1,10 +1,9 @@
 use crate::consts;
 
-pub use sqlx::sqlite::SqliteError as DriverError;
 pub use sqlx::sqlite::SqlitePool as Pool;
 use sqlx::sqlite::SqlitePoolOptions;
-pub use sqlx::sqlite::SqliteQueryResult as QueryResult;
-pub use sqlx::{query, query_as, Error, FromRow, Row};
+
+pub use sqlx::{query, query_as, Error, FromRow};
 
 pub async fn init_pool(conn_str: &str, max_conn: Option<u32>) -> Result<Pool, sqlx::Error> {
     let max_conn = max_conn.unwrap_or(consts::DEFAULT_DB_CONNECTION_POOL_SIZE);
