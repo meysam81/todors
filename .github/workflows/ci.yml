@@ -141,8 +141,8 @@ jobs:
 
   build-docker-stable:
     if: |
-      sudo apt update
-      sudo apt install -y protobuf-compiler libprotobuf-dev0
+      github.event_name == 'push' &&
+      startsWith(github.ref, 'refs/tags/v')
     permissions:
       contents: read
       packages: write
