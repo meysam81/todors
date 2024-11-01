@@ -4,7 +4,7 @@ primary_region = "ams"
 kill_timeout = 120
 
 [build]
-image = "meysam81/todors"
+image = "ghcr.io/meysam81/todors"
 
 [http_service]
 internal_port = 8080
