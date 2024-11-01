@@ -152,7 +152,10 @@ jobs:
           wait-for-processing: true
 
   deploy:
-    needs: build-docker-edge
+    if: |
+      github.event_name == 'push' &&
+      github.ref == 'refs/heads/main'
+    needs: build-binary
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
